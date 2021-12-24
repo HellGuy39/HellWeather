@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
 }
 
 android {
@@ -23,6 +22,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures {
+        viewBinding true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -62,10 +64,11 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:1.1.1"
 
     //Network
-    api "com.squareup.retrofit2:retrofit:2.6"
-    api "com.squareup.retrofit2:converter-gson:2.6"
-    api "com.squareup.okhttp3:logging-interceptor:3.12.6"
-    api "com.squareup.okhttp3:okhttp-urlconnection:3.12.6"
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0")) // define a BOM and its version
+    implementation("com.squareup.okhttp3:okhttp") // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:logging-interceptor")
 
     implementation("com.squareup.picasso:picasso:2.71828") {
         exclude group: 'com.squareup.okhttp3'
