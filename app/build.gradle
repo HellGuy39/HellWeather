@@ -2,15 +2,16 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
-    compileSdk 32
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.hellguy39.hellweather"
         minSdk 21
-        targetSdk 32
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -24,11 +25,15 @@ android {
         }
     }
     buildFeatures {
+        //compose true
         viewBinding true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.0-rc02'
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -37,9 +42,38 @@ android {
 
 dependencies {
     //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+    //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
+
+    // Feature module Support
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.5"
+
+    /*implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
+    implementation 'androidx.compose.ui:ui:1.0.5'*/
+    // Tooling support (Previews, etc.)
+    //implementation 'androidx.compose.ui:ui-tooling:1.0.5'
+
+    //implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
+    // Integration with activities
+    //implementation 'androidx.activity:activity-compose:1.4.0'
+    // Compose Material Design
+    //implementation 'androidx.compose.material:material:1.0.5'
+    // Animations
+    //implementation 'androidx.compose.animation:animation:1.0.5'
+    // Tooling support (Previews, etc.)
+    //implementation 'androidx.compose.ui:ui-tooling:1.0.5'
+    // Integration with ViewModels
+    //implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
+    // UI Tests
+    //androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.5'
+    // When using a MDC theme
+    //implementation "com.google.android.material:compose-theme-adapter:1.1.2"
+    // When using a AppCompat theme
+    //implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
 
     //AndroidX
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -51,6 +85,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -60,8 +95,8 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:2.36"
 
     //Room
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    kapt "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'androidx.room:room-runtime:2.0.0'
+    kapt 'androidx.room:room-compiler:2.0.0'
 
     //Network
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
