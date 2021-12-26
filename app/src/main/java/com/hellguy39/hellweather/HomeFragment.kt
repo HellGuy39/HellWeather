@@ -69,13 +69,22 @@ class HomeFragment : Fragment() {
         CoroutineScope(Main).launch {
             Log.i(LOG_HOME_FRAGMENT, "updateUI() was called")
             binding.rootView.isRefreshing = false
+            //Center
             binding.tvTemp.text = wm.temp
             binding.tvMaxTemp.text = wm.tempMax
             binding.tvMinTemp.text = wm.tempMin
-            binding.tvUpdateTime.text = wm.updateTime
             binding.tvWeather.text = wm.wDescription
+            //Top
+            binding.tvUpdateTime.text = wm.updateTime
             binding.tvCity.text = wm.city
-            //binding.tvUpdateTime.text = wm.updateTime
+            //Details
+            binding.tvSunrise.text = wm.sunrise
+            binding.tvSunset.text = wm.sunset
+            binding.tvTempFeelsLike.text = wm.tempFeelsLike
+            binding.tvHumidity.text = wm.humidity
+            binding.tvPressure.text = wm.pressure
+            binding.tvWind.text = wm.wind
+
         }
     }
 
@@ -101,13 +110,25 @@ class HomeFragment : Fragment() {
                         val jsonObject = JSONObject(result)
                         val main = jsonObject.getJSONObject("main")
                         wm.temp = main.getInt("temp").toString() + "°"
-                        wm.tempFeelsLike = main.getString("feels_like")
+                        wm.tempFeelsLike = main.getInt("feels_like").toString() + "°"
                         wm.tempMax = main.getInt("temp_max").toString() + "° C"
                         wm.tempMin = main.getInt("temp_min").toString() + "° C"
+                        wm.pressure = main.getInt("pressure").toString() + "hPa"
+                        wm.humidity = main.getInt("humidity").toString() + "%"
+
+                        val sys = jsonObject.getJSONObject("sys")
+                        val sunrise = sys.getLong("sunrise")
+                        val sunset = sys.getLong("sunset")
+                        wm.sunrise = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(sunrise * 1000))
+                        wm.sunset = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(sunset * 1000))
+
+                        val wind = jsonObject.getJSONObject("wind")
+                        wm.wind = wind.getDouble("speed").toString() + " m/s"
 
                         val time: Long = jsonObject.getLong("dt")
 
-                        wm.updateTime = SimpleDateFormat("E, HH:mm", Locale.ENGLISH).format(Date(time * 1000))
+                        val sdf = SimpleDateFormat("E, HH:mm", Locale.getDefault())//.setTimeZone(TimeZone.getTimeZone("GMT"))//.format(Date(time * 1000))
+                        wm.updateTime = sdf.format(Date(time * 1000))
                         wm.city = city
 
                         val weather = jsonObject.getJSONArray("weather").getJSONObject(0)
