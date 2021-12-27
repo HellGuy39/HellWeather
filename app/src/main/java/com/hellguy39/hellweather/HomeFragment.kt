@@ -9,16 +9,14 @@ import android.view.ViewGroup
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.utils.OW_API_KEY
 import com.hellguy39.hellweather.utils.WeatherModel
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.*
-import okhttp3.internal.wait
 import org.json.JSONObject
 import java.io.IOException
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,10 +41,11 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentHomeBinding.bind(view)
-        binding.rootView.setBackgroundResource(R.drawable.gradient_day)
-        binding.rootView.setOnRefreshListener {
-            onRefresh()
-        }
+        binding.rootView.setBackgroundResource(R.drawable.gradient_clear_day)
+//        binding.rootView.setOnRefreshListener {
+//            onRefresh()
+//        }
+        binding.rootView
 
     }
 
@@ -68,8 +67,12 @@ class HomeFragment : Fragment() {
     private fun updateUI(wm : WeatherModel) {
         CoroutineScope(Main).launch {
             Log.i(LOG_HOME_FRAGMENT, "updateUI() was called")
-            binding.rootView.isRefreshing = false
+            //binding.rootView.isRefreshing = false
             //Center
+            Picasso.get()
+                .load("https://openweathermap.org/img/wn/${wm.owIcon}@2x.png")
+                .into(binding.ivWeather)
+
             binding.tvTemp.text = wm.temp
             binding.tvMaxTemp.text = wm.tempMax
             binding.tvMinTemp.text = wm.tempMin
@@ -107,35 +110,36 @@ class HomeFragment : Fragment() {
                     {
                         val result = response.body?.string()
                         result?.let { Log.i("LOG", it) }
+
                         val jsonObject = JSONObject(result)
+
                         val main = jsonObject.getJSONObject("main")
+                        val sys = jsonObject.getJSONObject("sys")
+                        val sunrise = sys.getLong("sunrise")
+                        val sunset = sys.getLong("sunset")
+                        val wind = jsonObject.getJSONObject("wind")
+                        val time: Long = jsonObject.getLong("dt")
+                        val weather = jsonObject.getJSONArray("weather").getJSONObject(0)
+                        val sdf = SimpleDateFormat("E, HH:mm", Locale.getDefault())//.setTimeZone(TimeZone.getTimeZone("GMT"))//.format(Date(time * 1000))
+
                         wm.temp = main.getInt("temp").toString() + "°"
                         wm.tempFeelsLike = main.getInt("feels_like").toString() + "°"
                         wm.tempMax = main.getInt("temp_max").toString() + "° C"
                         wm.tempMin = main.getInt("temp_min").toString() + "° C"
                         wm.pressure = main.getInt("pressure").toString() + "hPa"
                         wm.humidity = main.getInt("humidity").toString() + "%"
-
-                        val sys = jsonObject.getJSONObject("sys")
-                        val sunrise = sys.getLong("sunrise")
-                        val sunset = sys.getLong("sunset")
                         wm.sunrise = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(sunrise * 1000))
                         wm.sunset = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(sunset * 1000))
-
-                        val wind = jsonObject.getJSONObject("wind")
                         wm.wind = wind.getDouble("speed").toString() + " m/s"
-
-                        val time: Long = jsonObject.getLong("dt")
-
-                        val sdf = SimpleDateFormat("E, HH:mm", Locale.getDefault())//.setTimeZone(TimeZone.getTimeZone("GMT"))//.format(Date(time * 1000))
                         wm.updateTime = sdf.format(Date(time * 1000))
                         wm.city = city
-
-                        val weather = jsonObject.getJSONArray("weather").getJSONObject(0)
-                        wm.wDescription = weather.getString("description")
+                        wm.wDescription = weather
+                            .getString("description")
                             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
+                        wm.owIcon = weather.getString("icon")
+
                         updateUI(wm)
-                        //wm.updateTime =
                     }
                     else
                     {

@@ -1,43 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    android:id="@+id/rootView">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".HomeFragment">
+    android:id="@+id/rootView"
+    tools:context=".HomeFragment">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
+            app:layout_constraintGuide_begin="24dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
-
-        <TextView
-            android:id="@+id/tvCity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:fontFamily="sans-serif-thin"
-            android:text="Krasnodar"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintGuide_end="24dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline3"
@@ -46,43 +29,94 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.15" />
 
-        <TextView
-            android:id="@+id/tvUpdateTime"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSysStatBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-thin"
-            android:text="Sat, 9:41"
-            android:textSize="18sp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.66" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/tvCity"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar">
 
-        <TextView
-            android:id="@+id/tvWeather"
+            <TextView
+                android:id="@+id/tvCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-thin"
+                android:text="Krasnodar"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tvUpdateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-thin"
+                android:text="Sat, 9:41"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-thin"
             android:gravity="center"
-            android:text=""
-            android:textSize="42sp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/tempContainer"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            tools:text="Clear" />
+            app:layout_constraintTop_toTopOf="@+id/guideline3"
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <ImageView
+                android:id="@+id/ivWeather"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tvWeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:autoSizeMaxTextSize="64dp"
+                android:autoSizeMinTextSize="32dp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text=""
+                android:textSize="42sp"
+                tools:text="Clear" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/detailsTittle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/tempContainer">
+            app:layout_constraintTop_toTopOf="@+id/guideline2">
 
             <TextView
                 android:id="@+id/tvDetails"
@@ -108,9 +142,7 @@
             android:id="@+id/detailsContainer2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
@@ -146,13 +178,13 @@
                         android:id="@+id/tvPressure"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:maxLines="1"
                         android:autoSizeMaxTextSize="24sp"
                         android:autoSizeMinTextSize="16sp"
                         android:autoSizeTextType="uniform"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textSize="24sp"
                         tools:text="24.25" />
                 </LinearLayout>
 
@@ -189,13 +221,13 @@
                         android:id="@+id/tvHumidity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:maxLines="1"
                         android:autoSizeMaxTextSize="24sp"
                         android:autoSizeMinTextSize="16sp"
                         android:autoSizeTextType="uniform"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textSize="24sp"
                         tools:text="15%" />
                 </LinearLayout>
 
@@ -231,13 +263,13 @@
                         android:id="@+id/tvWind"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:maxLines="1"
                         android:autoSizeMaxTextSize="24sp"
                         android:autoSizeMinTextSize="16sp"
                         android:autoSizeTextType="uniform"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textSize="24sp"
                         tools:text="5 km/h" />
                 </LinearLayout>
 
@@ -246,12 +278,15 @@
 
         <LinearLayout
             android:id="@+id/tempContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart">
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
             <TextView
                 android:id="@+id/tvTemp"
@@ -299,20 +334,11 @@
 
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
-
         <LinearLayout
             android:id="@+id/detailsContainer1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
@@ -349,13 +375,13 @@
                         android:id="@+id/tvSunrise"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:maxLines="1"
                         android:autoSizeMaxTextSize="24sp"
                         android:autoSizeMinTextSize="16sp"
                         android:autoSizeTextType="uniform"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textSize="24sp"
                         tools:text="9:41" />
                 </LinearLayout>
 
@@ -392,13 +418,13 @@
                         android:id="@+id/tvSunset"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:maxLines="1"
                         android:autoSizeMaxTextSize="24sp"
                         android:autoSizeMinTextSize="16sp"
                         android:autoSizeTextType="uniform"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textSize="24sp"
                         tools:text="21:41" />
                 </LinearLayout>
 
@@ -434,18 +460,46 @@
                         android:id="@+id/tvTempFeelsLike"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:maxLines="1"
                         android:autoSizeMaxTextSize="24sp"
                         android:autoSizeMinTextSize="16sp"
                         android:autoSizeTextType="uniform"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textSize="24sp"
                         tools:text="10°" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <Button
+            android:id="@+id/btnMenu"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="24dp"
+            app:icon="@drawable/ic_round_menu_24"
+            app:iconTint="?android:attr/textColor"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar"
+            app:strokeColor="?android:attr/textColor"
+            app:strokeWidth="1dp" />
+
+        <Button
+            android:id="@+id/btnAdd"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="24dp"
+            app:icon="@drawable/ic_round_add_24"
+            app:iconTint="?android:attr/textColor"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar"
+            app:strokeColor="?android:attr/textColor"
+            app:strokeWidth="1dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -13,5 +13,6 @@ data class WeatherModel(
     var sunset: String = "N/A",
     var wind: String = "N/A",
     var updateTime: String = "N/A",
-    var wDescription: String = "N/A"
+    var wDescription: String = "N/A",
+    var owIcon: String = "N/A"
 )
