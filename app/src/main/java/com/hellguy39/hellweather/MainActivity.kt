@@ -12,14 +12,14 @@ class MainActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        val firstBoot = intent.extras?.getBoolean("first_boot", false)
+        //val firstBoot = intent.extras?.getBoolean("first_boot", false)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        if (firstBoot as Boolean)
-        {
-            navController.navigate(R.id.action_homeFragment_to_welcomeFragment)
-        }
+//        if (firstBoot as Boolean)
+//        {
+//            navController.navigate(R.id.action_homeFragment_to_welcomeFragment)
+//        }
 
 
     }

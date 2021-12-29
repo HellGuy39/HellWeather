@@ -333,7 +333,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:fontFamily="sans-serif-thin"
-                android:text="26° C"
+                tools:text="26° C"
                 android:textSize="32sp" />
 
             <View
