@@ -1,546 +1,547 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.motion.widget.MotionLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    android:id="@+id/rootView"
+    app:layoutDescription="@xml/fragment_home_scene"
     tools:context=".HomeFragment">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineStart"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="24dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineSysStatBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="24dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline66"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <LinearLayout
+        android:id="@+id/infoContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline15"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar">
+
+        <TextView
+            android:id="@+id/tvCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="24dp" />
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-thin"
+            android:text="Krasnodar"
+            android:textSize="24sp" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineEnd"
+        <TextView
+            android:id="@+id/tvUpdateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="24dp" />
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-thin"
+            android:text="Sat, 9:41"
+            android:textSize="18sp" />
+    </LinearLayout>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
+
+    <LinearLayout
+        android:id="@+id/descriptionContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guideline15">
+
+        <ImageView
+            android:id="@+id/ivWeather"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tvWeather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.15" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineSysStatBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="24dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.66" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar">
-
-            <TextView
-                android:id="@+id/tvCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-thin"
-                android:text="Krasnodar"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/tvUpdateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-thin"
-                android:text="Sat, 9:41"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:autoSizeMaxTextSize="64dp"
+            android:autoSizeMinTextSize="32dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-thin"
             android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/tempContainer"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toTopOf="@+id/guideline3"
-            app:layout_constraintVertical_chainStyle="packed">
+            android:maxLines="1"
+            android:text=""
+            android:textSize="42sp"
+            tools:text="Clear" />
+    </LinearLayout>
 
-            <ImageView
-                android:id="@+id/ivWeather"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop" />
+    <LinearLayout
+        android:id="@+id/detailsTittleContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guideline66">
 
-            <TextView
-                android:id="@+id/tvWeather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:autoSizeMaxTextSize="64dp"
-                android:autoSizeMinTextSize="32dp"
-                android:autoSizeTextType="uniform"
-                android:fontFamily="sans-serif-thin"
-                android:gravity="center"
-                android:maxLines="1"
-                android:text=""
-                android:textSize="42sp"
-                tools:text="Clear" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-light"
+            android:text="Details"
+            android:textAllCaps="true"
+            android:textSize="18sp" />
 
-        <LinearLayout
-            android:id="@+id/detailsTittle"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:background="@color/black"
+            android:backgroundTint="?android:attr/textColor" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/detailsContainer2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/detailsContainer1">
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toTopOf="@+id/guideline2">
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/whiteBlur30"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_pressure"
+                    app:tint="?android:attr/textColor" />
+
+                <TextView
+                    android:id="@+id/tvPressureTittle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
+                    android:gravity="center"
+                    android:text="Pressure"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvPressure"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="16sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textSize="24sp"
+                    tools:text="24.25" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/whiteBlur30"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_humidity" />
+
+                <TextView
+                    android:id="@+id/tvHumidityTittle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
+                    android:gravity="center"
+                    android:text="Humidity"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvHumidity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="16sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textSize="24sp"
+                    tools:text="15%" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/whiteBlur30"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_wind" />
+
+                <TextView
+                    android:id="@+id/tvWindTittle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
+                    android:gravity="center"
+                    android:text="Wind"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvWind"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="16sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textSize="24sp"
+                    tools:text="5 km/h" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tempContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline66"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionContainer"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tvTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="end"
+            android:text=""
+            android:textSize="128sp"
+            tools:text="9°" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="24sp"
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvDetails"
+                android:id="@+id/tvMaxTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-light"
-                android:text="Details"
-                android:textAllCaps="true"
-                android:textSize="18sp" />
+                android:layout_gravity="end"
+                android:fontFamily="sans-serif-thin"
+                android:text="26° C"
+                android:textSize="32sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="8dp"
                 android:background="@color/black"
                 android:backgroundTint="?android:attr/textColor" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/detailsContainer2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/detailsContainer1">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/whiteBlur30"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        app:tint="?android:attr/textColor"
-                        android:src="@drawable/ic_pressure"/>
-
-                    <TextView
-                        android:id="@+id/tvPressureTittle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-thin"
-                        android:gravity="center"
-                        android:text="Pressure"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tvPressure"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeMaxTextSize="24sp"
-                        android:autoSizeMinTextSize="16sp"
-                        android:autoSizeTextType="uniform"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:textSize="24sp"
-                        tools:text="24.25" />
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/whiteBlur30"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_humidity"/>
-
-                    <TextView
-                        android:id="@+id/tvHumidityTittle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-thin"
-                        android:gravity="center"
-                        android:text="Humidity"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tvHumidity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeMaxTextSize="24sp"
-                        android:autoSizeMinTextSize="16sp"
-                        android:autoSizeTextType="uniform"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:textSize="24sp"
-                        tools:text="15%" />
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/whiteBlur30"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_wind"/>
-
-                    <TextView
-                        android:id="@+id/tvWindTittle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-thin"
-                        android:gravity="center"
-                        android:text="Wind"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tvWind"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeMaxTextSize="24sp"
-                        android:autoSizeMinTextSize="16sp"
-                        android:autoSizeTextType="uniform"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:textSize="24sp"
-                        tools:text="5 km/h" />
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tempContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
-
             <TextView
-                android:id="@+id/tvTemp"
+                android:id="@+id/tvMinTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:fontFamily="sans-serif-thin"
-                android:gravity="end"
                 android:text=""
-                android:textSize="128sp"
-                tools:text="9°" />
+                android:textSize="32sp"
+                tools:text="9° C" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/detailsContainer1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/detailsTittleContainer">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/whiteBlur30"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="24sp"
-                android:layout_marginBottom="24dp"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_sunrise"
+                    app:tint="?android:attr/textColor" />
 
                 <TextView
-                    android:id="@+id/tvMaxTemp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:fontFamily="sans-serif-thin"
-                    android:text="26° C"
-                    android:textSize="32sp" />
-
-                <View
+                    android:id="@+id/tvSunriseTittle"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/black"
-                    android:backgroundTint="?android:attr/textColor" />
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
+                    android:gravity="center"
+                    android:text="Sunrise"
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/tvMinTemp"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvSunrise"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:fontFamily="sans-serif-thin"
-                    android:text=""
-                    android:textSize="32sp"
-                    tools:text="9° C" />
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="16sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textSize="24sp"
+                    tools:text="9:41" />
             </LinearLayout>
 
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
-            android:id="@+id/detailsContainer1"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/detailsTittle">
+            android:backgroundTint="@color/whiteBlur30"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/whiteBlur30"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        app:tint="?android:attr/textColor"
-                        android:src="@drawable/ic_sunrise"/>
-
-                    <TextView
-                        android:id="@+id/tvSunriseTittle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-thin"
-                        android:gravity="center"
-                        android:text="Sunrise"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tvSunrise"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeMaxTextSize="24sp"
-                        android:autoSizeMinTextSize="16sp"
-                        android:autoSizeTextType="uniform"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:textSize="24sp"
-                        tools:text="9:41" />
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/whiteBlur30"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp">
+                android:orientation="vertical"
+                android:padding="8dp">
 
-                <LinearLayout
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_sunset"
+                    app:tint="?android:attr/textColor" />
+
+                <TextView
+                    android:id="@+id/tvSunsetTittle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
+                    android:gravity="center"
+                    android:text="Sunset"
+                    android:textSize="18sp" />
 
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        app:tint="?android:attr/textColor"
-                        android:src="@drawable/ic_sunset"/>
+                <TextView
+                    android:id="@+id/tvSunset"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="16sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textSize="24sp"
+                    tools:text="21:41" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvSunsetTittle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-thin"
-                        android:gravity="center"
-                        android:text="Sunset"
-                        android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:id="@+id/tvSunset"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeMaxTextSize="24sp"
-                        android:autoSizeMinTextSize="16sp"
-                        android:autoSizeTextType="uniform"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:textSize="24sp"
-                        tools:text="21:41" />
-                </LinearLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/whiteBlur30"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
 
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/whiteBlur30"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp">
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:padding="8dp">
 
-                <LinearLayout
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_thermometer_2"
+                    app:tint="?android:attr/textColor" />
+
+                <TextView
+                    android:id="@+id/tvFeelsLikeTittle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
+                    android:gravity="center"
+                    android:text="Feels like"
+                    android:textSize="18sp" />
 
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        app:tint="?android:attr/textColor"
-                        android:src="@drawable/ic_thermometer_2"/>
+                <TextView
+                    android:id="@+id/tvTempFeelsLike"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="16sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textSize="24sp"
+                    tools:text="10°" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvFeelsLikeTittle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-thin"
-                        android:gravity="center"
-                        android:text="Feels like"
-                        android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvTempFeelsLike"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeMaxTextSize="24sp"
-                        android:autoSizeMinTextSize="16sp"
-                        android:autoSizeTextType="uniform"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:textSize="24sp"
-                        tools:text="10°" />
-                </LinearLayout>
+    <Button
+        android:id="@+id/btnMenu"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cornerRadius="24dp"
+        app:icon="@drawable/ic_round_menu_24"
+        app:iconTint="?android:attr/textColor"
+        app:layout_constraintBottom_toTopOf="@+id/guideline15"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar"
+        app:strokeColor="?android:attr/textColor"
+        app:strokeWidth="1dp" />
 
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
+    <Button
+        android:id="@+id/btnAdd"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cornerRadius="24dp"
+        app:icon="@drawable/ic_round_add_24"
+        app:iconTint="?android:attr/textColor"
+        app:layout_constraintBottom_toTopOf="@+id/guideline15"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar"
+        app:strokeColor="?android:attr/textColor"
+        app:strokeWidth="1dp" />
 
-        <Button
-            android:id="@+id/btnMenu"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cornerRadius="24dp"
-            app:icon="@drawable/ic_round_menu_24"
-            app:iconTint="?android:attr/textColor"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar"
-            app:strokeColor="?android:attr/textColor"
-            app:strokeWidth="1dp" />
-
-        <Button
-            android:id="@+id/btnAdd"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cornerRadius="24dp"
-            app:icon="@drawable/ic_round_add_24"
-            app:iconTint="?android:attr/textColor"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintTop_toTopOf="@+id/guidelineSysStatBar"
-            app:strokeColor="?android:attr/textColor"
-            app:strokeWidth="1dp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="1000">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+
+        <OnSwipe
+            motion:touchAnchorId="@+id/rootView"
+            motion:touchAnchorSide="bottom"
+            motion:dragDirection="dragUp" />
+       <KeyFrameSet>
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/descriptionContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toTopOf="@+id/guideline15"/>
+
+        <Constraint
+            android:id="@+id/guideline66"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            motion:layout_constraintGuide_percent="0.66"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/descriptionContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toTopOf="@+id/guideline15"/>
+
+        <Constraint
+            android:id="@+id/guideline66"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            motion:layout_constraintGuide_percent="0.50"/>
+    </ConstraintSet>
+</MotionScene>
