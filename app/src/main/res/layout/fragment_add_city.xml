@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
-        android:text="Enter your location"
+        android:text="Enter your city name"
         android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/outlinedTextField"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
@@ -23,13 +23,24 @@
         app:layout_constraintTop_toTopOf="@+id/guideline15"
         app:layout_constraintVertical_chainStyle="spread" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressLinear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/textColor"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/tvFragTittle"
+        app:trackCornerRadius="4dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/outlinedTextField"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Location"
+        android:hint="City name"
         app:layout_constraintBottom_toTopOf="@+id/btnCnt"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"
@@ -86,5 +97,18 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/outlinedTextField" />
+
+    <TextView
+        android:id="@+id/tvWait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="Just wait a few seconds..."
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/outlinedTextField"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/tvFragTittle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

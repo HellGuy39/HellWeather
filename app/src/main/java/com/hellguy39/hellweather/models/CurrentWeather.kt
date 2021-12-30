@@ -1,6 +1,6 @@
-package com.hellguy39.hellweather.utils
+package com.hellguy39.hellweather.models
 
-data class WeatherModel(
+data class CurrentWeather(
     var name: String = "N/A",
     var city: String = "N/A",
     var temp: String = "N/A",

@@ -6,30 +6,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
-import com.hellguy39.hellweather.utils.OW_API_KEY
-import com.hellguy39.hellweather.utils.WeatherModel
-import com.squareup.picasso.Picasso
+import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
+import com.hellguy39.hellweather.models.CurrentWeather
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 //import okhttp3.*
-import org.json.JSONObject
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
-import android.location.Geocoder
 import com.google.gson.JsonObject
 import com.hellguy39.hellweather.retrofit.Common
-import com.hellguy39.hellweather.retrofit.RetrofitClient
 import com.hellguy39.hellweather.retrofit.RetrofitServices
-import com.hellguy39.hellweather.utils.BASE_URL
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-
 
 class HomeFragment : Fragment() {
 
@@ -50,10 +40,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+    ): View? = inflater.inflate(R.layout.fragment_home, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,14 +51,11 @@ class HomeFragment : Fragment() {
 //            onRefresh()
 //        }
 
-        mService.getWeather(45,40,"minutely,alerts","metric", OW_API_KEY).enqueue(object : Callback<JsonObject> {
+        mService.getWeatherOneCall(45,40,"minutely,alerts","metric", OPEN_WEATHER_API_KEY).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                if (response.isSuccessful) {
-                    //Log.d(LOG_HOME_FRAGMENT, response.body().toString())
-                    //Log.d(LOG_HOME_FRAGMENT, call.request().url.toString())
-                    //Log.d(LOG_HOME_FRAGMENT, response.headers().toString())
-                    //Log.d(LOG_HOME_FRAGMENT, response.code().toString())
 
+                if (response.isSuccessful)
+                {
                     val jObj: JsonObject? = response.body()
                     if (jObj != null)
                     {
@@ -79,13 +63,12 @@ class HomeFragment : Fragment() {
                         val hourly = jObj.getAsJsonObject("hourly")
                         val daily = jObj.getAsJsonObject("daily")
                     }
-
-                    //Log.i(LOG_HOME_FRAGMENT, response.body()?.getJSONObject("timezone_offset").toString())
                 }
                 else
                 {
                     Log.d(LOG_HOME_FRAGMENT, "Nope")
                 }
+
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
@@ -111,14 +94,18 @@ class HomeFragment : Fragment() {
 //        }
 //    }
 
-    private fun updateUI(wm : WeatherModel) {
+    private fun updateUI(wm : CurrentWeather) {
         CoroutineScope(Main).launch {
             Log.i(LOG_HOME_FRAGMENT, "updateUI() was called")
             //binding.rootView.isRefreshing = false
             //Center
-            Picasso.get()
+            Glide.with(this@HomeFragment)
                 .load("https://openweathermap.org/img/wn/${wm.owIcon}@2x.png")
+                .centerCrop()
                 .into(binding.ivWeather)
+//            Picasso.get()
+//                .load("https://openweathermap.org/img/wn/${wm.owIcon}@2x.png")
+//                .into(binding.ivWeather)
 
             binding.tvTemp.text = wm.temp
             binding.tvMaxTemp.text = wm.tempMax
