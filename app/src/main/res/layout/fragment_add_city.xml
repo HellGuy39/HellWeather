@@ -27,6 +27,7 @@
         android:id="@+id/progressLinear"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:background="?android:attr/textColor"
         android:indeterminate="true"
         android:visibility="invisible"
@@ -102,13 +103,13 @@
         android:id="@+id/tvWait"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+        android:fontFamily="sans-serif-thin"
         android:gravity="center"
         android:text="Just wait a few seconds..."
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/outlinedTextField"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@+id/tvFragTittle" />
+        app:layout_constraintTop_toBottomOf="@+id/progressLinear" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

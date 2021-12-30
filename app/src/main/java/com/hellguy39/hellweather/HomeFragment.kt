@@ -1,11 +1,13 @@
 package com.hellguy39.hellweather
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
@@ -15,6 +17,9 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 //import okhttp3.*
 import com.google.gson.JsonObject
+import com.hellguy39.hellweather.models.DailyWeather
+import com.hellguy39.hellweather.models.HourlyWeather
+import com.hellguy39.hellweather.models.UserLocation
 import com.hellguy39.hellweather.retrofit.Common
 import com.hellguy39.hellweather.retrofit.RetrofitServices
 import retrofit2.Call
@@ -29,12 +34,14 @@ class HomeFragment : Fragment() {
     private val city = "Krasnodar"
     //private val url = "https://api.openweathermap.org/data/2.5/weather?q=$city&units=metric&appid=$OW_API_KEY"
     private val LOG_HOME_FRAGMENT = "HomeFragment"
+    private lateinit var usrLoc: UserLocation
 
     private lateinit var mService: RetrofitServices
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mService = Common.retrofitServices
+        usrLoc = getUserLocation()
     }
 
     override fun onCreateView(
@@ -51,7 +58,7 @@ class HomeFragment : Fragment() {
 //            onRefresh()
 //        }
 
-        mService.getWeatherOneCall(45,40,"minutely,alerts","metric", OPEN_WEATHER_API_KEY).enqueue(object : Callback<JsonObject> {
+        mService.getWeatherOneCall(usrLoc.lat.toDouble(),usrLoc.lon.toDouble(),"minutely,alerts","metric", OPEN_WEATHER_API_KEY).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
 
                 if (response.isSuccessful)
@@ -59,9 +66,16 @@ class HomeFragment : Fragment() {
                     val jObj: JsonObject? = response.body()
                     if (jObj != null)
                     {
+                        val currentWeather = CurrentWeather()
+                        val hourlyWeather: List<HourlyWeather> = ArrayList()
+                        val dailyWeather: List<DailyWeather> = ArrayList()
+
                         val current = jObj.getAsJsonObject("current")
-                        val hourly = jObj.getAsJsonObject("hourly")
-                        val daily = jObj.getAsJsonObject("daily")
+                        val hourly = jObj.getAsJsonArray("hourly")
+                        val daily = jObj.getAsJsonArray("daily")
+
+
+
                     }
                 }
                 else
@@ -84,6 +98,13 @@ class HomeFragment : Fragment() {
         //onRefresh()
     }
 
+    private fun getUserLocation(): UserLocation {
+        val usrLoc = UserLocation()
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        usrLoc.lat = sharedPreferences.getString("lat", "0").toString()
+        usrLoc.lon = sharedPreferences.getString("lon", "0").toString()
+        return usrLoc
+    }
 //    private fun onRefresh() {
 //        CoroutineScope(IO).launch {
 //            val request: Request = Request
@@ -100,27 +121,27 @@ class HomeFragment : Fragment() {
             //binding.rootView.isRefreshing = false
             //Center
             Glide.with(this@HomeFragment)
-                .load("https://openweathermap.org/img/wn/${wm.owIcon}@2x.png")
+                .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
                 .centerCrop()
                 .into(binding.ivWeather)
 //            Picasso.get()
 //                .load("https://openweathermap.org/img/wn/${wm.owIcon}@2x.png")
 //                .into(binding.ivWeather)
 
-            binding.tvTemp.text = wm.temp
-            binding.tvMaxTemp.text = wm.tempMax
-            binding.tvMinTemp.text = wm.tempMin
-            binding.tvWeather.text = wm.wDescription
-            //Top
-            binding.tvUpdateTime.text = wm.updateTime
-            binding.tvCity.text = wm.city
-            //Details
-            binding.tvSunrise.text = wm.sunrise
-            binding.tvSunset.text = wm.sunset
-            binding.tvTempFeelsLike.text = wm.tempFeelsLike
-            binding.tvHumidity.text = wm.humidity
-            binding.tvPressure.text = wm.pressure
-            binding.tvWind.text = wm.wind
+//            binding.tvTemp.text = wm.temp
+//            binding.tvMaxTemp.text = wm.tempMax
+//            binding.tvMinTemp.text = wm.tempMin
+//            binding.tvWeather.text = wm.wDescription
+//            //Top
+//            binding.tvUpdateTime.text = wm.updateTime
+//            binding.tvCity.text = wm.city
+//            //Details
+//            binding.tvSunrise.text = wm.sunrise
+//            binding.tvSunset.text = wm.sunset
+//            binding.tvTempFeelsLike.text = wm.tempFeelsLike
+//            binding.tvHumidity.text = wm.humidity
+//            binding.tvPressure.text = wm.pressure
+//            binding.tvWind.text = wm.wind
 
         }
     }

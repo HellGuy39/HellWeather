@@ -9,8 +9,8 @@ interface RetrofitServices {
 
     @GET("onecall?")
     fun getWeatherOneCall(
-        @Query("lat")lat: Int,
-        @Query("lon")lon: Int,
+        @Query("lat")lat: Double,
+        @Query("lon")lon: Double,
         @Query("exclude")exclude: String,
         @Query("units")units: String,
         @Query("appid")appId: String

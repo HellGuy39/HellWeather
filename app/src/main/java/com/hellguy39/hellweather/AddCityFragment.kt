@@ -1,22 +1,24 @@
 package com.hellguy39.hellweather
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.hellguy39.hellweather.databinding.FragmentAddCityBinding
+import com.hellguy39.hellweather.models.UserLocation
 import com.hellguy39.hellweather.retrofit.Common
 import com.hellguy39.hellweather.retrofit.RetrofitServices
-import com.hellguy39.hellweather.utils.METRIC
-import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
+import com.hellguy39.hellweather.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -28,6 +30,7 @@ class AddCityFragment : Fragment() {
 
     private lateinit var binding: FragmentAddCityBinding
     private lateinit var mService: RetrofitServices
+    private lateinit var fragView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,30 +48,18 @@ class AddCityFragment : Fragment() {
     {
         super.onViewCreated(view, savedInstanceState)
 
+        fragView = view
         binding = FragmentAddCityBinding.bind(view)
 
         binding.btnCnt.setOnClickListener {
 
-            it.isEnabled = false
             val input = binding.etCity.text.toString()
 
             CoroutineScope(Dispatchers.Default).launch {
                 if (checkTextField(input))
                 {
-                    binding.progressLinear.visibility = View.VISIBLE
-                    binding.tvWait.visibility = View.VISIBLE
-
-                    if (checkCityInAPI(input))
-                    {
-                        view.findNavController().navigate(R.id.action_addCityFragment_to_homeFragment)
-                    }
-                    else
-                    {
-                        binding.progressLinear.visibility = View.INVISIBLE
-                        binding.tvWait.visibility = View.INVISIBLE
-
-                        Snackbar.make(view,"City not found", Snackbar.LENGTH_SHORT).show()
-                    }
+                    loadController(ENABLE)
+                    checkCityInAPI(input)
                 }
                 else
                 {
@@ -78,15 +69,76 @@ class AddCityFragment : Fragment() {
         }
     }
 
+    private suspend fun loadController(action: String) {
+        withContext(Dispatchers.Main) {
+            when (action) {
+                ENABLE -> {
+                    binding.etCity.isEnabled = false
+                    binding.btnCnt.isEnabled = false
+                    binding.progressLinear.visibility = View.VISIBLE
+                    binding.tvWait.visibility = View.VISIBLE
+                }
+                DISABLE -> {
+                    binding.etCity.isEnabled = true
+                    binding.btnCnt.isEnabled = true
+                    binding.progressLinear.visibility = View.INVISIBLE
+                    binding.tvWait.visibility = View.INVISIBLE
+                }
+            }
+        }
+    }
+
     private fun checkTextField(input: String) : Boolean {
         return !TextUtils.isEmpty(input) && input.length > 3
     }
 
-    private fun saveCord(lat: Double, lon: Double, cityName: String, region: String, cod: Int, timezone: Int, id: Int) {
-
+    private fun saveCord(usrLoc: UserLocation) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val edit: SharedPreferences.Editor = sharedPreferences.edit()
+        edit.putString("lat", usrLoc.lat)
+        edit.putString("lon", usrLoc.lon)
+        edit.apply()
     }
 
-    private fun checkCityInAPI(input: String) : Boolean {
+    private fun disableFirstBoot() {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val edit: SharedPreferences.Editor = sharedPreferences.edit()
+        edit.putBoolean("first_boot", false)
+        edit.apply()
+    }
+
+    private fun onRequestResult(res: String, eCode: String = "0") {
+        when(res) {
+            SUCCESSFUL -> {
+                CoroutineScope(Dispatchers.Default).launch {
+                    loadController(DISABLE)
+                    disableFirstBoot()
+                }
+                fragView.findNavController().navigate(AddCityFragmentDirections.actionAddCityFragmentToHomeFragment())
+            }
+            EMPTY_BODY -> {
+                CoroutineScope(Dispatchers.Default).launch {
+                    loadController(DISABLE)
+                }
+                Snackbar.make(fragView,"City not found", Snackbar.LENGTH_SHORT).show()
+            }
+            ERROR -> {
+                CoroutineScope(Dispatchers.Default).launch {
+                    loadController(DISABLE)
+                }
+                Snackbar.make(fragView,"City not found", Snackbar.LENGTH_SHORT).show()
+            }
+            FAILURE -> {
+                CoroutineScope(Dispatchers.Default).launch {
+                    loadController(DISABLE)
+                }
+                Snackbar.make(fragView,"Server not responding", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun checkCityInAPI(input: String) {
+
         mService.getCurrentWeather(input, METRIC, OPEN_WEATHER_API_KEY)
             .enqueue(object : Callback<JsonObject> {
 
@@ -97,29 +149,46 @@ class AddCityFragment : Fragment() {
                         val jObj: JsonObject? = response.body()
                         if (jObj != null)
                         {
-                            val coordinates = jObj.getAsJsonObject("coord")
-                            val lat: Double = coordinates.get("lat").asDouble
-                            val lon: Double = coordinates.get("lon").asDouble
-                            //saveCord(lat, lon)
+                            val usrLoc = UserLocation()
 
+                            val coordinates = jObj.getAsJsonObject("coord")
+                            usrLoc.lat = coordinates.get("lat").asString
+                            usrLoc.lon = coordinates.get("lon").asString
+
+                            usrLoc.cityName = input
+                            usrLoc.region = jObj.get("name").asString
+                            usrLoc.cod = jObj.get("cod").asString
+                            usrLoc.id = jObj.get("id").asInt
+                            usrLoc.timezone = jObj.get("timezone").asString
+                            saveCord(usrLoc)
+
+                            Log.d("LOG", "Lat:${usrLoc.lat} Lon:${usrLoc.lon}")
+
+                            if (usrLoc.lat != "N/A" || !TextUtils.isEmpty(usrLoc.lat) &&
+                                usrLoc.lon != "N/A" || !TextUtils.isEmpty(usrLoc.lon)) {
+                                onRequestResult(SUCCESSFUL)
+                            }
+                            else
+                            {
+                                onRequestResult(EMPTY_BODY)
+                            }
                         }
                         else
                         {
-
+                            onRequestResult(EMPTY_BODY)
                         }
                     }
                     else
                     {
-                        //response.code().toString()
+                        onRequestResult(ERROR, response.code().toString())
                     }
 
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-
+                    onRequestResult(FAILURE, t.toString())
                 }
 
             })
-        return true
     }
 }
