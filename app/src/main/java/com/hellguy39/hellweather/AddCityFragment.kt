@@ -97,6 +97,7 @@ class AddCityFragment : Fragment() {
         val edit: SharedPreferences.Editor = sharedPreferences.edit()
         edit.putString("lat", usrLoc.lat)
         edit.putString("lon", usrLoc.lon)
+        edit.putString("cityName", usrLoc.cityName)
         edit.apply()
     }
 

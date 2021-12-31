@@ -1,5 +1,6 @@
 package com.hellguy39.hellweather
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -22,20 +23,18 @@ import com.hellguy39.hellweather.models.HourlyWeather
 import com.hellguy39.hellweather.models.UserLocation
 import com.hellguy39.hellweather.retrofit.Common
 import com.hellguy39.hellweather.retrofit.RetrofitServices
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-
-    //private var okHttpClient: OkHttpClient = OkHttpClient()
-    private val city = "Krasnodar"
-    //private val url = "https://api.openweathermap.org/data/2.5/weather?q=$city&units=metric&appid=$OW_API_KEY"
-    private val LOG_HOME_FRAGMENT = "HomeFragment"
     private lateinit var usrLoc: UserLocation
-
     private lateinit var mService: RetrofitServices
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +56,15 @@ class HomeFragment : Fragment() {
 //        binding.rootView.setOnRefreshListener {
 //            onRefresh()
 //        }
+        if (usrLoc.cityName != "N/A") {
+            CoroutineScope(Dispatchers.IO).launch {
+                request()
+            }
+        }
 
+    }
+
+    private fun request() {
         mService.getWeatherOneCall(usrLoc.lat.toDouble(),usrLoc.lon.toDouble(),"minutely,alerts","metric", OPEN_WEATHER_API_KEY).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
 
@@ -74,23 +81,36 @@ class HomeFragment : Fragment() {
                         val hourly = jObj.getAsJsonArray("hourly")
                         val daily = jObj.getAsJsonArray("daily")
 
+                        currentWeather.let {
+                            it.dt = SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(current.get("dt").asLong * 1000))
+                            it.sunrise = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(current.get("sunrise").asLong * 1000))
+                            it.sunset = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(current.get("sunset").asLong * 1000))
+                            it.temp = current.get("temp").asDouble.toInt().toString()
+                            it.tempFeelsLike = current.get("feels_like").asDouble.toInt().toString()
+                            it.pressure = current.get("pressure").asString
+                            it.humidity = current.get("humidity").asString
+                            it.windSpeed = current.get("wind_speed").asString
+                            val wt = current.getAsJsonArray("weather").get(0).asJsonObject
+                            it.wMain = wt.get("main").asString
+                            it.wDescription = wt.get("description").asString.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                            it.icon = wt.get("icon").asString
+                        }
 
-
+                        updateUI(currentWeather)
                     }
                 }
                 else
                 {
-                    Log.d(LOG_HOME_FRAGMENT, "Nope")
+
                 }
 
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.d(LOG_HOME_FRAGMENT, t.message.toString())
+
             }
 
         })
-
     }
 
     override fun onStart() {
@@ -101,106 +121,48 @@ class HomeFragment : Fragment() {
     private fun getUserLocation(): UserLocation {
         val usrLoc = UserLocation()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        usrLoc.cityName = sharedPreferences.getString("cityName", "N/A").toString()
         usrLoc.lat = sharedPreferences.getString("lat", "0").toString()
         usrLoc.lon = sharedPreferences.getString("lon", "0").toString()
         return usrLoc
     }
-//    private fun onRefresh() {
-//        CoroutineScope(IO).launch {
-//            val request: Request = Request
-//                .Builder()
-//                .url(url)
-//                .build()
-//            request(request)
-//        }
-//    }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUI(wm : CurrentWeather) {
         CoroutineScope(Main).launch {
-            Log.i(LOG_HOME_FRAGMENT, "updateUI() was called")
             //binding.rootView.isRefreshing = false
+
             //Center
             Glide.with(this@HomeFragment)
                 .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
                 .centerCrop()
                 .into(binding.ivWeather)
-//            Picasso.get()
-//                .load("https://openweathermap.org/img/wn/${wm.owIcon}@2x.png")
-//                .into(binding.ivWeather)
 
-//            binding.tvTemp.text = wm.temp
-//            binding.tvMaxTemp.text = wm.tempMax
-//            binding.tvMinTemp.text = wm.tempMin
-//            binding.tvWeather.text = wm.wDescription
-//            //Top
-//            binding.tvUpdateTime.text = wm.updateTime
-//            binding.tvCity.text = wm.city
-//            //Details
-//            binding.tvSunrise.text = wm.sunrise
-//            binding.tvSunset.text = wm.sunset
-//            binding.tvTempFeelsLike.text = wm.tempFeelsLike
-//            binding.tvHumidity.text = wm.humidity
-//            binding.tvPressure.text = wm.pressure
-//            binding.tvWind.text = wm.wind
+//            when (wm.wMain) {
+//                "Clouds" -> {}
+//                "Clear" -> {}
+//                //"Atmosphere" -> {}
+//                "Snow" -> {}
+//                "Rain" -> {}
+//                "Drizzle" -> {}
+//                "Thunderstorm" -> {}
+//            }
+
+            binding.tvTemp.text = wm.temp + "°"
+            //binding.tvMaxTemp.text = wm.tempMax
+            //binding.tvMinTemp.text = wm.tempMin
+            binding.tvWeather.text = wm.wDescription
+            //Top
+            binding.tvUpdateTime.text = wm.dt
+            binding.tvCity.text = usrLoc.cityName
+            //Details
+            binding.tvSunrise.text = wm.sunrise
+            binding.tvSunset.text = wm.sunset
+            binding.tvTempFeelsLike.text = wm.tempFeelsLike + "°"
+            binding.tvHumidity.text = wm.humidity + "%"
+            binding.tvPressure.text = wm.pressure + "hPa"
+            binding.tvWind.text = wm.windSpeed + "m/s"
 
         }
     }
-
-//    private fun request(request: Request){
-//        Log.i(LOG_HOME_FRAGMENT, "request() was called")
-//        val wm = WeatherModel()
-//
-//        okHttpClient
-//            .newCall(request)
-//            .enqueue(object: Callback {
-//                override fun onFailure(call: Call, e: IOException)
-//                {
-//
-//                }
-//
-//                override fun onResponse(call: Call, response: Response)
-//                {
-//
-//                    if (response.isSuccessful)
-//                    {
-//                        val result = response.body?.string()
-//                        result?.let { Log.i("LOG", it) }
-//
-//                        val jsonObject = JSONObject(result)
-//
-//                        val main = jsonObject.getJSONObject("main")
-//                        val sys = jsonObject.getJSONObject("sys")
-//                        val sunrise = sys.getLong("sunrise")
-//                        val sunset = sys.getLong("sunset")
-//                        val wind = jsonObject.getJSONObject("wind")
-//                        val time: Long = jsonObject.getLong("dt")
-//                        val weather = jsonObject.getJSONArray("weather").getJSONObject(0)
-//                        val sdf = SimpleDateFormat("E, HH:mm", Locale.getDefault())//.setTimeZone(TimeZone.getTimeZone("GMT"))//.format(Date(time * 1000))
-//
-//                        wm.temp = main.getInt("temp").toString() + "°"
-//                        wm.tempFeelsLike = main.getInt("feels_like").toString() + "°"
-//                        wm.tempMax = main.getInt("temp_max").toString() + "° C"
-//                        wm.tempMin = main.getInt("temp_min").toString() + "° C"
-//                        wm.pressure = main.getInt("pressure").toString() + "hPa"
-//                        wm.humidity = main.getInt("humidity").toString() + "%"
-//                        wm.sunrise = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(sunrise * 1000))
-//                        wm.sunset = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(sunset * 1000))
-//                        wm.wind = wind.getDouble("speed").toString() + " m/s"
-//                        wm.updateTime = sdf.format(Date(time * 1000))
-//                        wm.city = city
-//                        wm.wDescription = weather
-//                            .getString("description")
-//                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-//
-//                        wm.owIcon = weather.getString("icon")
-//
-//                        updateUI(wm)
-//                    }
-//                    else
-//                    {
-//
-//                    }
-//                }
-//            })
-//    }
 }
