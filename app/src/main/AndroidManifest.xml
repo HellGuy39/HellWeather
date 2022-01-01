@@ -13,6 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HellWeather" >
         <activity
+            android:name=".hui1"
+            android:exported="false"
+            android:label="@string/title_activity_hui1"
+            android:theme="@style/Theme.HellWeather.NoActionBar" />
+        <activity
+            android:name=".MainActivity2"
+            android:exported="false"
+            android:label="@string/title_activity_main2" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" >
             <intent-filter>

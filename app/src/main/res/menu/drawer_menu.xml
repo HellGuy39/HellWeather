@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_quick_weather"
+            android:icon="@drawable/ic_outline_search_24"
+            android:title="Quick weather" />
+
+        <item
+            android:id="@+id/nav_my_cities"
+            android:icon="@drawable/ic_outline_location_city_24"
+            android:title="My cities" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_outline_settings_24"
+            android:title="Settings" />
+
+        <item
+            android:id="@+id/nav_customize"
+            android:icon="@drawable/ic_outline_format_paint_24"
+            android:title="Customize" />
+
+    </group>
+
+</menu>

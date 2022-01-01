@@ -105,6 +105,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
+        android:textSize="20sp"
         android:text="Just wait a few seconds..."
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/outlinedTextField"

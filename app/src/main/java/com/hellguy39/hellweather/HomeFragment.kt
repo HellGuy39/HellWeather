@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
@@ -60,6 +61,10 @@ class HomeFragment : Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 request()
             }
+        }
+
+        binding.btnMenu.setOnClickListener {
+            (activity as MainActivity).openDrawer()
         }
 
     }

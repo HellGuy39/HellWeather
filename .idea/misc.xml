@@ -21,13 +21,19 @@
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/splash_screen.xml" value="0.3880208333333333" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/splash_screen_day.xml" value="0.3729166666666667" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/splash_screen_night.xml" value="0.3880208333333333" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/activity_hui1.xml" value="0.371875" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/activity_main.xml" value="0.38385416666666666" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/activity_new_user.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/activity_splash_screen.xml" value="0.371875" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/content_hui1.xml" value="0.371875" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/day_item.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_add_city.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_home.xml" value="0.33" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_notifications.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_welcome.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/main_activity.xml" value="0.2427536231884058" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/main_fragment.xml" value="0.264" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/menu/drawer_menu.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3880208333333333" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.225" />
       </map>
