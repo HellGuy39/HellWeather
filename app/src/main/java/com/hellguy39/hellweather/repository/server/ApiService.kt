@@ -1,11 +1,11 @@
-package com.hellguy39.hellweather.retrofit
+package com.hellguy39.hellweather.repository.server
 
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface RetrofitServices {
+interface ApiService {
 
     @GET("onecall?")
     fun getWeatherOneCall(

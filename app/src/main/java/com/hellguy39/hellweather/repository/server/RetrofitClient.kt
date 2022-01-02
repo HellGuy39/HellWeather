@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.retrofit
+package com.hellguy39.hellweather.repository.server
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

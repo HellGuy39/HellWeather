@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.models
+package com.hellguy39.hellweather.repository.database.pojo
 
 data class UserLocation(
     var lat: String = "N/A",

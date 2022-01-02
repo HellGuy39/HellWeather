@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather
+package com.hellguy39.hellweather.presentation.fragments.add
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,10 +12,11 @@ import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
+import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentAddCityBinding
-import com.hellguy39.hellweather.models.UserLocation
-import com.hellguy39.hellweather.retrofit.Common
-import com.hellguy39.hellweather.retrofit.RetrofitServices
+import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.repository.server.Common
+import com.hellguy39.hellweather.repository.server.ApiService
 import com.hellguy39.hellweather.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,7 @@ import retrofit2.Response
 class AddCityFragment : Fragment() {
 
     private lateinit var binding: FragmentAddCityBinding
-    private lateinit var mService: RetrofitServices
+    private lateinit var mService: ApiService
     private lateinit var fragView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {

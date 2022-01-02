@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_clear_night"
-    tools:context=".AddCityFragment">
+    tools:context=".presentation.fragments.add.AddCityFragment">
 
     <TextView
         android:id="@+id/tvFragTittle"

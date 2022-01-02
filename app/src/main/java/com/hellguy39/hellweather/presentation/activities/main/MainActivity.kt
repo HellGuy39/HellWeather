@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather
+package com.hellguy39.hellweather.presentation.activities.main
 
 import android.os.Bundle
 import android.util.Log
@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
+import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 
 private lateinit var drawerLayout: DrawerLayout
 private lateinit var binding: MainActivityBinding

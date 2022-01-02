@@ -52,7 +52,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
 
     // Feature module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.5"
@@ -109,8 +109,4 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0")) // define a BOM and its version
     implementation("com.squareup.okhttp3:okhttp") // define any required OkHttp artifacts without version
     implementation("com.squareup.okhttp3:logging-interceptor")
-
-    implementation("com.squareup.picasso:picasso:2.71828") {
-        exclude group: 'com.squareup.okhttp3'
-    }
 }

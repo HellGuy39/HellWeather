@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather
+package com.hellguy39.hellweather.presentation.activities.splash
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
-
+import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 
 private var isFirstBoot = false
 

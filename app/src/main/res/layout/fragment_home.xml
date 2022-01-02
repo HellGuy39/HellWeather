@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     app:layoutDescription="@xml/fragment_home_scene"
-    tools:context=".HomeFragment">
+    tools:context=".presentation.fragments.home.HomeFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"
