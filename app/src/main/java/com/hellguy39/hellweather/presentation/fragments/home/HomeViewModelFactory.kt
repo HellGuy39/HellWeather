@@ -7,12 +7,12 @@ import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 
 class HomeViewModelFactory(
-    private val requireContext: Context
+    private val context: Context
 ) : ViewModelProvider.Factory {
 
     private fun getUserLocation(): UserLocation {
         val usrLoc = UserLocation()
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         usrLoc.cityName = sharedPreferences.getString("cityName", "N/A").toString()
         usrLoc.lat = sharedPreferences.getString("lat", "0").toString()
         usrLoc.lon = sharedPreferences.getString("lon", "0").toString()

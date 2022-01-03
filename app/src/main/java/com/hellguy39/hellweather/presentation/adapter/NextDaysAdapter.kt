@@ -1,6 +1,7 @@
 package com.hellguy39.hellweather.presentation.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,8 @@ class NextDaysAdapter(
             tvMinTemp.text = dailyWeather.min + "°"
             tvHumidity.text = dailyWeather.humidity + "%"
             tvDay.text = dailyWeather.dt
+
+            Log.d("DEBUG", "Icon:${dailyWeather.icon}")
 
             Glide.with(context)
                 .load("https://openweathermap.org/img/wn/${dailyWeather.icon}@2x.png")

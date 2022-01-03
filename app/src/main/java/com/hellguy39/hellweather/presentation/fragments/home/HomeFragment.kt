@@ -8,11 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.broooapps.graphview.CurveGraphConfig
+import com.broooapps.graphview.CurveGraphView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
@@ -24,19 +27,18 @@ import kotlinx.coroutines.launch
 import com.google.gson.JsonObject
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
-import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
-import com.hellguy39.hellweather.repository.server.Common
-import com.hellguy39.hellweather.repository.server.ApiService
-import kotlinx.coroutines.Dispatchers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.absoluteValue
+import com.broooapps.graphview.models.PointMap
+
+import com.broooapps.graphview.models.GraphData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+
 
 class HomeFragment : Fragment() {
 
@@ -60,11 +62,41 @@ class HomeFragment : Fragment() {
 
         binding.rootView.setBackgroundResource(R.drawable.gradient_clear_day)
 
-        binding.btnMenu.setOnClickListener {
+        binding.fabMenu.setOnClickListener {
             (activity as MainActivity).openDrawer()
         }
 
-        binding.nestedSV
+        binding.graphView.configure(CurveGraphConfig.Builder(context)
+            .setAxisColor(R.color.White)
+            .setIntervalDisplayCount(6)
+            .setVerticalGuideline(5)
+            .setHorizontalGuideline(5)
+            .setGuidelineColor(R.color.Gray)
+            .setNoDataMsg("Loading...")
+            .setxAxisScaleTextColor(R.color.white)
+            .setyAxisScaleTextColor(R.color.white)
+            .setAnimationDuration(2000)
+            .build())
+
+        val pointMap = PointMap()
+        pointMap.addPoint(0, 50)
+        pointMap.addPoint(1, 55)
+        pointMap.addPoint(2, 82)
+        pointMap.addPoint(3, 30)
+        pointMap.addPoint(4, 19)
+        pointMap.addPoint(5, 25)
+
+        val gd = GraphData.builder(context)
+            .setPointMap(pointMap)
+            .setGraphStroke(R.color.White)
+            .animateLine(true)
+            .setGraphGradient(R.color.White, R.color.transparent)
+            .build()
+
+        CoroutineScope(Main).launch {
+            delay(1000L)
+            binding.graphView.setData(6, 100, gd)
+        }
 
         viewModel.currentWeatherLive.observe(this, {
             updateUI(it)

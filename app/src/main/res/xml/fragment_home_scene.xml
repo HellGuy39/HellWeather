@@ -9,12 +9,24 @@
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
 
-        <OnSwipe
-            motion:touchAnchorId="@+id/rootView"
-            motion:touchAnchorSide="top"
-            motion:dragDirection="dragUp" />
+        <OnClick
+            motion:autoTransition="animateToEnd"
+            motion:targetId="@+id/fabMore"/>
        <KeyFrameSet>
        </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+
+        <OnClick
+            motion:autoTransition="animateToStart"
+            motion:targetId="@+id/fabMore"/>
+
+        <KeyFrameSet>
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -23,5 +35,38 @@
 
     <ConstraintSet android:id="@+id/end">
 
+        <Constraint
+            android:layout_height="wrap_content"
+            motion:layout_constraintGuide_percent="0.12"
+            android:layout_width="wrap_content"
+            android:id="@+id/guideline66" />
+
+        <Constraint
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            motion:layout_constraintBottom_toTopOf="@+id/tempContainer"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_chainStyle="packed"
+            android:visibility="invisible"
+            android:id="@+id/descriptionContainer" />
+
+        <Constraint
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toBottomOf="@+id/descriptionContainer"
+            android:visibility="invisible"
+            android:id="@+id/tempContainer" />
     </ConstraintSet>
+
 </MotionScene>

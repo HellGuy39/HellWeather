@@ -1,9 +1,7 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.preference.PreferenceManager
 import com.google.gson.JsonObject
 import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
