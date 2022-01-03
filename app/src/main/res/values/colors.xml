@@ -11,6 +11,8 @@
     <color name="splash_day_background">#FFFFFFFF</color>
     <color name="splash_night_background">#1E1E1E</color>
 
+    <color name="transparent">#00FFFFFF</color>
+
     <color name="whiteBlur10">#10FFFFFF</color>
     <color name="whiteBlur20">#20FFFFFF</color>
     <color name="whiteBlur30">#30FFFFFF</color>

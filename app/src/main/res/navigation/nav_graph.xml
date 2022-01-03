@@ -18,6 +18,12 @@
             app:enterAnim="@anim/fade_in"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_customizeFragment"
+            app:destination="@id/customizeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addCityFragment"
@@ -31,6 +37,9 @@
             app:exitAnim="@anim/fade_out"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_addCityFragment_to_confirmationCityFragment"
+            app:destination="@id/confirmationCityFragment" />
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment"
@@ -45,4 +54,23 @@
             app:popEnterAnim="@anim/to_right_in"
             app:popExitAnim="@anim/to_right_out" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.settings.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/settings_fragment" />
+    <fragment
+        android:id="@+id/confirmationCityFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.confirmation.ConfirmationCityFragment"
+        android:label="confirmation_city_fragment"
+        tools:layout="@layout/confirmation_city_fragment" >
+        <action
+            android:id="@+id/action_confirmationCityFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/customizeFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.customization.CustomizeFragment"
+        android:label="customize_fragment"
+        tools:layout="@layout/customize_fragment" />
 </navigation>

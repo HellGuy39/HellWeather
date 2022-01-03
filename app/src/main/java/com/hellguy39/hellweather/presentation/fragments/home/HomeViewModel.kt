@@ -23,7 +23,10 @@ class HomeViewModel(
     getUserLocation: UserLocation
 ) : ViewModel() {
 
+    val dailyWeatherLive = MutableLiveData<MutableList<DailyWeather>>()
+    val hourlyWeatherLive = MutableLiveData<MutableList<HourlyWeather>>()
     val currentWeatherLive = MutableLiveData<CurrentWeather>()
+
     val userLocationLive = MutableLiveData<UserLocation>()
     val isUserLocationLive = MutableLiveData<Boolean>()
 
@@ -61,17 +64,17 @@ class HomeViewModel(
     private fun updatePojo(jObj: JsonObject) {
 
         val currentWeather = CurrentWeather()
-        val hourlyWeather: List<HourlyWeather> = ArrayList()
-        val dailyWeather: List<DailyWeather> = ArrayList()
+        val hourlyWeather: MutableList<HourlyWeather> = ArrayList()
+        val dailyWeather: MutableList<DailyWeather> = ArrayList()
 
         val current = jObj.getAsJsonObject("current")
         val hourly = jObj.getAsJsonArray("hourly")
         val daily = jObj.getAsJsonArray("daily")
 
         currentWeather.let {
-            it.dt = SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(current.get("dt").asLong * 1000))
-            it.sunrise = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(current.get("sunrise").asLong * 1000))
-            it.sunset = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(current.get("sunset").asLong * 1000))
+            it.dt = current.get("dt").asLong
+            it.sunrise = current.get("sunrise").asLong
+            it.sunset = current.get("sunset").asLong
             it.temp = current.get("temp").asDouble.toInt().toString()
             it.tempFeelsLike = current.get("feels_like").asDouble.toInt().toString()
             it.pressure = current.get("pressure").asString
@@ -85,15 +88,50 @@ class HomeViewModel(
                 ) else it.toString()
             }
             it.icon = wt.get("icon").asString
+
+            val obj = daily[0].asJsonObject // if index = 0 -> today
+            it.tempMax = obj.get("temp").asJsonObject.get("max").asDouble.toInt().toString()
+            it.tempMin = obj.get("temp").asJsonObject.get("min").asDouble.toInt().toString()
+
         }
 
-/*        for (n in 0..48) {
-            Log.d("DEBUG", "For: $n")
+        for (n in 0 until hourly.asJsonArray.size())
+        {
             val obj = hourly[n].asJsonObject
-            hourlyWeather[n].temp = obj.get("").asString
-        }*/
+
+            hourlyWeather.add(n, HourlyWeather())
+
+            hourlyWeather[n].temp = obj.get("temp").asString
+            hourlyWeather[n].dt = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(obj.get("dt").asLong * 1000))
+            hourlyWeather[n].tempFeelsLike = obj.get("feels_like").asString
+            hourlyWeather[n].humidity = obj.get("humidity").asString
+            hourlyWeather[n].pressure = obj.get("pressure").asString
+            hourlyWeather[n].pop = obj.get("pop").asString
+            hourlyWeather[n].windSpeed = obj.get("wind_speed").asString
+        }
+
+        for (n in 0 until daily.asJsonArray.size())
+        {
+            val obj = daily[n].asJsonObject
+            val wt = obj.getAsJsonArray("weather").get(0).asJsonObject
+
+            dailyWeather.add(n, DailyWeather())
+
+            //dailyWeather[n].temp = obj.get("temp").asString
+            dailyWeather[n].dt = SimpleDateFormat("E", Locale.getDefault()).format(Date(obj.get("dt").asLong * 1000))
+            //dailyWeather[n].tempFeelsLike = obj.get("feels_like").asString
+            dailyWeather[n].humidity = obj.get("humidity").asString
+            //dailyWeather[n].pressure = obj.get("pressure").asString
+            dailyWeather[n].pop = obj.get("pop").asString
+            dailyWeather[n].icon = wt.get("icon").asString
+            dailyWeather[n].max = obj.get("temp").asJsonObject.get("max").asDouble.toInt().toString()
+            dailyWeather[n].min = obj.get("temp").asJsonObject.get("min").asDouble.toInt().toString()
+            //dailyWeather[n].windSpeed = obj.get("wind_speed").asString
+        }
 
         currentWeatherLive.value = currentWeather
+        hourlyWeatherLive.value = hourlyWeather
+        dailyWeatherLive.value = dailyWeather
     }
 
     fun requestToApi() {

@@ -13,6 +13,7 @@
         android:backgroundTint="@color/whiteBlur30"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +24,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="4dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/tvDay"
@@ -59,8 +60,8 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:backgroundTint="?android:attr/textColor" />
+                android:layout_height="0.5dp"
+                android:background="?android:attr/textColor" />
 
             <TextView
                 android:id="@+id/tvMinTemp"
