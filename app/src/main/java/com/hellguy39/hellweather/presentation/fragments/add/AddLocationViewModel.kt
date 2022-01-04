@@ -17,7 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AddCityViewModel() : ViewModel() {
+class AddLocationViewModel() : ViewModel() {
 
     private val mService = Common.retrofitServices
     val userLocationLive = MutableLiveData<UserLocation>()

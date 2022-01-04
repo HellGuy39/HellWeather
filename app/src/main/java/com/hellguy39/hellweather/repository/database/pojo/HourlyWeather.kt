@@ -6,6 +6,6 @@ data class HourlyWeather(
     var tempFeelsLike: String = "N/A",
     var pressure: String = "N/A",
     var humidity: String = "N/A",
-    var pop: String = "N/A",
+    var pop: Double = 0.0,
     var windSpeed: String = "N/A"
 )

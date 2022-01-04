@@ -27,9 +27,9 @@
     </fragment>
     <fragment
         android:id="@+id/addCityFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.add.AddCityFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.add.AddLocationFragment"
         android:label="fragment_add_city"
-        tools:layout="@layout/fragment_add_city" >
+        tools:layout="@layout/fragment_add_location" >
         <action
             android:id="@+id/action_addCityFragment_to_homeFragment"
             app:destination="@id/homeFragment"

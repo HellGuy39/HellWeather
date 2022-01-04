@@ -1,20 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <!--TODO: Override night theme-->
     <style name="Theme.HellWeather" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/material_gray_2</item>
+        <item name="colorPrimaryVariant">@color/material_gray_5</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/material_gray_8</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status and nav bar color. -->
-<!--        <item name="android:windowTranslucentStatus">true</item>-->
-<!--        <item name="android:windowTranslucentNavigation">true</item>-->
+        <item name="android:statusBarColor">@color/cloudyNightStart</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
+        <item name="android:navigationBarColor">@color/cloudyNightEnd</item>
         <!-- Customize your theme here. -->
-        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@drawable/gradient_cloudy_night</item>
+        <item name="android:textColor">@color/white</item>>
     </style>
 
     <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -32,6 +34,6 @@
 
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-</style>
+    </style>
 
 </resources>

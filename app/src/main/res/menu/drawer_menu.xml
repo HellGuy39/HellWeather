@@ -5,24 +5,40 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_round_cloud_queue_24"
+            android:title="Home" />
+
+        <item
             android:id="@+id/nav_quick_weather"
             android:icon="@drawable/ic_outline_search_24"
             android:title="Quick weather" />
 
         <item
-            android:id="@+id/nav_my_cities"
+            android:id="@+id/nav_location_manager"
             android:icon="@drawable/ic_outline_location_city_24"
-            android:title="My cities" />
+            android:title="Location manager" />
 
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_outline_settings_24"
-            android:title="Settings" />
+    </group>
 
+    <group
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_customize"
-            android:icon="@drawable/ic_outline_format_paint_24"
-            android:title="Customize" />
+            android:title="Options">
+
+            <menu>
+                <item
+                    android:id="@+id/nav_settings"
+                    android:icon="@drawable/ic_outline_settings_24"
+                    android:title="Settings" />
+
+                <item
+                    android:id="@+id/nav_customize"
+                    android:icon="@drawable/ic_outline_format_paint_24"
+                    android:title="Customize" />
+            </menu>
+
+        </item>
 
     </group>
 

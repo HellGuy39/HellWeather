@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_clear_night"
-    tools:context=".presentation.fragments.add.AddCityFragment">
+    tools:context=".presentation.fragments.add.AddLocationFragment">
 
     <TextView
         android:id="@+id/tvFragTittle"
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
-        android:text="Enter your city name"
+        android:text="Enter your location"
         android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/outlinedTextField"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
@@ -41,7 +41,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="City name"
+        android:hint="Location name"
         app:layout_constraintBottom_toTopOf="@+id/btnCnt"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"

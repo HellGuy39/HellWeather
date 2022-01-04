@@ -10,6 +10,7 @@ import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.repository.server.ApiService
 import com.hellguy39.hellweather.repository.server.Common
 import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,7 +60,7 @@ class HomeViewModel(
         return true
     }
 
-    private fun updatePojo(jObj: JsonObject) {
+    private suspend fun updatePojo(jObj: JsonObject) = coroutineScope {
 
         val currentWeather = CurrentWeather()
         val hourlyWeather: MutableList<HourlyWeather> = ArrayList()
@@ -104,7 +105,7 @@ class HomeViewModel(
             hourlyWeather[n].tempFeelsLike = obj.get("feels_like").asString
             hourlyWeather[n].humidity = obj.get("humidity").asString
             hourlyWeather[n].pressure = obj.get("pressure").asString
-            hourlyWeather[n].pop = obj.get("pop").asString
+            hourlyWeather[n].pop = obj.get("pop").asDouble * 100
             hourlyWeather[n].windSpeed = obj.get("wind_speed").asString
         }
 
@@ -127,34 +128,42 @@ class HomeViewModel(
             //dailyWeather[n].windSpeed = obj.get("wind_speed").asString
         }
 
-        currentWeatherLive.value = currentWeather
-        hourlyWeatherLive.value = hourlyWeather
-        dailyWeatherLive.value = dailyWeather
+        withContext(Dispatchers.Main) {
+            currentWeatherLive.value = currentWeather
+            hourlyWeatherLive.value = hourlyWeather
+            dailyWeatherLive.value = dailyWeather
+        }
     }
 
-    fun requestToApi() {
-        mService.getWeatherOneCall(usrLoc.lat.toDouble(),usrLoc.lon.toDouble(),"minutely,alerts","metric", OPEN_WEATHER_API_KEY).enqueue(object :
-            Callback<JsonObject> {
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+    suspend fun requestToApi() = coroutineScope {
+            mService.getWeatherOneCall(
+                usrLoc.lat.toDouble(),
+                usrLoc.lon.toDouble(),
+                "minutely,alerts",
+                "metric",
+                OPEN_WEATHER_API_KEY
+            ).enqueue(object :
+                Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
 
-                if (response.isSuccessful)
-                {
-                    if (response.body() != null)
-                    {
-                        updatePojo(response.body() as JsonObject)
+                    if (response.isSuccessful) {
+                        if (response.body() != null)
+                        {
+                            CoroutineScope(Dispatchers.Default).launch {
+                                updatePojo(response.body() as JsonObject)
+                            }
+                        }
+                    } else {
+
                     }
-                }
-                else
-                {
 
                 }
 
-            }
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
 
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                }
 
-            }
+            })
+        }
 
-        })
-    }
 }

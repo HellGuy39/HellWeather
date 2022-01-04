@@ -11,27 +11,27 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.R
-import com.hellguy39.hellweather.databinding.FragmentAddCityBinding
+import com.hellguy39.hellweather.databinding.FragmentAddLocationBinding
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.*
-import retrofit2.Response
 
 
-class AddCityFragment : Fragment() {
+class AddLocationFragment : Fragment() {
 
-    private lateinit var binding: FragmentAddCityBinding
+    private lateinit var binding: FragmentAddLocationBinding
     private lateinit var fragView: View
-    private lateinit var viewModel: AddCityViewModel
+    private lateinit var viewModel: AddLocationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, AddCityViewModelFactory(requireContext())).get(AddCityViewModel::class.java)
+        viewModel = ViewModelProvider(this, AddLocationViewModelFactory(requireContext()))[AddLocationViewModel::class.java]
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_add_city, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_add_location, container, false)
 
     override fun onViewCreated(
         view: View,
@@ -40,7 +40,7 @@ class AddCityFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fragView = view
-        binding = FragmentAddCityBinding.bind(view)
+        binding = FragmentAddLocationBinding.bind(view)
 
         viewModel.userLocationLive.observe(this, {
             saveCord(it)
@@ -50,6 +50,7 @@ class AddCityFragment : Fragment() {
             when(it) {
                 SUCCESSFUL -> {
                     disableFirstBoot()
+                    (activity as MainActivity).drawerControl(ENABLE)
                     navigate()
                 }
                 EMPTY_BODY -> {
@@ -126,6 +127,6 @@ class AddCityFragment : Fragment() {
         return !TextUtils.isEmpty(input) && input.length > 3
     }
 
-    private fun navigate() = fragView.findNavController().navigate(AddCityFragmentDirections.actionAddCityFragmentToHomeFragment())
+    private fun navigate() = fragView.findNavController().navigate(AddLocationFragmentDirections.actionAddCityFragmentToHomeFragment())
 
 }

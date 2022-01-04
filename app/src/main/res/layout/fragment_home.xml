@@ -5,7 +5,6 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     app:layoutDescription="@xml/fragment_home_scene"
     tools:context=".presentation.fragments.home.HomeFragment">
 
@@ -451,6 +450,17 @@
                             android:id="@+id/graphView"
                             android:layout_width="match_parent"
                             android:layout_height="150dp" />
+
+                        <TextView
+                            android:id="@+id/tvDesc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:fontFamily="sans-serif-light"
+                            android:text="*after N hours"
+                            android:textAllCaps="false"
+                            android:layout_marginStart="8dp"
+                            android:textSize="14sp" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

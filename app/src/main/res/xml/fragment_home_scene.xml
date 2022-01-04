@@ -7,7 +7,7 @@
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
-        motion:duration="1000">
+        motion:duration="500">
 
         <OnClick
             motion:autoTransition="animateToEnd"
@@ -19,7 +19,7 @@
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
-        motion:duration="1000">
+        motion:duration="500">
 
         <OnClick
             motion:autoTransition="animateToStart"
@@ -66,7 +66,21 @@
             motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
             motion:layout_constraintTop_toBottomOf="@+id/descriptionContainer"
             android:visibility="invisible"
-            android:id="@+id/tempContainer" />
+            android:id="@+id/tempContainer"/>
+
+        <Constraint
+            android:id="@+id/fabMore">
+
+            <Transform
+                android:fromDegrees="0"
+                android:toDegrees="180"
+                android:rotation="180"
+                android:pivotX="50%"
+                android:pivotY="50%"
+                android:duration="500"
+                />
+
+        </Constraint>
     </ConstraintSet>
 
 </MotionScene>
