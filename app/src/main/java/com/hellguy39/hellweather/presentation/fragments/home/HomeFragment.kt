@@ -3,58 +3,39 @@ package com.hellguy39.hellweather.presentation.fragments.home
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.broooapps.graphview.CurveGraphConfig
-import com.broooapps.graphview.CurveGraphView
+import com.broooapps.graphview.models.GraphData
+import com.broooapps.graphview.models.PointMap
 import com.bumptech.glide.Glide
-import com.hellguy39.hellweather.databinding.FragmentHomeBinding
-import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
-import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-//import okhttp3.*
-import com.google.gson.JsonObject
 import com.hellguy39.hellweather.R
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
+import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
+import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
+import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
+import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.absoluteValue
-import com.broooapps.graphview.models.PointMap
-
-import com.broooapps.graphview.models.GraphData
-import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, HomeViewModelFactory(requireContext())).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, HomeViewModelFactory(requireContext()))[HomeViewModel::class.java]
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_home, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,7 +43,6 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.bind(view)
 
         //binding.rootView.setBackgroundResource(R.drawable.gradient_clear_day)
-
         binding.fabMenu.setOnClickListener {
             (activity as MainActivity).openDrawer()
         }
@@ -160,7 +140,7 @@ class HomeFragment : Fragment() {
                 .centerCrop()
                 .into(binding.ivWeather)
 
-            val isDay = if (wm.dt > wm.sunset) {
+            /*val isDay = if (wm.dt > wm.sunset) {
                 false
             } else wm.dt > wm.sunrise
 
@@ -177,7 +157,7 @@ class HomeFragment : Fragment() {
                 if (wm.dt > startSunrise && wm.dt < endSunrise) true
             else
                 false
-
+*/
 //            if (isDay)
 //            {
 //                when (wm.wMain) {

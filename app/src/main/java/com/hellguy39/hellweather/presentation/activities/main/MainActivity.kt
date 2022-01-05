@@ -17,13 +17,14 @@ import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirecti
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
 import android.R.attr.radius
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.NavigationUI
 
 import com.google.android.material.shape.CornerFamily
 
 import com.google.android.material.shape.MaterialShapeDrawable
-
-
-
+import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModel
+import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModelFactory
 
 private lateinit var drawerLayout: DrawerLayout
 private lateinit var binding: MainActivityBinding
@@ -40,28 +41,8 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        binding.navigationView.setCheckedItem(R.id.nav_home)
-        //binding.navigationView.setupWithNavController(navController)
-        binding.navigationView.setNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.nav_settings -> {
-                    Log.d("DEBUG", "SETTINGS")
-                    navController.navigate(R.id.action_homeFragment_to_settingsFragment)
-                }
-                R.id.nav_home -> {
-                    Log.d("DEBUG", "HOME")
-                    /*navController.navigate(R.id.action_homeFragment_to_settingsFragment)
-                    binding.navigationView.setCheckedItem(R.id.nav_settings)*/
-                }
-                R.id.nav_quick_weather -> {
-                    Log.d("DEBUG", "QUICK")
-                    /*navController.navigate(R.id.action_homeFragment_to_settingsFragment)
-                    binding.navigationView.setCheckedItem(R.id.nav_settings)*/
-                }
-            }
-            binding.drawerLayout.close()
-            true
-        }
+        binding.navigationView.setCheckedItem(R.id.homeFragment)
+        NavigationUI.setupWithNavController(binding.navigationView, navController)
 
         val navViewBackground:MaterialShapeDrawable = binding.navigationView.background as MaterialShapeDrawable
         navViewBackground.shapeAppearanceModel = navViewBackground.shapeAppearanceModel

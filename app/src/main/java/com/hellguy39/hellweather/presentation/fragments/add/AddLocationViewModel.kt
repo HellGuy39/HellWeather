@@ -13,6 +13,9 @@ import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.repository.server.Common
 import com.hellguy39.hellweather.utils.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +27,7 @@ class AddLocationViewModel() : ViewModel() {
     val isLoadingLive = MutableLiveData<Boolean>()
     val requestResLive = MutableLiveData<String>()
 
-    fun checkCityInAPI(input: String) {
+    suspend fun checkCityInAPI(input: String) = coroutineScope {
 
         mService.getCurrentWeather(input, METRIC, OPEN_WEATHER_API_KEY)
             .enqueue(object : Callback<JsonObject> {
@@ -79,7 +82,6 @@ class AddLocationViewModel() : ViewModel() {
                 }
 
             })
-        isLoadingLive.value = false
     }
 
 

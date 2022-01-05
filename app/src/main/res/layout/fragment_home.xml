@@ -259,7 +259,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
@@ -288,6 +288,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-thin"
                                 android:gravity="center"
+                                android:maxLines="1"
                                 android:text="Pressure"
                                 android:textSize="18sp" />
 
@@ -308,7 +309,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
@@ -337,6 +338,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-thin"
                                 android:gravity="center"
+                                android:maxLines="1"
                                 android:text="Humidity"
                                 android:textSize="18sp" />
 
@@ -357,7 +359,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
@@ -386,6 +388,7 @@
                                 android:fontFamily="sans-serif-thin"
                                 android:gravity="center"
                                 android:text="Wind"
+                                android:maxLines="1"
                                 android:textSize="18sp" />
 
                             <TextView
@@ -623,7 +626,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-thin"
-            android:text="Sat, 9:41"
+            tools:text="Sat, 9:41"
             android:textSize="18sp" />
     </LinearLayout>
 

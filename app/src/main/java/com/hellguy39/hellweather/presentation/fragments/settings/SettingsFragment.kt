@@ -11,22 +11,15 @@ import androidx.navigation.fragment.findNavController
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.SettingsFragmentBinding
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : Fragment(R.layout.settings_fragment) {
 
     private lateinit var viewModel: SettingsViewModel
     private lateinit var binding: SettingsFragmentBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.settings_fragment, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = SettingsFragmentBinding.bind(view)
-        viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
+        viewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
 
         binding.fabBack.setOnClickListener {
             view.findNavController().popBackStack()

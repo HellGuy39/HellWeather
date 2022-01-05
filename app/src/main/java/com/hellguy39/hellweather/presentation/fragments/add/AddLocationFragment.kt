@@ -15,9 +15,12 @@ import com.hellguy39.hellweather.databinding.FragmentAddLocationBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
-class AddLocationFragment : Fragment() {
+class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
 
     private lateinit var binding: FragmentAddLocationBinding
     private lateinit var fragView: View
@@ -27,11 +30,6 @@ class AddLocationFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this, AddLocationViewModelFactory(requireContext()))[AddLocationViewModel::class.java]
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_add_location, container, false)
 
     override fun onViewCreated(
         view: View,
@@ -47,6 +45,7 @@ class AddLocationFragment : Fragment() {
         })
 
         viewModel.requestResLive.observe(this, {
+            loadController(DISABLE)
             when(it) {
                 SUCCESSFUL -> {
                     disableFirstBoot()
@@ -81,7 +80,10 @@ class AddLocationFragment : Fragment() {
 
             if (checkTextField(input))
             {
-                viewModel.checkCityInAPI(input)
+                loadController(ENABLE)
+                CoroutineScope(Dispatchers.Default).launch {
+                    viewModel.checkCityInAPI(input)
+                }
             }
             else
             {

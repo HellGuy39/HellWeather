@@ -18,12 +18,6 @@
             app:enterAnim="@anim/fade_in"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_homeFragment_to_customizeFragment"
-            app:destination="@id/customizeFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addCityFragment"
@@ -39,7 +33,11 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_addCityFragment_to_confirmationCityFragment"
-            app:destination="@id/confirmationCityFragment" />
+            app:destination="@id/confirmationCityFragment"
+            app:enterAnim="@anim/to_left_in"
+            app:exitAnim="@anim/to_left_out"
+            app:popEnterAnim="@anim/to_right_in"
+            app:popExitAnim="@anim/to_right_out" />
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment"
@@ -73,4 +71,14 @@
         android:name="com.hellguy39.hellweather.presentation.fragments.customization.CustomizeFragment"
         android:label="customize_fragment"
         tools:layout="@layout/customize_fragment" />
+    <fragment
+        android:id="@+id/locationManagerFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerFragment"
+        android:label="location_manager_fragment"
+        tools:layout="@layout/location_manager_fragment" />
+    <fragment
+        android:id="@+id/quickWeatherFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.quick_weather.QuickWeatherFragment"
+        android:label="quick_weather_fragment"
+        tools:layout="@layout/quick_weather_fragment" />
 </navigation>

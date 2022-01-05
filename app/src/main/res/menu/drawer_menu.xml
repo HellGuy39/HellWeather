@@ -5,17 +5,17 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/homeFragment"
             android:icon="@drawable/ic_round_cloud_queue_24"
             android:title="Home" />
 
         <item
-            android:id="@+id/nav_quick_weather"
+            android:id="@+id/quickWeatherFragment"
             android:icon="@drawable/ic_outline_search_24"
             android:title="Quick weather" />
 
         <item
-            android:id="@+id/nav_location_manager"
+            android:id="@+id/locationManagerFragment"
             android:icon="@drawable/ic_outline_location_city_24"
             android:title="Location manager" />
 
@@ -28,12 +28,12 @@
 
             <menu>
                 <item
-                    android:id="@+id/nav_settings"
+                    android:id="@+id/settingsFragment"
                     android:icon="@drawable/ic_outline_settings_24"
                     android:title="Settings" />
 
                 <item
-                    android:id="@+id/nav_customize"
+                    android:id="@+id/customizeFragment"
                     android:icon="@drawable/ic_outline_format_paint_24"
                     android:title="Customize" />
             </menu>
