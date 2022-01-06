@@ -13,7 +13,8 @@ class HomeViewModelFactory(
     private fun getUserLocation(): UserLocation {
         val usrLoc = UserLocation()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        usrLoc.cityName = sharedPreferences.getString("cityName", "N/A").toString()
+        usrLoc.requestName = sharedPreferences.getString("requestName", "N/A").toString()
+        usrLoc.locationName = sharedPreferences.getString("locationName", "N/A").toString()
         usrLoc.lat = sharedPreferences.getString("lat", "0").toString()
         usrLoc.lon = sharedPreferences.getString("lon", "0").toString()
         return usrLoc

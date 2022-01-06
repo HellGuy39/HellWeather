@@ -27,7 +27,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="24dp" />
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabBack"
         android:layout_width="wrap_content"
@@ -43,7 +42,7 @@
         app:tint="?android:attr/textColor" />
 
     <TextView
-        android:id="@+id/tvSettingsTittle"
+        android:id="@+id/tvTittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Customize"

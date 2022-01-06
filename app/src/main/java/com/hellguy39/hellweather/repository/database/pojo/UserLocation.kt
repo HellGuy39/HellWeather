@@ -7,8 +7,9 @@ import kotlinx.parcelize.Parcelize
 data class UserLocation(
     var lat: String = "N/A",
     var lon: String = "N/A",
-    var cityName: String = "N/A",
-    var region: String = "N/A",
+    var requestName: String = "N/A",
+    var locationName: String = "N/A",
+    var country: String = "N/A",
     var cod: String = "N/A",
     var id: Int = 0,
     var timezone: Int = 0

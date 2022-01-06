@@ -19,26 +19,16 @@
             android:icon="@drawable/ic_outline_location_city_24"
             android:title="Location manager" />
 
-    </group>
-
-    <group
-        android:checkableBehavior="single">
         <item
-            android:title="Options">
+            android:id="@+id/customizeFragment"
+            android:icon="@drawable/ic_outline_format_paint_24"
+            android:title="Customize" />
 
-            <menu>
-                <item
-                    android:id="@+id/settingsFragment"
-                    android:icon="@drawable/ic_outline_settings_24"
-                    android:title="Settings" />
+        <item
+            android:id="@+id/settingsFragment"
+            android:icon="@drawable/ic_outline_settings_24"
+            android:title="Settings" />
 
-                <item
-                    android:id="@+id/customizeFragment"
-                    android:icon="@drawable/ic_outline_format_paint_24"
-                    android:title="Customize" />
-            </menu>
-
-        </item>
 
     </group>
 

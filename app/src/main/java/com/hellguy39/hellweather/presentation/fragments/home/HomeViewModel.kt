@@ -1,5 +1,6 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
@@ -22,36 +23,45 @@ class HomeViewModel(
     getUserLocation: UserLocation
 ) : ViewModel() {
 
+    val isUpdate = MutableLiveData<Boolean>()
     val dailyWeatherLive = MutableLiveData<MutableList<DailyWeather>>()
     val hourlyWeatherLive = MutableLiveData<MutableList<HourlyWeather>>()
     val currentWeatherLive = MutableLiveData<CurrentWeather>()
 
-    val userLocationLive = MutableLiveData<UserLocation>()
+    private val userLocationLive = MutableLiveData<UserLocation>()
     val isUserLocationLive = MutableLiveData<Boolean>()
 
     var usrLoc: UserLocation = getUserLocation
     private var mService: ApiService = Common.retrofitServices
 
     init {
-        userLocationLive.value = getUserLocation
-        isUserLocationLive.value = checkUserLocation(userLocationLive.value!!) //true - всё окей, false - всё плохо
+        CoroutineScope(Dispatchers.Main).launch {
+            userLocationLive.value = getUserLocation
+            isUserLocationLive.value = checkUserLocation(userLocationLive.value!!) //true - всё окей, false - всё плохо
+            isUpdate.value = false
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("DEBUG", "OnCleared")
     }
 
     private fun checkUserLocation(ul: UserLocation): Boolean {
 
-        if (ul.cityName == null &&
-            ul.cityName == "N/A")
+        if (ul.requestName == "" &&
+            ul.requestName == "N/A")
         {
             return false
         }
 
-        if (ul.lat == null &&
+        if (ul.lat == "" &&
             ul.lat == "N/A")
         {
             return false
         }
 
-        if (ul.lon == null &&
+        if (ul.lon == "" &&
             ul.lon == "N/A")
         {
             return false
@@ -132,28 +142,35 @@ class HomeViewModel(
             currentWeatherLive.value = currentWeather
             hourlyWeatherLive.value = hourlyWeather
             dailyWeatherLive.value = dailyWeather
+            isUpdate.value = true
         }
     }
 
     suspend fun requestToApi() = coroutineScope {
+        withContext(Dispatchers.Main) {
+            isUpdate.value = false
+        }
+        Log.d("DEBUG", "REQUEST_TO_API")
             mService.getWeatherOneCall(
                 usrLoc.lat.toDouble(),
                 usrLoc.lon.toDouble(),
                 "minutely,alerts",
                 "metric",
                 OPEN_WEATHER_API_KEY
-            ).enqueue(object :
-                Callback<JsonObject> {
+            ).enqueue(object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
 
-                    if (response.isSuccessful) {
+                    if (response.isSuccessful)
+                    {
                         if (response.body() != null)
                         {
                             CoroutineScope(Dispatchers.Default).launch {
                                 updatePojo(response.body() as JsonObject)
                             }
                         }
-                    } else {
+                    }
+                    else
+                    {
 
                     }
 

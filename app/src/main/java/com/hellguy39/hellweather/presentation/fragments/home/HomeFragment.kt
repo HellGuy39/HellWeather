@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.broooapps.graphview.CurveGraphConfig
 import com.broooapps.graphview.models.GraphData
 import com.broooapps.graphview.models.PointMap
@@ -44,50 +45,63 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding = FragmentHomeBinding.bind(view)
 
+        confGraph()
+
         //binding.rootView.setBackgroundResource(R.drawable.gradient_clear_day)
         binding.fabMenu.setOnClickListener {
             (activity as MainActivity).openDrawer()
         }
 
+        binding.rootRefreshLayout.setOnRefreshListener {
+            binding.rootRefreshLayout.isRefreshing = true
+            onRefresh()
+        }
+        Log.d("DEBUG", "${viewModel.isUpdate.value}")
+        viewModel.isUpdate.observe(this, {
+            Log.d("DEBUG", "OBS TRIGGERED")
+            if (it == true) {
+                binding.rootRefreshLayout.isRefreshing = false
+                val currentWeather = viewModel.currentWeatherLive.value
+                val hourlyWeather = viewModel.hourlyWeatherLive.value
+                val dailyWeather = viewModel.dailyWeatherLive.value
+
+                if (currentWeather != null && hourlyWeather != null && dailyWeather != null) {
+                    updateUI(currentWeather)
+                    updateGraph(hourlyWeather)
+                    dailyWeather.removeAt(0) // Delete element 0, because it is today
+                    updateRecyclerView(dailyWeather)
+                }
+            }
+        })
 
     }
 
     override fun onStart() {
         super.onStart()
 
-        confGraph()
+        if (viewModel.isUpdate.value == false || viewModel.isUpdate.value == null)
+            onRefresh()
+    }
 
-        viewModel.hourlyWeatherLive.observe(this, {
-            updateGraph(it)
-        })
-
-        viewModel.currentWeatherLive.observe(this, {
-            updateUI(it)
-        })
-
-        viewModel.dailyWeatherLive.observe(this, {
-            it.removeAt(0) // Delete element 0, because it is today
-            CoroutineScope(Main).launch {
-                updateRecyclerView(it)
-            }
-        })
-
-        if (viewModel.isUserLocationLive.value == true)
-        {
-            CoroutineScope(Dispatchers.Default).launch {
+    private fun onRefresh() {
+        binding.rootRefreshLayout.isRefreshing = true
+        CoroutineScope(Default).launch {
+            val isLoc = viewModel.isUserLocationLive.value
+            if (isLoc == true)
+            {
                 viewModel.requestToApi()
             }
+            else
+            {
+                delay(100L)
+                onRefresh()
+            }
         }
-        else
-        {
-
-        }
-
     }
 
     private fun confGraph() = CoroutineScope(Main).launch {
         binding.graphView.configure(CurveGraphConfig.Builder(context)
-            .setAxisColor(R.color.White)
+            .setAxisColor(R.color.white)
             .setIntervalDisplayCount(12)
             .setVerticalGuideline(12)
             .setHorizontalGuideline(5)
@@ -131,7 +145,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     }
 
-    private fun updateRecyclerView(list: MutableList<DailyWeather>) {
+    private fun updateRecyclerView(list: MutableList<DailyWeather>) = CoroutineScope(Main).launch {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = NextDaysAdapter(context, list)
@@ -166,7 +180,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 if (wm.dt > startSunrise && wm.dt < endSunrise) true
             else
                 false
-*/
+
 //            if (isDay)
 //            {
 //                when (wm.wMain) {
@@ -216,7 +230,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 //                    "Drizzle" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
 //                    "Thunderstorm" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
 //                }
-//            }
+//            }*/
 
             binding.tvTemp.text = wm.temp + "°"
             binding.tvMaxTemp.text = wm.tempMax + "°C"
@@ -224,7 +238,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.tvWeather.text = wm.wDescription
             //Top
             binding.tvUpdateTime.text = SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000))
-            binding.tvCity.text = viewModel.usrLoc.cityName
+            binding.tvCity.text = viewModel.usrLoc.locationName
             //Details
             binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
             binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))

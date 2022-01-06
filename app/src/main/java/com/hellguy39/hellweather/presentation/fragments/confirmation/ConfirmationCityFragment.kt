@@ -42,8 +42,8 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     }
 
     private fun updateUI(usrLoc: UserLocation) {
-        binding.tvCity.text = usrLoc.cityName
-        binding.tvRegion.text = usrLoc.region
+        binding.tvCity.text = usrLoc.locationName
+        binding.tvRegion.text = usrLoc.country
         binding.tvCoords.text = "Lat: ${usrLoc.lat} Lon: ${usrLoc.lon}"
         if (usrLoc.timezone > 0)
         {
@@ -80,7 +80,8 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         val edit: SharedPreferences.Editor = sharedPreferences.edit()
         edit.putString("lat", usrLoc.lat)
         edit.putString("lon", usrLoc.lon)
-        edit.putString("cityName", usrLoc.cityName)
+        edit.putString("requestName", usrLoc.requestName)
+        edit.putString("locationName", usrLoc.locationName)
         edit.apply()
     }
     private fun disableFirstBoot() {

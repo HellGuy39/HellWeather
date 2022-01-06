@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootView"
+    android:id="@+id/rootMotionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_clear_night"
@@ -42,6 +42,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Location name"
+        app:startIconDrawable="@drawable/ic_round_location_on_24"
+        app:endIconMode="clear_text"
         app:layout_constraintBottom_toTopOf="@+id/btnCnt"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"
@@ -50,6 +52,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCity"
+            android:maxLines="1"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin" />

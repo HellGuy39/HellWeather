@@ -45,16 +45,18 @@ class AddLocationViewModel() : ViewModel() {
                             val usrLoc = UserLocation()
 
                             val coordinates = jObj.getAsJsonObject("coord")
+                            val sys = jObj.getAsJsonObject("sys")
                             usrLoc.lat = coordinates.get("lat").asString
                             usrLoc.lon = coordinates.get("lon").asString
 
-                            usrLoc.cityName = input
-                            usrLoc.region = jObj.get("name").asString
+                            usrLoc.requestName = input
+                            usrLoc.locationName = jObj.get("name").asString
+                            usrLoc.country = sys.get("country").asString
                             usrLoc.cod = jObj.get("cod").asString
                             usrLoc.id = jObj.get("id").asInt
                             usrLoc.timezone = jObj.get("timezone").asInt / 3600
 
-                            Log.d("LOG", "Lat:${usrLoc.lat} Lon:${usrLoc.lon}")
+                            Log.d("LOG", "Lat:${usrLoc.lat} & Lon:${usrLoc.lon}")
 
                             if (usrLoc.lat != "N/A" || !TextUtils.isEmpty(usrLoc.lat) &&
                                 usrLoc.lon != "N/A" || !TextUtils.isEmpty(usrLoc.lon)) {
