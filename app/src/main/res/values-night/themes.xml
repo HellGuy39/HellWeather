@@ -29,7 +29,7 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
-    <style name="AppSplashTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="AppSplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
     <item name="android:windowBackground">@drawable/splash_screen_night</item>
 
         <item name="android:windowTranslucentStatus">true</item>

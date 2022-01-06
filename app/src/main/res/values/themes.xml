@@ -10,20 +10,25 @@
         <item name="colorSecondaryVariant">@color/material_gray_5</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status and nav bar color. -->
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@color/clearSkyDayStart</item>
 
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
         <item name="android:navigationBarColor">@color/clearSkyDayEnd</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/gradient_clear_day</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="Theme.HellWeather.SunriseOrSunset" parent="Theme.HellWeather">
+    <style name="Theme.HellWeather.ClearSkyNight" parent="Theme.HellWeather">
 
-        <item name="android:windowBackground">@drawable/gradient_sunset_or_sunrise</item>
-        <item name="android:textColor">@color/white</item>
+        <!-- Primary brand color. -->
+
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/clearSkyNightStart</item>
+
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
+        <item name="android:navigationBarColor">@color/clearSkyNightEnd</item>
     </style>
 
     <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -36,7 +41,7 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
-    <style name="AppSplashTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="AppSplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_day</item>
         <!--<item name="android:navigationBarColor">@color/splash_day_background</item>
         <item name="android:statusBarColor">@color/splash_day_background</item>-->

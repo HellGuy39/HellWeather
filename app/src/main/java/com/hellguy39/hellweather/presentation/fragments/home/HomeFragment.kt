@@ -20,6 +20,7 @@ import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewModel = ViewModelProvider(this, HomeViewModelFactory(requireContext()))[HomeViewModel::class.java]
     }
 
@@ -47,17 +49,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             (activity as MainActivity).openDrawer()
         }
 
-        binding.graphView.configure(CurveGraphConfig.Builder(context)
-            .setAxisColor(R.color.White)
-            .setIntervalDisplayCount(12)
-            .setVerticalGuideline(12)
-            .setHorizontalGuideline(5)
-            .setGuidelineColor(R.color.Gray)
-            .setNoDataMsg("Loading...")
-            .setxAxisScaleTextColor(R.color.white)
-            .setyAxisScaleTextColor(R.color.white)
-            .setAnimationDuration(2000)
-            .build())
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        confGraph()
 
         viewModel.hourlyWeatherLive.observe(this, {
             updateGraph(it)
@@ -73,10 +71,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 updateRecyclerView(it)
             }
         })
-    }
-
-    override fun onStart() {
-        super.onStart()
 
         if (viewModel.isUserLocationLive.value == true)
         {
@@ -88,6 +82,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         {
 
         }
+
+    }
+
+    private fun confGraph() = CoroutineScope(Main).launch {
+        binding.graphView.configure(CurveGraphConfig.Builder(context)
+            .setAxisColor(R.color.White)
+            .setIntervalDisplayCount(12)
+            .setVerticalGuideline(12)
+            .setHorizontalGuideline(5)
+            .setGuidelineColor(R.color.Gray)
+            .setNoDataMsg("Loading...")
+            .setxAxisScaleTextColor(R.color.white)
+            .setyAxisScaleTextColor(R.color.white)
+            .setAnimationDuration(2000)
+            .build())
     }
 
     private fun updateGraph(list: MutableList<HourlyWeather>) {
@@ -116,7 +125,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .build()
 
         CoroutineScope(Main).launch {
-            delay(1000L)
+            delay(250L)
             binding.graphView.setData(12, 100, gd)
         }
 

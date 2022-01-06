@@ -25,10 +25,13 @@ class AddLocationViewModel() : ViewModel() {
     private val mService = Common.retrofitServices
     val userLocationLive = MutableLiveData<UserLocation>()
     val isLoadingLive = MutableLiveData<Boolean>()
-    val requestResLive = MutableLiveData<String>()
+    val requestResLive = MutableLiveData<String?>()
+
+    fun clearData() {
+        requestResLive.value = null
+    }
 
     suspend fun checkCityInAPI(input: String) = coroutineScope {
-
         mService.getCurrentWeather(input, METRIC, OPEN_WEATHER_API_KEY)
             .enqueue(object : Callback<JsonObject> {
 
@@ -49,7 +52,7 @@ class AddLocationViewModel() : ViewModel() {
                             usrLoc.region = jObj.get("name").asString
                             usrLoc.cod = jObj.get("cod").asString
                             usrLoc.id = jObj.get("id").asInt
-                            usrLoc.timezone = jObj.get("timezone").asString
+                            usrLoc.timezone = jObj.get("timezone").asInt / 3600
 
                             Log.d("LOG", "Lat:${usrLoc.lat} Lon:${usrLoc.lon}")
 
@@ -83,6 +86,5 @@ class AddLocationViewModel() : ViewModel() {
 
             })
     }
-
 
 }

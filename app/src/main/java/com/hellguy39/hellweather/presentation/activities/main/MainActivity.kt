@@ -17,12 +17,16 @@ import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirecti
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
 import android.R.attr.radius
+import android.view.Window
+import android.view.WindowManager
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.NavigationUI
 
 import com.google.android.material.shape.CornerFamily
 
 import com.google.android.material.shape.MaterialShapeDrawable
+import com.hellguy39.hellweather.presentation.fragments.home.HomeFragment
 import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModel
 import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModelFactory
 
@@ -54,10 +58,29 @@ class MainActivity : AppCompatActivity() {
         if (firstBoot)
         {
             drawerControl(DISABLE)
-            navController.navigate(HomeFragmentDirections.actionHomeFragmentToWelcomeFragment())
+
+            if(navController.currentDestination?.id == R.id.homeFragment)
+            {
+                navController.navigate(HomeFragmentDirections.actionHomeFragmentToWelcomeFragment())
+            }
         }
     }
 
+    /*fun setSystemBarsColor(action: String)
+    {
+        val window: Window = window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        if (action == "welcome")
+        {
+            window.statusBarColor = ResourcesCompat.getColor(resources, R.color.clearSkyNightStart, null)
+            window.navigationBarColor = ResourcesCompat.getColor(resources, R.color.clearSkyNightEnd, null)
+        }
+        else
+        {
+
+        }
+    }
+*/
     fun drawerControl(action: String) {
         when(action) {
             ENABLE -> {
@@ -69,12 +92,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun openDrawer() {
-        binding.drawerLayout.open()
-    }
+    fun openDrawer() = binding.drawerLayout.open()
+
 
     override fun onBackPressed() {
-        if (binding.drawerLayout.isOpen) {
+        if (binding.drawerLayout.isOpen)
+        {
             binding.drawerLayout.close()
         }
         else

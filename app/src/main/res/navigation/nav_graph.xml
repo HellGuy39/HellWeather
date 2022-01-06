@@ -25,13 +25,6 @@
         android:label="fragment_add_city"
         tools:layout="@layout/fragment_add_location" >
         <action
-            android:id="@+id/action_addCityFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/action_addCityFragment_to_confirmationCityFragment"
             app:destination="@id/confirmationCityFragment"
             app:enterAnim="@anim/to_left_in"
@@ -64,7 +57,16 @@
         tools:layout="@layout/confirmation_city_fragment" >
         <action
             android:id="@+id/action_confirmationCityFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/to_left_in"
+            app:exitAnim="@anim/to_left_out"
+            app:popEnterAnim="@anim/to_right_in"
+            app:popExitAnim="@anim/to_right_out"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="userLocation"
+            app:argType="com.hellguy39.hellweather.repository.database.pojo.UserLocation" />
     </fragment>
     <fragment
         android:id="@+id/customizeFragment"

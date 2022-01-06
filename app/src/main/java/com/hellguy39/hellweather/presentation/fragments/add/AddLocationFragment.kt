@@ -3,16 +3,19 @@ package com.hellguy39.hellweather.presentation.fragments.add
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentAddLocationBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.presentation.fragments.confirmation.ConfirmationCityFragmentDirections
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.*
 import kotlinx.coroutines.CoroutineScope
@@ -41,16 +44,16 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
         binding = FragmentAddLocationBinding.bind(view)
 
         viewModel.userLocationLive.observe(this, {
-            saveCord(it)
+            //saveCord(it)
         })
 
         viewModel.requestResLive.observe(this, {
+            Log.d("DEBUG", "REQUEST")
             loadController(DISABLE)
             when(it) {
                 SUCCESSFUL -> {
-                    disableFirstBoot()
-                    (activity as MainActivity).drawerControl(ENABLE)
-                    navigate()
+                    navigate(viewModel.userLocationLive.value!!)
+                    viewModel.clearData() //strange solution
                 }
                 EMPTY_BODY -> {
                     fragView.shortSnackBar("City not found")
@@ -92,21 +95,8 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
 
         }
     }
-    //I know that it is wrong
-    private fun saveCord(usrLoc: UserLocation) {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val edit: SharedPreferences.Editor = sharedPreferences.edit()
-        edit.putString("lat", usrLoc.lat)
-        edit.putString("lon", usrLoc.lon)
-        edit.putString("cityName", usrLoc.cityName)
-        edit.apply()
-    }
-    private fun disableFirstBoot() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val edit: SharedPreferences.Editor = sharedPreferences.edit()
-        edit.putBoolean("first_boot", false)
-        edit.apply()
-    }
+
+
 
     private fun loadController(action: String) {
             when (action) {
@@ -125,10 +115,9 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
             }
     }
 
-    private fun checkTextField(input: String) : Boolean {
-        return !TextUtils.isEmpty(input) && input.length > 3
-    }
+    private fun checkTextField(input: String) : Boolean = !TextUtils.isEmpty(input)
 
-    private fun navigate() = fragView.findNavController().navigate(AddLocationFragmentDirections.actionAddCityFragmentToHomeFragment())
 
+    private fun navigate(userLocation: UserLocation) = fragView.findNavController()
+        .navigate(AddLocationFragmentDirections.actionAddCityFragmentToConfirmationCityFragment(userLocation))
 }

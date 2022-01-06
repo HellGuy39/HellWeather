@@ -1,17 +1,21 @@
 package com.hellguy39.hellweather.presentation.fragments.welcome
 
 import android.os.Bundle
+import android.view.*
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWelcomeBinding
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 
 class WelcomeFragment : Fragment() {
 
     private lateinit var binding: FragmentWelcomeBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
