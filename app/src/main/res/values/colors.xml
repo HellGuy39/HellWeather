@@ -22,11 +22,17 @@
     <color name="cloudyNightStart">#0A0D13</color>
     <color name="cloudyNightEnd">#232325</color>
 
-    <color name="whiteBlur10">#10FFFFFF</color>
-    <color name="whiteBlur20">#20FFFFFF</color>
-    <color name="whiteBlur30">#30FFFFFF</color>
-    <color name="whiteBlur40">#40FFFFFF</color>
+    <color name="whiteBlur100">#FFFFFFFF</color>
+    <color name="whiteBlur90">#90FFFFFF</color>
+    <color name="whiteBlur80">#80FFFFFF</color>
+    <color name="whiteBlur70">#70FFFFFF</color>
+    <color name="whiteBlur60">#60FFFFFF</color>
     <color name="whiteBlur50">#50FFFFFF</color>
+    <color name="whiteBlur40">#40FFFFFF</color>
+    <color name="whiteBlur30">#30FFFFFF</color>
+    <color name="whiteBlur20">#20FFFFFF</color>
+    <color name="whiteBlur10">#10FFFFFF</color>
+    <color name="whiteBlur00">#00FFFFFF</color>
 
     <color name="material_gray_10">#101010</color>
     <color name="material_gray_9">#202020</color>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavHost
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
@@ -17,11 +18,16 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
     private lateinit var viewModel: LocationManagerViewModel
     private lateinit var binding: LocationManagerFragmentBinding
+    private lateinit var fragView: View
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fragView = view
         binding = LocationManagerFragmentBinding.bind(view)
         viewModel = ViewModelProvider(this).get(LocationManagerViewModel::class.java)
+        binding.fabBack.setOnClickListener {
+            fragView.findNavController().popBackStack()
+        }
 
     }
 

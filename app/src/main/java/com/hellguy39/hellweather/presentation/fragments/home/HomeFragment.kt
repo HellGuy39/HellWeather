@@ -56,9 +56,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.rootRefreshLayout.isRefreshing = true
             onRefresh()
         }
-        Log.d("DEBUG", "${viewModel.isUpdate.value}")
+
         viewModel.isUpdate.observe(this, {
-            Log.d("DEBUG", "OBS TRIGGERED")
             if (it == true) {
                 binding.rootRefreshLayout.isRefreshing = false
                 val currentWeather = viewModel.currentWeatherLive.value
@@ -99,7 +98,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun confGraph() = CoroutineScope(Main).launch {
+    private fun confGraph() {
         binding.graphView.configure(CurveGraphConfig.Builder(context)
             .setAxisColor(R.color.white)
             .setIntervalDisplayCount(12)
