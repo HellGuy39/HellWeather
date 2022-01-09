@@ -27,22 +27,14 @@
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/tvDay"
+                android:id="@+id/tvHour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-thin"
                 android:text=""
                 android:textSize="18sp"
-                tools:text="Fri" />
+                tools:text="12" />
 
-            <TextView
-                android:id="@+id/tvHumidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
-                android:text=""
-                android:textSize="18sp"
-                tools:text="60%" />
 
             <ImageView
                 android:id="@+id/ivIcon"
@@ -51,27 +43,13 @@
                 android:contentDescription="TODO" />
 
             <TextView
-                android:id="@+id/tvMaxTemp"
+                android:id="@+id/tvTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-thin"
                 android:text=""
                 android:textSize="18sp"
                 tools:text="25°" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="?android:attr/textColor" />
-
-            <TextView
-                android:id="@+id/tvMinTemp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
-                android:text=""
-                android:textSize="18sp"
-                tools:text="15°" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

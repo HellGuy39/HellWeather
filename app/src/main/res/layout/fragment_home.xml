@@ -74,8 +74,42 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/nextHoursTittleContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvNextHours"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif-light"
+                            android:text="Next 48 hours"
+                            android:textAllCaps="true"
+                            android:textSize="18sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="12dp"
+                            android:background="@color/black"
+                            android:backgroundTint="?android:attr/textColor" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_next_hours"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                    <LinearLayout
                         android:id="@+id/detailsTittleContainer"
                         android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
@@ -501,7 +535,7 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view"
+                        android:id="@+id/recycler_next_days"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"

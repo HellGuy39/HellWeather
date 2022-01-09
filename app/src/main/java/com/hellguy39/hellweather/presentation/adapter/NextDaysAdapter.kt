@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
@@ -61,6 +62,9 @@ class NextDaysAdapter(
 
             Glide.with(context)
                 .load("https://openweathermap.org/img/wn/${dailyWeather.icon}@2x.png")
+                //.dontAnimate()
+                .placeholder(R.drawable.ic_round_image_not_supported_24)
+                .error(R.drawable.ic_outline_error_outline_24)
                 .centerCrop()
                 .into(ivIcon)
         }

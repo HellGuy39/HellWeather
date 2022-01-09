@@ -29,13 +29,13 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabBack"
+        android:id="@+id/fabMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/transparent"
         android:clickable="true"
-        android:src="@drawable/ic_round_arrow_back_ios_new_24"
+        android:src="@drawable/ic_round_menu_24"
         app:borderWidth="1dp"
         app:elevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline12"

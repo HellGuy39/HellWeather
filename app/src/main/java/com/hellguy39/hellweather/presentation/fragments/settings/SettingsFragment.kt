@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.SettingsFragmentBinding
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 
 class SettingsFragment : Fragment(R.layout.settings_fragment) {
 
@@ -21,8 +22,9 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
         binding = SettingsFragmentBinding.bind(view)
         viewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
 
-        binding.fabBack.setOnClickListener {
-            view.findNavController().popBackStack()
+        binding.fabMenu.setOnClickListener {
+            (activity as MainActivity).openDrawer()
+            //view.findNavController().popBackStack()
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationManagerFragmentBinding
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 
 class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
@@ -25,8 +26,9 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
         fragView = view
         binding = LocationManagerFragmentBinding.bind(view)
         viewModel = ViewModelProvider(this).get(LocationManagerViewModel::class.java)
-        binding.fabBack.setOnClickListener {
-            fragView.findNavController().popBackStack()
+        binding.fabMenu.setOnClickListener {
+            //fragView.findNavController().popBackStack()
+            (activity as MainActivity).openDrawer()
         }
 
     }

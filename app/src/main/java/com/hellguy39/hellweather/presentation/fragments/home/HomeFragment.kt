@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
+import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
@@ -68,7 +70,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     updateUI(currentWeather)
                     updateGraph(hourlyWeather)
                     dailyWeather.removeAt(0) // Delete element 0, because it is today
-                    updateRecyclerView(dailyWeather)
+                    updateRecyclersView(dailyWeather, hourlyWeather)
                 }
             }
         })
@@ -144,10 +146,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     }
 
-    private fun updateRecyclerView(list: MutableList<DailyWeather>) = CoroutineScope(Main).launch {
-        binding.recyclerView.apply {
+    private fun updateRecyclersView(
+        listDays: MutableList<DailyWeather>,
+        listHours: MutableList<HourlyWeather>
+    ) = CoroutineScope(Main).launch {
+        binding.recyclerNextDays.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = NextDaysAdapter(context, list)
+            adapter = NextDaysAdapter(context, listDays)
+        }
+        binding.recyclerNextHours.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = NextHoursAdapter(context, listHours)
         }
     }
 
@@ -160,6 +169,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Glide.with(this@HomeFragment)
                 .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
                 .centerCrop()
+                //.dontAnimate()
+                //.placeholder(ResourcesCompat.getDrawable(resources, R.drawable.ic_round_image_not_supported_24, null))
                 .into(binding.ivWeather)
 
             /*val isDay = if (wm.dt > wm.sunset) {

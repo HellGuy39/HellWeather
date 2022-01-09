@@ -16,6 +16,7 @@ import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.CustomizeFragmentBinding
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 
 class CustomizeFragment : Fragment(R.layout.customize_fragment) {
 
@@ -30,8 +31,9 @@ class CustomizeFragment : Fragment(R.layout.customize_fragment) {
         viewModel = ViewModelProvider(this)[CustomizeViewModel::class.java]
         binding = CustomizeFragmentBinding.bind(view)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        binding.fabBack.setOnClickListener {
-            view.findNavController().popBackStack()
+        binding.fabMenu.setOnClickListener {
+            (activity as MainActivity).openDrawer()
+            //view.findNavController().popBackStack()
         }
 
         binding.sliderBlur.addOnChangeListener { slider, value, fromUser ->

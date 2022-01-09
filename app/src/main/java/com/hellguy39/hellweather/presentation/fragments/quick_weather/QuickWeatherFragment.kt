@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.QuickWeatherFragmentBinding
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 
 class QuickWeatherFragment : Fragment(R.layout.quick_weather_fragment) {
 
@@ -23,8 +24,9 @@ class QuickWeatherFragment : Fragment(R.layout.quick_weather_fragment) {
         binding = QuickWeatherFragmentBinding.bind(view)
         viewModel = ViewModelProvider(this)[QuickWeatherViewModel::class.java]
 
-        binding.fabBack.setOnClickListener {
-            fragView.findNavController().popBackStack()
+        binding.fabMenu.setOnClickListener {
+            //fragView.findNavController().popBackStack()
+            (activity as MainActivity).openDrawer()
         }
 
         binding.fabSearch.setOnClickListener {

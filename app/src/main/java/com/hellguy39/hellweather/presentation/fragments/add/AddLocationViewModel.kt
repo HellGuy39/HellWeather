@@ -53,7 +53,7 @@ class AddLocationViewModel() : ViewModel() {
                             usrLoc.locationName = jObj.get("name").asString
                             usrLoc.country = sys.get("country").asString
                             usrLoc.cod = jObj.get("cod").asString
-                            usrLoc.id = jObj.get("id").asInt
+                            //usrLoc.id = jObj.get("id").asInt
                             usrLoc.timezone = jObj.get("timezone").asInt / 3600
 
                             Log.d("LOG", "Lat:${usrLoc.lat} & Lon:${usrLoc.lon}")

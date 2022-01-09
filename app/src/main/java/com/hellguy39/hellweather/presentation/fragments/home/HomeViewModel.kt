@@ -107,11 +107,13 @@ class HomeViewModel(
         for (n in 0 until hourly.asJsonArray.size())
         {
             val obj = hourly[n].asJsonObject
+            val wt = obj.getAsJsonArray("weather").get(0).asJsonObject
 
             hourlyWeather.add(n, HourlyWeather())
 
-            hourlyWeather[n].temp = obj.get("temp").asString
-            hourlyWeather[n].dt = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(obj.get("dt").asLong * 1000))
+            hourlyWeather[n].icon = wt.get("icon").asString
+            hourlyWeather[n].temp = obj.get("temp").asInt.toString()
+            hourlyWeather[n].dt = obj.get("dt").asLong
             hourlyWeather[n].tempFeelsLike = obj.get("feels_like").asString
             hourlyWeather[n].humidity = obj.get("humidity").asString
             hourlyWeather[n].pressure = obj.get("pressure").asString
