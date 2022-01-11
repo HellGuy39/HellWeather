@@ -19,6 +19,7 @@ import com.hellguy39.hellweather.utils.ENABLE
 import android.R.attr.radius
 import android.view.Window
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.NavigationUI
@@ -29,11 +30,16 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragment
 import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModel
 import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModelFactory
+import com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 private lateinit var drawerLayout: DrawerLayout
 private lateinit var binding: MainActivityBinding
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
