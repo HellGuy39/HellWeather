@@ -21,6 +21,7 @@ import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Default
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
@@ -39,7 +40,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this, HomeViewModelFactory(requireContext()))[HomeViewModel::class.java]
+        viewModel = ViewModelProvider(this/*,HomeViewModelFactory(requireContext())*/)[HomeViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -248,7 +249,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.tvWeather.text = wm.wDescription
             //Top
             binding.tvUpdateTime.text = SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000))
-            binding.tvCity.text = viewModel.usrLoc.locationName
+            binding.tvCity.text = viewModel.userLocationLive.value?.locationName
             //Details
             binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
             binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))

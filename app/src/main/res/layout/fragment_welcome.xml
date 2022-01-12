@@ -5,7 +5,6 @@
     android:id="@+id/rootMotionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_clear_night"
     tools:context=".presentation.fragments.welcome.WelcomeFragment">
 
     <TextView

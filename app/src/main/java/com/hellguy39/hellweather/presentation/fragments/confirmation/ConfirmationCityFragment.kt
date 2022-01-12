@@ -16,7 +16,9 @@ import com.hellguy39.hellweather.databinding.ConfirmationCityFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.ENABLE
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), View.OnClickListener {
 
     private lateinit var viewModel: ConfirmationCityViewModel
@@ -60,7 +62,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         when (p0?.id) {
             R.id.fabTrue -> {
                 disableFirstBoot()
-                saveCord(userLocation)
+                viewModel.saveToRoom(userLocation)
                 navigate()
                 (activity as MainActivity).drawerControl(ENABLE)
             }

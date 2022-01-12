@@ -3,7 +3,9 @@ package com.hellguy39.hellweather.presentation.fragments.home
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
+import com.hellguy39.hellweather.repository.database.LocationRepository
 import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
@@ -11,16 +13,19 @@ import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.repository.server.ApiService
 import com.hellguy39.hellweather.repository.server.Common
 import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class HomeViewModel(
-    getUserLocation: UserLocation
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    repository: LocationRepository
 ) : ViewModel() {
 
     val isUpdate = MutableLiveData<Boolean>()
@@ -28,15 +33,14 @@ class HomeViewModel(
     val hourlyWeatherLive = MutableLiveData<MutableList<HourlyWeather>>()
     val currentWeatherLive = MutableLiveData<CurrentWeather>()
 
-    private val userLocationLive = MutableLiveData<UserLocation>()
+    val userLocationLive = MutableLiveData<UserLocation>()
     val isUserLocationLive = MutableLiveData<Boolean>()
 
-    var usrLoc: UserLocation = getUserLocation
     private var mService: ApiService = Common.retrofitServices
 
     init {
-        CoroutineScope(Dispatchers.Main).launch {
-            userLocationLive.value = getUserLocation
+        viewModelScope.launch {
+            userLocationLive.value = repository.getLocationById(1)
             isUserLocationLive.value = checkUserLocation(userLocationLive.value!!) //true - всё окей, false - всё плохо
             isUpdate.value = false
         }
@@ -70,7 +74,7 @@ class HomeViewModel(
         return true
     }
 
-    private suspend fun updatePojo(jObj: JsonObject) = coroutineScope {
+    private suspend fun updatePojo(jObj: JsonObject) {
 
         val currentWeather = CurrentWeather()
         val hourlyWeather: MutableList<HourlyWeather> = ArrayList()
@@ -154,8 +158,8 @@ class HomeViewModel(
         }
         Log.d("DEBUG", "REQUEST_TO_API")
             mService.getWeatherOneCall(
-                usrLoc.lat.toDouble(),
-                usrLoc.lon.toDouble(),
+                userLocationLive.value!!.lat.toDouble(),
+                userLocationLive.value!!.lon.toDouble(),
                 "minutely,alerts",
                 "metric",
                 OPEN_WEATHER_API_KEY
@@ -166,7 +170,7 @@ class HomeViewModel(
                     {
                         if (response.body() != null)
                         {
-                            CoroutineScope(Dispatchers.Default).launch {
+                            viewModelScope.launch {
                                 updatePojo(response.body() as JsonObject)
                             }
                         }

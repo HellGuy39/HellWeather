@@ -62,13 +62,13 @@ class LocationsAdapter(
             btnDelete.setOnClickListener(this)
             btnEdit.setOnClickListener(this)
 
-            if (usrLoc.id == 0) {
+            if (usrLoc.id == 1) {
                 tvId.text = "Main"
             } else {
                 tvId.text = usrLoc.id.toString()
             }
             tvLocationName.text = usrLoc.locationName
-            tvLatLon.text = "Lat:${usrLoc.lat} | Lon:${usrLoc.lon}"
+            tvLatLon.text = "Lat: ${usrLoc.lat} | Lon: ${usrLoc.lon}"
 
             if (usrLoc.timezone > 0)
             {

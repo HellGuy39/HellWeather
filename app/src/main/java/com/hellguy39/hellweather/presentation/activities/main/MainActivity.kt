@@ -29,7 +29,6 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragment
 import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModel
-import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModelFactory
 import com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
