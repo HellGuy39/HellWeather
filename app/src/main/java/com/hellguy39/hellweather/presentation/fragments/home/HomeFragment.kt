@@ -39,7 +39,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         viewModel = ViewModelProvider(this/*,HomeViewModelFactory(requireContext())*/)[HomeViewModel::class.java]
     }
 
@@ -47,22 +46,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentHomeBinding.bind(view)
-
+        (activity as MainActivity).setToolbarTittle("Loading...")
         confGraph()
 
         //binding.rootView.setBackgroundResource(R.drawable.gradient_clear_day)
-        binding.fabMenu.setOnClickListener {
+        /*binding.fabMenu.setOnClickListener {
             (activity as MainActivity).openDrawer()
-        }
+        }*/
 
-        binding.rootRefreshLayout.setOnRefreshListener {
+        /*binding.rootRefreshLayout.setOnRefreshListener {
             binding.rootRefreshLayout.isRefreshing = true
             onRefresh()
-        }
+        }*/
 
         viewModel.isUpdate.observe(this, {
             if (it == true) {
-                binding.rootRefreshLayout.isRefreshing = false
+                //binding.rootRefreshLayout.isRefreshing = false
                 val currentWeather = viewModel.currentWeatherLive.value
                 val hourlyWeather = viewModel.hourlyWeatherLive.value
                 val dailyWeather = viewModel.dailyWeatherLive.value
@@ -86,7 +85,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onRefresh() {
-        binding.rootRefreshLayout.isRefreshing = true
+        //binding.rootRefreshLayout.isRefreshing = true
         CoroutineScope(Default).launch {
             val isLoc = viewModel.isUserLocationLive.value
             if (isLoc == true)
@@ -174,83 +173,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 //.placeholder(ResourcesCompat.getDrawable(resources, R.drawable.ic_round_image_not_supported_24, null))
                 .into(binding.ivWeather)
 
-            /*val isDay = if (wm.dt > wm.sunset) {
-                false
-            } else wm.dt > wm.sunrise
-
-            //3600 - 1 hour
-            val startSunset : Long = wm.sunset - 3600
-            val endSunset : Long = wm.sunset + 3600
-
-            val startSunrise : Long = wm.sunrise - 3600
-            val endSunrise : Long = wm.sunrise + 3600
-
-            val isSunriseOrSunset = if (wm.dt > startSunset && wm.dt < endSunset)
-                true
-            else
-                if (wm.dt > startSunrise && wm.dt < endSunrise) true
-            else
-                false
-
-//            if (isDay)
-//            {
-//                when (wm.wMain) {
-//                    "Clouds" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_day)}
-//                    "Clear" -> {
-//                        if (isSunriseOrSunset)
-//                            binding.rootView.setBackgroundResource(R.drawable.gradient_sunset_or_sunrise)
-//                        else
-//                            binding.rootView.setBackgroundResource(R.drawable.gradient_clear_day)
-//                    }
-//                    "Mist" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Smoke" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Haze" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Dust" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Fog" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Sand" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Ash" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Squall" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Tornado" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Snow" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Rain" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Drizzle" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                    "Thunderstorm" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_snow_day)}
-//                }
-//            }
-//            else {
-//                when (wm.wMain) {
-//                    "Clouds" -> { binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night) }
-//                    "Clear" -> {
-//                        if (isSunriseOrSunset)
-//                            binding.rootView.setBackgroundResource(R.drawable.gradient_sunset_or_sunrise)
-//                        else
-//                            binding.rootView.setBackgroundResource(R.drawable.gradient_clear_night)
-//
-//                    }
-//                    "Mist" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Smoke" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Haze" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Dust" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Fog" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Sand" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Ash" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Squall" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Tornado" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Snow" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Rain" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Drizzle" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                    "Thunderstorm" -> {binding.rootView.setBackgroundResource(R.drawable.gradient_cloudy_night)}
-//                }
-//            }*/
-
             binding.tvTemp.text = wm.temp + "°"
             binding.tvMaxTemp.text = wm.tempMax + "°C"
             binding.tvMinTemp.text = wm.tempMin + "°C"
             binding.tvWeather.text = wm.wDescription
             //Top
-            binding.tvUpdateTime.text = SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000))
-            binding.tvCity.text = viewModel.userLocationLive.value?.locationName
+            (activity as MainActivity).setToolbarTittle(SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000)))
+            //binding.tvUpdateTime.text = SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000))
+            //binding.tvCity.text = viewModel.userLocationLive.value?.locationName
             //Details
+            binding.tabLayout.getTabAt(0)?.text = viewModel.userLocationLive.value?.locationName
             binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
             binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))
             binding.tvTempFeelsLike.text = wm.tempFeelsLike + "°"

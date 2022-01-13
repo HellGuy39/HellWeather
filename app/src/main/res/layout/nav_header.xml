@@ -1,32 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerHeader"
-    android:padding="24dp"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnInfo"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            app:cornerRadius="24dp"
+            app:icon="@drawable/ic_outline_info_24"
+            app:iconTint="?attr/colorOnSurface"
+            app:strokeWidth="0dp" />
+
+        <Button
+            android:id="@+id/btnSettings"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            app:cornerRadius="24dp"
+            app:icon="@drawable/ic_outline_settings_24"
+            app:iconTint="?attr/colorOnSurface"
+            app:strokeWidth="0dp" />
+    </LinearLayout>
+
+
     <TextView
-        android:text="HellWeather"
-        android:textColor="?attr/colorOnSurface"
-        android:fontFamily="sans-serif-thin"
+        android:id="@+id/tvAppTittle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:fontFamily="sans-serif-thin"
+        android:maxLines="1"
+        android:text="HellWeather"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="32sp"
-        android:maxLines="1" />
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:background="?attr/colorOnSurface"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:textColor="?attr/colorOnSurface"
-        android:fontFamily="sans-serif-thin"
-        android:text="ALPHA STAGE 3"
-        android:textSize="18sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

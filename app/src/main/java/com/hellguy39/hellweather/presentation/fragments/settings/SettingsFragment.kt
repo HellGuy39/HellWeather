@@ -17,15 +17,16 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
     private lateinit var viewModel: SettingsViewModel
     private lateinit var binding: SettingsFragmentBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as MainActivity).setToolbarTittle("Settings")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = SettingsFragmentBinding.bind(view)
         viewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
 
-        binding.fabMenu.setOnClickListener {
-            (activity as MainActivity).openDrawer()
-            //view.findNavController().popBackStack()
-        }
     }
 
 }

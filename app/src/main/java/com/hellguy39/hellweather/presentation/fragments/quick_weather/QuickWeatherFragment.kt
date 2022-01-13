@@ -18,16 +18,16 @@ class QuickWeatherFragment : Fragment(R.layout.quick_weather_fragment) {
     private lateinit var binding: QuickWeatherFragmentBinding
     private lateinit var fragView: View
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as MainActivity).setToolbarTittle("Quick weather")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragView = view
         binding = QuickWeatherFragmentBinding.bind(view)
         viewModel = ViewModelProvider(this)[QuickWeatherViewModel::class.java]
-
-        binding.fabMenu.setOnClickListener {
-            //fragView.findNavController().popBackStack()
-            (activity as MainActivity).openDrawer()
-        }
 
         binding.fabSearch.setOnClickListener {
 

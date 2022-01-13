@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">HellWeather</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="open" translatable="false">Open</string>
+    <string name="close" translatable="false">Close</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_home">Home</string>

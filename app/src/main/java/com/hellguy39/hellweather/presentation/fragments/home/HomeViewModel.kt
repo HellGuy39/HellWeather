@@ -156,7 +156,6 @@ class HomeViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             isUpdate.value = false
         }
-        Log.d("DEBUG", "REQUEST_TO_API")
             mService.getWeatherOneCall(
                 userLocationLive.value!!.lat.toDouble(),
                 userLocationLive.value!!.lon.toDouble(),

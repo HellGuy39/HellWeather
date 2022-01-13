@@ -20,6 +20,7 @@ import android.R.attr.radius
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.NavigationUI
@@ -39,6 +40,7 @@ private lateinit var binding: MainActivityBinding
 class MainActivity : AppCompatActivity() {
 
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +52,19 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
+        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        binding.topAppBar.setNavigationOnClickListener {
+            openDrawer()
+        }
+
         binding.navigationView.setCheckedItem(R.id.homeFragment)
         NavigationUI.setupWithNavController(binding.navigationView, navController)
+
+        /*setSupportActionBar(binding.topAppBar)
+        NavigationUI.setupActionBarWithNavController(this, navController)*/
 
         val navViewBackground:MaterialShapeDrawable = binding.navigationView.background as MaterialShapeDrawable
         navViewBackground.shapeAppearanceModel = navViewBackground.shapeAppearanceModel
@@ -71,21 +84,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*fun setSystemBarsColor(action: String)
-    {
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        if (action == "welcome")
-        {
-            window.statusBarColor = ResourcesCompat.getColor(resources, R.color.clearSkyNightStart, null)
-            window.navigationBarColor = ResourcesCompat.getColor(resources, R.color.clearSkyNightEnd, null)
-        }
-        else
-        {
-
-        }
+    fun setToolbarTittle(s: String) {
+        binding.topAppBar.title = s
     }
-*/
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     fun drawerControl(action: String) {
         when(action) {
             ENABLE -> {

@@ -27,15 +27,16 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
     private lateinit var binding: LocationManagerFragmentBinding
     private lateinit var fragView: View
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as MainActivity).setToolbarTittle("Location manager")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragView = view
         binding = LocationManagerFragmentBinding.bind(view)
         viewModel = ViewModelProvider(this)[LocationManagerViewModel::class.java]
-        binding.fabMenu.setOnClickListener {
-            //fragView.findNavController().popBackStack()
-            (activity as MainActivity).openDrawer()
-        }
 
         viewModel.userLocations.observe(this, {
             updateRecycler(it)

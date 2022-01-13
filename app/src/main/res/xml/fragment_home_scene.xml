@@ -2,44 +2,29 @@
 <MotionScene 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto"
-    motion:defaultDuration="1000">
+    motion:defaultDuration="500">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="500">
 
-        <OnClick
+        <OnSwipe
             motion:autoTransition="animateToEnd"
-            motion:targetId="@+id/fabMore"/>
+            motion:touchAnchorId="@+id/moreContainer"
+            motion:dragDirection="dragUp"
+            motion:touchAnchorSide="top" />
        <KeyFrameSet>
        </KeyFrameSet>
     </Transition>
 
-    <Transition
-        motion:constraintSetEnd="@+id/end"
-        motion:constraintSetStart="@id/start"
-        motion:duration="500">
 
-        <OnClick
-            motion:autoTransition="animateToStart"
-            motion:targetId="@+id/fabMore"/>
-
-        <KeyFrameSet>
-        </KeyFrameSet>
-    </Transition>
 
     <ConstraintSet android:id="@+id/start">
 
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-
-        <Constraint
-            android:layout_height="wrap_content"
-            motion:layout_constraintGuide_percent="0.12"
-            android:layout_width="wrap_content"
-            android:id="@+id/guideline66" />
 
         <Constraint
             android:layout_width="0dp"
@@ -69,18 +54,14 @@
             android:id="@+id/tempContainer"/>
 
         <Constraint
-            android:id="@+id/fabMore">
-
-            <Transform
-                android:fromDegrees="0"
-                android:toDegrees="180"
-                android:rotation="180"
-                android:pivotX="50%"
-                android:pivotY="50%"
-                android:duration="500"
-                />
-
-        </Constraint>
+            android:layout_height="0dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="-1dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:id="@+id/moreContainer"
+            motion:layout_constraintTop_toBottomOf="@+id/tabLayout" />
     </ConstraintSet>
 
 </MotionScene>

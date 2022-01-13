@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootRefreshLayout"
@@ -13,26 +13,38 @@
         android:layout_height="match_parent"
         app:layoutDescription="@xml/fragment_home_scene">
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabMode="scrollable"
+            app:tabTextColor="?android:attr/textColor">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Krasnodar" />
+
+        </com.google.android.material.tabs.TabLayout>
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="24dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineTop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.12" />
+            app:layout_constraintGuide_begin="16dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="24dp" />
+            app:layout_constraintGuide_end="16dp" />
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -43,7 +55,7 @@
             app:layout_constraintGuide_percent="0.97" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+            android:id="@+id/moreContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="-1dp"
@@ -101,16 +113,16 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_next_hours"
-                        android:layout_marginTop="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:orientation="horizontal" />
 
                     <LinearLayout
                         android:id="@+id/detailsTittleContainer"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="16dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -640,66 +652,8 @@
                 tools:text="Clear" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/infoContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart">
-
-            <TextView
-                android:id="@+id/tvCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-thin"
-                android:textSize="24sp"
-                tools:text="Krasnodar" />
-
-            <TextView
-                android:id="@+id/tvUpdateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-thin"
-                android:textSize="18sp"
-                tools:text="Sat, 9:41" />
-        </LinearLayout>
-
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/transparent"
-            android:clickable="true"
-            android:src="@drawable/ic_round_menu_24"
-            app:borderWidth="1dp"
-            app:elevation="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:tint="?android:attr/textColor" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="17dp"
-            android:backgroundTint="@color/transparent"
-            android:clickable="true"
-            android:src="@drawable/ic_round_expand_less_24"
-            app:borderWidth="1dp"
-            app:elevation="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline66"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:tint="?android:attr/textColor" />
-
     </androidx.constraintlayout.motion.widget.MotionLayout>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

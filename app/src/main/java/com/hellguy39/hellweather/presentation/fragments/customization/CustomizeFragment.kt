@@ -26,15 +26,16 @@ class CustomizeFragment : Fragment(R.layout.customize_fragment) {
     private val themeMode = listOf("Auto", "Light", "Dark")
     private lateinit var sharedPreferences: SharedPreferences
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as MainActivity).setToolbarTittle("Customize")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[CustomizeViewModel::class.java]
         binding = CustomizeFragmentBinding.bind(view)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        binding.fabMenu.setOnClickListener {
-            (activity as MainActivity).openDrawer()
-            //view.findNavController().popBackStack()
-        }
 
         binding.sliderBlur.addOnChangeListener { slider, value, fromUser ->
             val cardBlur : MaterialCardView = binding.cardBlur

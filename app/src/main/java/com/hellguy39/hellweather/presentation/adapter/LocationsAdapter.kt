@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.card.MaterialCardView
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
@@ -46,6 +47,7 @@ class LocationsAdapter(
         private var tvLatLon: TextView
         private var btnEdit: Button
         private var btnDelete: Button
+        private var card: MaterialCardView
 
 
         init {
@@ -56,6 +58,7 @@ class LocationsAdapter(
 
             btnEdit = v.findViewById(R.id.btnEdit)
             btnDelete = v.findViewById(R.id.btnDelete)
+            card = v.findViewById(R.id.rootCard)
         }
 
         fun bind(usrLoc: UserLocation, context: Context) {
