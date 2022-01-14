@@ -48,7 +48,6 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
         })
 
         viewModel.requestResLive.observe(this, {
-            Log.d("DEBUG", "REQUEST")
             loadController(DISABLE)
             when(it) {
                 SUCCESSFUL -> {

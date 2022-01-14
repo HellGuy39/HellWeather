@@ -17,8 +17,11 @@ import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirecti
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
 import android.R.attr.radius
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.res.ResourcesCompat
@@ -37,7 +40,7 @@ private lateinit var drawerLayout: DrawerLayout
 private lateinit var binding: MainActivityBinding
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
     private lateinit var toggle: ActionBarDrawerToggle
@@ -60,6 +63,12 @@ class MainActivity : AppCompatActivity() {
             openDrawer()
         }
 
+        val btnInfo = binding.navigationView.getHeaderView(0).findViewById<Button>(R.id.btnInfo)
+        val btnSettings = binding.navigationView.getHeaderView(0).findViewById<Button>(R.id.btnSettings)
+
+        btnInfo.setOnClickListener(this)
+        btnSettings.setOnClickListener(this)
+
         binding.navigationView.setCheckedItem(R.id.homeFragment)
         NavigationUI.setupWithNavController(binding.navigationView, navController)
 
@@ -80,6 +89,17 @@ class MainActivity : AppCompatActivity() {
             if(navController.currentDestination?.id == R.id.homeFragment)
             {
                 navController.navigate(HomeFragmentDirections.actionHomeFragmentToWelcomeFragment())
+            }
+        }
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.btnInfo -> {
+
+            }
+            R.id.btnSettings -> {
+
             }
         }
     }

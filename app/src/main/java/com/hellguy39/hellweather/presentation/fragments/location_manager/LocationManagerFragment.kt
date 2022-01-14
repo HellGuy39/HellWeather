@@ -2,6 +2,7 @@ package com.hellguy39.hellweather.presentation.fragments.location_manager
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,10 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
         viewModel.userLocations.observe(this, {
             updateRecycler(it)
         })
+
+        binding.fabAdd.setOnClickListener {
+            fragView.findNavController().navigate(R.id.action_locationManagerFragment_to_addCityFragment)
+        }
 
     }
 

@@ -76,16 +76,6 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     private fun navigate() = fragView.findNavController()
         .navigate(ConfirmationCityFragmentDirections.actionConfirmationCityFragmentToHomeFragment())
 
-    //I know that it is wrong
-    private fun saveCord(usrLoc: UserLocation) {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val edit: SharedPreferences.Editor = sharedPreferences.edit()
-        edit.putString("lat", usrLoc.lat)
-        edit.putString("lon", usrLoc.lon)
-        edit.putString("requestName", usrLoc.requestName)
-        edit.putString("locationName", usrLoc.locationName)
-        edit.apply()
-    }
     private fun disableFirstBoot() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val edit: SharedPreferences.Editor = sharedPreferences.edit()

@@ -15,6 +15,7 @@ import com.hellguy39.hellweather.repository.server.Common
 import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,16 +33,15 @@ class HomeViewModel @Inject constructor(
     val dailyWeatherLive = MutableLiveData<MutableList<DailyWeather>>()
     val hourlyWeatherLive = MutableLiveData<MutableList<HourlyWeather>>()
     val currentWeatherLive = MutableLiveData<CurrentWeather>()
-
-    val userLocationLive = MutableLiveData<UserLocation>()
-    val isUserLocationLive = MutableLiveData<Boolean>()
+    val userLocationsLive = MutableLiveData<List<UserLocation>>()
 
     private var mService: ApiService = Common.retrofitServices
 
     init {
         viewModelScope.launch {
-            userLocationLive.value = repository.getLocationById(1)
-            isUserLocationLive.value = checkUserLocation(userLocationLive.value!!) //true - всё окей, false - всё плохо
+            repository.getLocations().collect {
+                userLocationsLive.value = it
+            }
             isUpdate.value = false
         }
     }
@@ -152,40 +152,39 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    suspend fun requestToApi() = coroutineScope {
-        withContext(Dispatchers.Main) {
-            isUpdate.value = false
-        }
-            mService.getWeatherOneCall(
-                userLocationLive.value!!.lat.toDouble(),
-                userLocationLive.value!!.lon.toDouble(),
-                "minutely,alerts",
-                "metric",
-                OPEN_WEATHER_API_KEY
-            ).enqueue(object : Callback<JsonObject> {
-                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+    suspend fun requestToApi(userLocation: UserLocation) = viewModelScope.launch {
+        isUpdate.value = false
 
-                    if (response.isSuccessful)
+        mService.getWeatherOneCall(
+            userLocation.lat.toDouble(),
+            userLocation.lon.toDouble(),
+            "minutely,alerts",
+            "metric",
+            OPEN_WEATHER_API_KEY
+        ).enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+
+                if (response.isSuccessful)
+                {
+                    if (response.body() != null)
                     {
-                        if (response.body() != null)
-                        {
-                            viewModelScope.launch {
-                                updatePojo(response.body() as JsonObject)
-                            }
+                        viewModelScope.launch {
+                            updatePojo(response.body() as JsonObject)
                         }
                     }
-                    else
-                    {
-
-                    }
+                }
+                else
+                {
 
                 }
 
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+            }
 
-                }
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
 
-            })
-        }
+            }
+
+        })
+    }
 
 }
