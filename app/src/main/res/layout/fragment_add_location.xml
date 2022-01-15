@@ -74,7 +74,7 @@
         app:layout_constraintGuide_end="24dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline66"
+        android:id="@+id/guidelineMoreMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -96,7 +96,7 @@
         android:fontFamily="sans-serif-thin"
         android:text="Continue"
         android:textColor="?android:attr/textColor"
-        app:layout_constraintBottom_toTopOf="@+id/guideline66"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"

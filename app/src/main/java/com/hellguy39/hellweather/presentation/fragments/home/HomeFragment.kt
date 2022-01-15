@@ -4,31 +4,25 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.viewpager.widget.ViewPager
 import com.broooapps.graphview.CurveGraphConfig
 import com.broooapps.graphview.models.GraphData
 import com.broooapps.graphview.models.PointMap
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
 import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
-import com.hellguy39.hellweather.presentation.adapter.ViewPagerHomeAdapter
 import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,37 +45,41 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding = FragmentHomeBinding.bind(view)
         (activity as MainActivity).setToolbarTittle("Loading...")
-        //confGraph()
+        confGraph()
 
-        //binding.tabLayout.setupWithViewPager(binding.vpHome)
+        binding.progressIndicator.visibility = View.VISIBLE
 
-        //binding.rootView.setBackgroundResource(R.drawable.gradient_clear_day)
-        /*binding.fabMenu.setOnClickListener {
-            (activity as MainActivity).openDrawer()
-        }*/
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                binding.progressIndicator.visibility = View.VISIBLE
+                CoroutineScope(Dispatchers.Default).launch {
+                    val id = tab?.tag
+                    val name = tab?.text
+                    val location = viewModel.getLocation(id!!)
+                    viewModel.requestToApi(location)
+                }
+            }
 
-        /*binding.rootRefreshLayout.setOnRefreshListener {
-            binding.rootRefreshLayout.isRefreshing = true
-            onRefresh()
-        }*/
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
 
-        viewModel.userLocationsLive.observe(this,{
+            }
 
-           /* val size = it.size
+            override fun onTabReselected(tab: TabLayout.Tab?) {
 
-            val pagerAdapter = ViewPagerHomeAdapter()
-
-            binding.tabLayout.setupWithViewPager(binding.vpHome)*/
-//            for (n in it.indices) {
-//                Log.d("DEBUG", "HERE")
-//                val tabItem: TabLayout.Tab = binding.tabLayout.newTab()
-//                tabItem.text = it[n].locationName
-//                binding.tabLayout.addTab(tabItem)
-//            }
+            }
 
         })
 
-        /*viewModel.isUpdate.observe(this, {
+        viewModel.userLocationsLive.observe(this,{
+            for(n in it.indices) {
+                val tab = binding.tabLayout.newTab()
+                tab.text = it[n].locationName
+                tab.tag = it[n].id
+                binding.tabLayout.addTab(tab)
+            }
+        })
+
+        viewModel.isUpdate.observe(this, {
             if (it == true) {
                 //binding.rootRefreshLayout.isRefreshing = false
                 val currentWeather = viewModel.currentWeatherLive.value
@@ -93,9 +91,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     updateGraph(hourlyWeather)
                     dailyWeather.removeAt(0) // Delete element 0, because it is today
                     updateRecyclersView(dailyWeather, hourlyWeather)
+                    binding.progressIndicator.visibility = View.INVISIBLE
                 }
             }
-        })*/
+        })
 
     }
 
@@ -123,8 +122,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     }
 
-    /*private fun confGraph() {
-        binding.graphView.configure(CurveGraphConfig.Builder(context)
+    private fun confGraph() {
+        binding.graphView.configure(
+            CurveGraphConfig.Builder(context)
             .setAxisColor(R.color.white)
             .setIntervalDisplayCount(12)
             .setVerticalGuideline(12)
@@ -135,9 +135,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .setyAxisScaleTextColor(R.color.white)
             .setAnimationDuration(2000)
             .build())
-    }*/
+    }
 
-    /*private fun updateGraph(list: MutableList<HourlyWeather>) {
+    private fun updateGraph(list: MutableList<HourlyWeather>) {
 
         val pointMap = PointMap()
         pointMap.addPoint(0, list[0].pop.toInt())
@@ -153,7 +153,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         pointMap.addPoint(10, list[10].pop.toInt())
         pointMap.addPoint(11, list[11].pop.toInt())
 
-        Log.d("DEBUG", list[11].pop.toInt().toString())
 
         val gd = GraphData.builder(context)
             .setPointMap(pointMap)
@@ -162,14 +161,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .setGraphGradient(R.color.White, R.color.transparent)
             .build()
 
-        *//*CoroutineScope(Main).launch {
+        CoroutineScope(Main).launch {
             delay(250L)
             binding.graphView.setData(12, 100, gd)
-        }*//*
+        }
 
-    }*/
+    }
 
-    /*private fun updateRecyclersView(
+    private fun updateRecyclersView(
         listDays: MutableList<DailyWeather>,
         listHours: MutableList<HourlyWeather>
     ) = CoroutineScope(Main).launch {
@@ -181,9 +180,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = NextHoursAdapter(context, listHours)
         }
-    }*/
+    }
 
-    /*@SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n")
     private fun updateUI(wm : CurrentWeather) {
         CoroutineScope(Main).launch {
             //binding.rootView.isRefreshing = false
@@ -214,5 +213,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.tvWind.text = wm.windSpeed + "m/s"
 
         }
-    }*/
+    }
 }

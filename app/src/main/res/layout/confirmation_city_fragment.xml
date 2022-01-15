@@ -21,7 +21,7 @@
         app:layout_constraintGuide_end="24dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline66"
+        android:id="@+id/guidelineMoreMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -58,7 +58,7 @@
         android:src="@drawable/ic_round_check_24"
         app:borderWidth="1dp"
         app:elevation="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline66"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:tint="?android:attr/textColor"
         android:contentDescription="TODO" />
@@ -74,7 +74,7 @@
         android:src="@drawable/ic_round_clear_24"
         app:borderWidth="1dp"
         app:elevation="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline66"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:tint="?android:attr/textColor"
         android:contentDescription="TODO" />
@@ -85,7 +85,7 @@
         android:gravity="center"
         android:padding="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/guideline66"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/tvFragTittle"

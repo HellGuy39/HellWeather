@@ -25,6 +25,13 @@
     <ConstraintSet android:id="@+id/end">
 
         <Constraint
+            android:id="@+id/guidelineMoreMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintGuide_percent="0.0"
+            />
+
+        <Constraint
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -59,7 +66,7 @@
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
             android:id="@+id/moreContainer"
-            motion:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+            motion:layout_constraintTop_toBottomOf="@+id/guidelineMoreMenu" />
     </ConstraintSet>
 
 </MotionScene>

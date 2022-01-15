@@ -94,4 +94,9 @@
         android:name="com.hellguy39.hellweather.presentation.fragments.quick_weather.QuickWeatherFragment"
         android:label="quick_weather_fragment"
         tools:layout="@layout/quick_weather_fragment" />
+    <fragment
+        android:id="@+id/appInfoFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.info.AppInfoFragment"
+        android:label="fragment_app_info"
+        tools:layout="@layout/fragment_app_info" />
 </navigation>

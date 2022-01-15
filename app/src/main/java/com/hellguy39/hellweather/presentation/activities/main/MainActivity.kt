@@ -26,6 +26,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
 
 import com.google.android.material.shape.CornerFamily
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val firstBoot: Boolean = intent.getBooleanExtra("first_boot", false)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
         toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -96,10 +98,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btnInfo -> {
-
+                navController.navigate(R.id.appInfoFragment)
+                closeDrawer()
             }
             R.id.btnSettings -> {
-
+                navController.navigate(R.id.settingsFragment)
+                closeDrawer()
             }
         }
     }
@@ -127,7 +131,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     fun openDrawer() = binding.drawerLayout.open()
-
+    fun closeDrawer() = binding.drawerLayout.close()
 
     override fun onBackPressed() {
         if (binding.drawerLayout.isOpen)

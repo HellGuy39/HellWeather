@@ -26,7 +26,7 @@ import kotlin.collections.ArrayList
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    repository: LocationRepository
+    val repository: LocationRepository
 ) : ViewModel() {
 
     val isUpdate = MutableLiveData<Boolean>()
@@ -49,6 +49,10 @@ class HomeViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         Log.d("DEBUG", "OnCleared")
+    }
+
+    suspend fun getLocation(id: Any): UserLocation {
+        return repository.getLocationById(id.toString().toInt())!!
     }
 
     private fun checkUserLocation(ul: UserLocation): Boolean {

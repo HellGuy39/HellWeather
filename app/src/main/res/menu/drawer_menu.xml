@@ -24,11 +24,6 @@
             android:icon="@drawable/ic_outline_format_paint_24"
             android:title="Customize" />
 
-        <item
-            android:id="@+id/settingsFragment"
-            android:icon="@drawable/ic_outline_settings_24"
-            android:title="Settings" />
-
 
     </group>
 
