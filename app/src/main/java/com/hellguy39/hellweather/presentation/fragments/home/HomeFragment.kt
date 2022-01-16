@@ -1,9 +1,10 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,8 @@ import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
+import com.hellguy39.hellweather.utils.DISABLE
+import com.hellguy39.hellweather.utils.ENABLE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,71 +33,35 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedListener {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this/*,HomeViewModelFactory(requireContext())*/)[HomeViewModel::class.java]
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        (activity as MainActivity).setToolbarTittle("Loading...")
+        (activity as MainActivity).updateToolbarMenu(ENABLE)
+
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentHomeBinding.bind(view)
-        (activity as MainActivity).setToolbarTittle("Loading...")
+
         confGraph()
-
-        binding.progressIndicator.visibility = View.VISIBLE
-
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                binding.progressIndicator.visibility = View.VISIBLE
-                CoroutineScope(Dispatchers.Default).launch {
-                    val id = tab?.tag
-                    val name = tab?.text
-                    val location = viewModel.getLocation(id!!)
-                    viewModel.requestToApi(location)
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-
-        })
-
-        viewModel.userLocationsLive.observe(this,{
-            for(n in it.indices) {
-                val tab = binding.tabLayout.newTab()
-                tab.text = it[n].locationName
-                tab.tag = it[n].id
-                binding.tabLayout.addTab(tab)
-            }
-        })
-
-        viewModel.isUpdate.observe(this, {
-            if (it == true) {
-                //binding.rootRefreshLayout.isRefreshing = false
-                val currentWeather = viewModel.currentWeatherLive.value
-                val hourlyWeather = viewModel.hourlyWeatherLive.value
-                val dailyWeather = viewModel.dailyWeatherLive.value
-
-                if (currentWeather != null && hourlyWeather != null && dailyWeather != null) {
-                    updateUI(currentWeather)
-                    updateGraph(hourlyWeather)
-                    dailyWeather.removeAt(0) // Delete element 0, because it is today
-                    updateRecyclersView(dailyWeather, hourlyWeather)
-                    binding.progressIndicator.visibility = View.INVISIBLE
-                }
-            }
-        })
+        updateIndicator(ENABLE)
+        binding.tabLayout.addOnTabSelectedListener(this)
+        setObservers()
 
     }
 
@@ -105,21 +72,49 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             onRefresh()
     }
 
-    private fun onRefresh() {
-        //binding.rootRefreshLayout.isRefreshing = true
-        /*CoroutineScope(Default).launch {
-            val isLoc = viewModel.isUserLocationLive.value
-            if (isLoc == true)
-            {
-                viewModel.requestToApi()
-            }
-            else
-            {
-                delay(100L)
-                onRefresh()
-            }
-        }*/
+    fun onRefresh() {
 
+    }
+
+    private fun updateIndicator(action: String) {
+        if (action == ENABLE) {
+            binding.progressIndicator.visibility = View.VISIBLE
+        }
+        else
+        {
+            binding.progressIndicator.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setObservers() {
+
+        viewModel.userLocationsLive.observe(this,{
+            for(n in it.indices) {
+                val tab = binding.tabLayout.newTab()
+                tab.text = it[n].locationName
+                tab.tag = it[n].id
+                /*if (n == 0) {
+                    tab.icon = (ResourcesCompat.getDrawable(resources, R.drawable.ic_round_home_24, null))
+                }*/
+                binding.tabLayout.addTab(tab)
+            }
+        })
+
+        viewModel.isUpdate.observe(this, {
+            if (it == true) {
+                val currentWeather = viewModel.currentWeatherLive.value
+                val hourlyWeather = viewModel.hourlyWeatherLive.value
+                val dailyWeather = viewModel.dailyWeatherLive.value
+
+                if (currentWeather != null && hourlyWeather != null && dailyWeather != null) {
+                    updateUI(currentWeather)
+                    updateGraph(hourlyWeather)
+                    dailyWeather.removeAt(0) // Delete element 0, because it is today
+                    updateRecyclersView(dailyWeather, hourlyWeather)
+                    updateIndicator(DISABLE)
+                }
+            }
+        })
     }
 
     private fun confGraph() {
@@ -130,7 +125,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .setVerticalGuideline(12)
             .setHorizontalGuideline(5)
             .setGuidelineColor(R.color.Gray)
-            .setNoDataMsg("Loading...")
+            .setNoDataMsg(R.string.loading.toString())
             .setxAxisScaleTextColor(R.color.white)
             .setyAxisScaleTextColor(R.color.white)
             .setAnimationDuration(2000)
@@ -182,36 +177,43 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateUI(wm : CurrentWeather) {
         CoroutineScope(Main).launch {
-            //binding.rootView.isRefreshing = false
-
-            //Center
             Glide.with(this@HomeFragment)
                 .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
                 .centerCrop()
-                //.dontAnimate()
-                //.placeholder(ResourcesCompat.getDrawable(resources, R.drawable.ic_round_image_not_supported_24, null))
                 .into(binding.ivWeather)
 
             binding.tvTemp.text = wm.temp + "°"
             binding.tvMaxTemp.text = wm.tempMax + "°C"
             binding.tvMinTemp.text = wm.tempMin + "°C"
             binding.tvWeather.text = wm.wDescription
-            //Top
             (activity as MainActivity).setToolbarTittle(SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000)))
-            //binding.tvUpdateTime.text = SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000))
-            //binding.tvCity.text = viewModel.userLocationLive.value?.locationName
-            //Details
-            //binding.tabLayout.getTabAt(0)?.text = viewModel.userLocationLive.value?.locationName
             binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
             binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))
             binding.tvTempFeelsLike.text = wm.tempFeelsLike + "°"
             binding.tvHumidity.text = wm.humidity + "%"
             binding.tvPressure.text = wm.pressure + "hPa"
             binding.tvWind.text = wm.windSpeed + "m/s"
-
         }
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        updateIndicator(ENABLE)
+
+        CoroutineScope(Dispatchers.Default).launch {
+            val id = tab?.tag
+            val location = viewModel.getLocation(id!!)
+            viewModel.requestToApi(location)
+        }
+
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab?) {
+
     }
 }

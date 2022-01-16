@@ -3,7 +3,6 @@ package com.hellguy39.hellweather.presentation.activities.main
 import android.R.attr
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -17,14 +16,13 @@ import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirecti
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
 import android.R.attr.radius
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
@@ -41,11 +39,13 @@ private lateinit var drawerLayout: DrawerLayout
 private lateinit var binding: MainActivityBinding
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuItemClickListener {
 
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
+    private lateinit var navHostFragment: NavHostFragment
+    private  var toolBarMenu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +53,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val view = binding.root
         setContentView(view)
 
+        toolBarMenu = binding.topAppBar.menu
+
         val firstBoot: Boolean = intent.getBooleanExtra("first_boot", false)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
         toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
@@ -62,8 +64,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         toggle.syncState()
 
         binding.topAppBar.setNavigationOnClickListener {
-            openDrawer()
+            if (!firstBoot) {
+                openDrawer()
+            }
         }
+
+        binding.topAppBar.menu.getItem(0).setOnMenuItemClickListener(this)
 
         val btnInfo = binding.navigationView.getHeaderView(0).findViewById<Button>(R.id.btnInfo)
         val btnSettings = binding.navigationView.getHeaderView(0).findViewById<Button>(R.id.btnSettings)
@@ -112,6 +118,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.topAppBar.title = s
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
             return true
@@ -143,5 +150,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             super.onBackPressed()
         }
     }
+
+    fun updateToolbarMenu(action: String) {
+        if (toolBarMenu != null) {
+            if (action == ENABLE) {
+                toolBarMenu!!.findItem(R.id.update).isVisible = true
+            } else {
+                toolBarMenu!!.findItem(R.id.update).isVisible = false
+            }
+        }
+    }
+
+    override fun onMenuItemClick(p0: MenuItem?): Boolean {
+        when (p0?.itemId) {
+            R.id.update -> {
+                if (navController.currentDestination?.id == R.id.homeFragment) {
+                    (navHostFragment.childFragmentManager.fragments[0] as HomeFragment).onRefresh()
+                }
+            }
+        }
+        return true
+    }
+
+
 }
 

@@ -16,8 +16,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressIndicator"
         app:tabMode="auto"
-        app:tabTextColor="?android:attr/textColor">
-
+        app:tabTextAppearance="@style/tab_text"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabTextColor="?android:attr/textColor"
+        app:tabIndicatorColor="?android:attr/textColor">
 
     </com.google.android.material.tabs.TabLayout>
 
@@ -29,6 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:indicatorColor="?android:attr/textColor"
         android:visibility="invisible"/>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
@@ -105,7 +109,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:fontFamily="sans-serif-light"
+                            android:fontFamily="@font/roboto_light"
                             android:text="Next 48 hours"
                             android:textAllCaps="true"
                             android:textSize="18sp" />
@@ -139,7 +143,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:fontFamily="sans-serif-light"
+                            android:fontFamily="@font/roboto_light"
                             android:text="Details"
                             android:textAllCaps="true"
                             android:textSize="18sp" />
@@ -190,9 +194,9 @@
                                     android:id="@+id/tvSunriseTittle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif-thin"
+                                    android:fontFamily="@font/roboto_light"
                                     android:gravity="center"
-                                    android:text="Sunrise"
+                                    android:text="@string/sunrise"
                                     android:textSize="18sp" />
 
                                 <TextView
@@ -202,7 +206,7 @@
                                     android:autoSizeMaxTextSize="24sp"
                                     android:autoSizeMinTextSize="16sp"
                                     android:autoSizeTextType="uniform"
-                                    android:fontFamily="sans-serif-light"
+                                    android:fontFamily="@font/roboto_thin"
                                     android:gravity="center"
                                     android:maxLines="1"
                                     android:textSize="24sp"
@@ -240,9 +244,9 @@
                                     android:id="@+id/tvSunsetTittle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif-thin"
+                                    android:fontFamily="@font/roboto_light"
                                     android:gravity="center"
-                                    android:text="Sunset"
+                                    android:text="@string/sunset"
                                     android:textSize="18sp" />
 
                                 <TextView
@@ -252,7 +256,7 @@
                                     android:autoSizeMaxTextSize="24sp"
                                     android:autoSizeMinTextSize="16sp"
                                     android:autoSizeTextType="uniform"
-                                    android:fontFamily="sans-serif-light"
+                                    android:fontFamily="@font/roboto_thin"
                                     android:gravity="center"
                                     android:maxLines="1"
                                     android:textSize="24sp"
@@ -289,9 +293,9 @@
                                     android:id="@+id/tvFeelsLikeTittle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif-thin"
+                                    android:fontFamily="@font/roboto_light"
                                     android:gravity="center"
-                                    android:text="Feels like"
+                                    android:text="@string/feels_like"
                                     android:textSize="18sp" />
 
                                 <TextView
@@ -301,7 +305,7 @@
                                     android:autoSizeMaxTextSize="24sp"
                                     android:autoSizeMinTextSize="16sp"
                                     android:autoSizeTextType="uniform"
-                                    android:fontFamily="sans-serif-light"
+                                    android:fontFamily="@font/roboto_thin"
                                     android:gravity="center"
                                     android:maxLines="1"
                                     android:textSize="24sp"
@@ -346,10 +350,10 @@
                                     android:id="@+id/tvPressureTittle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif-thin"
+                                    android:fontFamily="@font/roboto_light"
                                     android:gravity="center"
                                     android:maxLines="1"
-                                    android:text="Pressure"
+                                    android:text="@string/pressure"
                                     android:textSize="18sp" />
 
                                 <TextView
@@ -359,7 +363,7 @@
                                     android:autoSizeMaxTextSize="24sp"
                                     android:autoSizeMinTextSize="16sp"
                                     android:autoSizeTextType="uniform"
-                                    android:fontFamily="sans-serif-light"
+                                    android:fontFamily="@font/roboto_thin"
                                     android:gravity="center"
                                     android:maxLines="1"
                                     android:textSize="24sp"
@@ -396,10 +400,10 @@
                                     android:id="@+id/tvHumidityTittle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif-thin"
+                                    android:fontFamily="@font/roboto_light"
                                     android:gravity="center"
                                     android:maxLines="1"
-                                    android:text="Humidity"
+                                    android:text="@string/humidity"
                                     android:textSize="18sp" />
 
                                 <TextView
@@ -409,7 +413,7 @@
                                     android:autoSizeMaxTextSize="24sp"
                                     android:autoSizeMinTextSize="16sp"
                                     android:autoSizeTextType="uniform"
-                                    android:fontFamily="sans-serif-light"
+                                    android:fontFamily="@font/roboto_thin"
                                     android:gravity="center"
                                     android:maxLines="1"
                                     android:textSize="24sp"
@@ -445,10 +449,10 @@
                                     android:id="@+id/tvWindTittle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif-thin"
+                                    android:fontFamily="@font/roboto_light"
                                     android:gravity="center"
                                     android:maxLines="1"
-                                    android:text="Wind"
+                                    android:text="@string/wind"
                                     android:textSize="18sp" />
 
                                 <TextView
@@ -458,7 +462,7 @@
                                     android:autoSizeMaxTextSize="24sp"
                                     android:autoSizeMinTextSize="16sp"
                                     android:autoSizeTextType="uniform"
-                                    android:fontFamily="sans-serif-light"
+                                    android:fontFamily="@font/roboto_thin"
                                     android:gravity="center"
                                     android:maxLines="1"
                                     android:textSize="24sp"
@@ -480,8 +484,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:fontFamily="sans-serif-light"
-                            android:text="Chance of rain"
+                            android:fontFamily="@font/roboto_light"
+                            android:text="@string/chance_of_rain"
                             android:textAllCaps="true"
                             android:textSize="18sp" />
 
@@ -520,8 +524,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
                                 android:layout_marginStart="8dp"
-                                android:fontFamily="sans-serif-light"
-                                android:text="*after N hours"
+                                android:fontFamily="@font/roboto_light"
+                                android:text="@string/after_n_hours"
                                 android:textAllCaps="false"
                                 android:textSize="14sp" />
 
@@ -540,8 +544,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:fontFamily="sans-serif-light"
-                            android:text="NEXT 7 DAYS"
+                            android:fontFamily="@font/roboto_light"
+                            android:text="@string/next_7_days"
                             android:textAllCaps="true"
                             android:textSize="18sp" />
 
@@ -583,7 +587,7 @@
                 android:id="@+id/tvTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
+                android:fontFamily="@font/roboto_thin"
                 android:gravity="end"
                 android:text=""
                 android:textSize="128sp"
@@ -602,7 +606,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="sans-serif-thin"
+                    android:fontFamily="@font/roboto_thin"
                     android:textSize="32sp"
                     tools:text="26° C" />
 
@@ -617,7 +621,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="sans-serif-thin"
+                    android:fontFamily="@font/roboto_thin"
                     android:text=""
                     android:textSize="32sp"
                     tools:text="9° C" />
@@ -653,7 +657,7 @@
                 android:autoSizeMaxTextSize="64dp"
                 android:autoSizeMinTextSize="32dp"
                 android:autoSizeTextType="uniform"
-                android:fontFamily="sans-serif-thin"
+                android:fontFamily="@font/roboto_thin"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text=""

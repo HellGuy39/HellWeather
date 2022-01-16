@@ -3,11 +3,8 @@ package com.hellguy39.hellweather.presentation.fragments.confirmation
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
@@ -27,6 +24,12 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     private val args: ConfirmationCityFragmentArgs by navArgs()
     private lateinit var fragView: View
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as MainActivity).setToolbarTittle("Location manager")
+        (activity as MainActivity).updateToolbarMenu("INVISIBLE")
+    }
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -44,8 +47,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     }
 
     private fun updateUI(usrLoc: UserLocation) {
-        binding.tvCity.text = usrLoc.locationName
-        binding.tvRegion.text = usrLoc.country
+        binding.tvLocation.text = usrLoc.country + ", " + usrLoc.locationName
         binding.tvCoords.text = "Lat: ${usrLoc.lat} Lon: ${usrLoc.lon}"
         if (usrLoc.timezone > 0)
         {

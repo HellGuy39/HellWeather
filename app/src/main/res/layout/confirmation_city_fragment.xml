@@ -34,94 +34,80 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.15" />
 
-    <TextView
-        android:id="@+id/tvFragTittle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-thin"
-        android:gravity="center"
-        android:text="That's right?"
-        android:textSize="48sp"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:layout_constraintTop_toTopOf="@+id/guideline15" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabTrue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/transparent"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="?android:attr/colorSecondary"
         android:clickable="true"
+        android:contentDescription="TODO"
         android:src="@drawable/ic_round_check_24"
-        app:borderWidth="1dp"
-        app:elevation="0dp"
+        app:borderWidth="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:tint="?android:attr/textColor"
-        android:contentDescription="TODO" />
+        app:tint="?attr/iconTint" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabFalse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/transparent"
-        android:clickable="true"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="?android:attr/colorSecondary"
+        android:contentDescription="TODO"
         android:src="@drawable/ic_round_clear_24"
-        app:borderWidth="1dp"
-        app:elevation="0dp"
+        app:borderWidth="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:tint="?android:attr/textColor"
-        android:contentDescription="TODO" />
+        app:tint="?attr/iconTint" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="8dp"
         android:orientation="vertical"
+        android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@+id/tvFragTittle"
-        app:layout_constraintVertical_bias="0.2">
+        app:layout_constraintTop_toTopOf="@+id/guideline15"
+        app:layout_constraintVertical_bias="0.3">
+
 
         <TextView
-            android:id="@+id/tvRegion"
+            android:id="@+id/tvFragTittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
-            android:textSize="20sp"
-            tools:text="Krasnodarsky Krai" />
+            android:gravity="center"
+            android:text="That's right?"
+            android:textSize="48sp" />
 
         <TextView
-            android:id="@+id/tvCity"
+            android:id="@+id/tvLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-thin"
-            android:textSize="20sp"
             android:layout_marginTop="8dp"
-            tools:text="Krasnodar" />
+            android:fontFamily="sans-serif-thin"
+            android:textSize="20sp"
+            tools:text="RU, Krasnodar" />
 
         <TextView
             android:id="@+id/tvCoords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-thin"
             android:textSize="20sp"
-            android:layout_marginTop="8dp"
             tools:text="Lan: 40 Lon: 45" />
 
         <TextView
             android:id="@+id/tvTimezone"
-            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-thin"
             android:textSize="20sp"
             tools:text="+3 GMT" />

@@ -2,23 +2,16 @@ package com.hellguy39.hellweather.presentation.fragments.location_manager
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.navigation.NavHost
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.navigation.NavigationView
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationManagerFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
-import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.utils.DISABLE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +24,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as MainActivity).setToolbarTittle("Location manager")
+        (activity as MainActivity).updateToolbarMenu(DISABLE)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

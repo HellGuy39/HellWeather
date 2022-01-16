@@ -1,21 +1,14 @@
 package com.hellguy39.hellweather.presentation.fragments.add
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
-import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentAddLocationBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.presentation.fragments.confirmation.ConfirmationCityFragmentDirections
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.*
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +24,8 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as MainActivity).setToolbarTittle("Location manager")
+        (activity as MainActivity).updateToolbarMenu("INVISIBLE")
         viewModel = ViewModelProvider(this, AddLocationViewModelFactory(requireContext()))[AddLocationViewModel::class.java]
     }
 
@@ -76,7 +71,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
             }
         })
 
-        binding.btnCnt.setOnClickListener {
+        binding.fabNext.setOnClickListener {
 
             val input = binding.etCity.text.toString()
 
@@ -101,15 +96,13 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
             when (action) {
                 ENABLE -> {
                     binding.etCity.isEnabled = false
-                    binding.btnCnt.isEnabled = false
+                    binding.fabNext.isEnabled = false
                     binding.progressLinear.visibility = View.VISIBLE
-                    binding.tvWait.visibility = View.VISIBLE
                 }
                 DISABLE -> {
                     binding.etCity.isEnabled = true
-                    binding.btnCnt.isEnabled = true
+                    binding.fabNext.isEnabled = true
                     binding.progressLinear.visibility = View.INVISIBLE
-                    binding.tvWait.visibility = View.INVISIBLE
                 }
             }
     }

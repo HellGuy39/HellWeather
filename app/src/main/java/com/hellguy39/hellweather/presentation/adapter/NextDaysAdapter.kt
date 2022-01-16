@@ -58,8 +58,6 @@ class NextDaysAdapter(
             tvHumidity.text = dailyWeather.humidity + "%"
             tvDay.text = dailyWeather.dt
 
-            Log.d("DEBUG", "Icon:${dailyWeather.icon}")
-
             Glide.with(context)
                 .load("https://openweathermap.org/img/wn/${dailyWeather.icon}@2x.png")
                 //.dontAnimate()

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 
+// Removed for better times
+
 /*
 class HomeViewModelFactory(
     private val context: Context

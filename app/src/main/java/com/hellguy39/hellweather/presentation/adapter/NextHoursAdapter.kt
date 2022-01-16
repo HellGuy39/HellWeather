@@ -64,7 +64,6 @@ class NextHoursAdapter(
                     Locale.getDefault()
                 ).format(Date(hourlyWeather.dt * 1000))//hourlyWeather.dt
             }
-            Log.d("DEBUG", "Icon:${hourlyWeather.icon}")
 
             Glide.with(context)
                 .load("https://openweathermap.org/img/wn/${hourlyWeather.icon}@2x.png")

@@ -30,8 +30,7 @@
                 android:id="@+id/tvDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
-                android:text=""
+                android:fontFamily="@font/roboto_thin"
                 android:textSize="18sp"
                 tools:text="Fri" />
 
@@ -39,7 +38,7 @@
                 android:id="@+id/tvHumidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
+                android:fontFamily="@font/roboto_thin"
                 android:text=""
                 android:textSize="18sp"
                 tools:text="60%" />
@@ -54,8 +53,7 @@
                 android:id="@+id/tvMaxTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
-                android:text=""
+                android:fontFamily="@font/roboto_thin"
                 android:textSize="18sp"
                 tools:text="25°" />
 
@@ -68,7 +66,7 @@
                 android:id="@+id/tvMinTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
+                android:fontFamily="@font/roboto_thin"
                 android:text=""
                 android:textSize="18sp"
                 tools:text="15°" />

@@ -30,10 +30,9 @@
                 android:id="@+id/tvHour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
-                android:text=""
+                android:fontFamily="@font/roboto_thin"
                 android:textSize="18sp"
-                tools:text="12" />
+                tools:text="12:00" />
 
 
             <ImageView
@@ -46,8 +45,7 @@
                 android:id="@+id/tvTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
-                android:text=""
+                android:fontFamily="@font/roboto_thin"
                 android:textSize="18sp"
                 tools:text="25°" />
 
