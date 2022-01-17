@@ -38,14 +38,13 @@
         android:id="@+id/fabTrue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="?android:attr/colorSecondary"
         android:clickable="true"
         android:contentDescription="TODO"
         android:src="@drawable/ic_round_check_24"
         app:borderWidth="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:tint="?attr/iconTint" />
 
@@ -53,13 +52,12 @@
         android:id="@+id/fabFalse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="?android:attr/colorSecondary"
         android:contentDescription="TODO"
         android:src="@drawable/ic_round_clear_24"
         app:borderWidth="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:tint="?attr/iconTint" />
 

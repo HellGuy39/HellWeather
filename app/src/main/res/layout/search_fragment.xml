@@ -4,49 +4,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.fragments.quick_weather.QuickWeatherFragment">
+    tools:context=".presentation.fragments.quick_weather.SearchFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="24dp" />
+        app:layout_constraintGuide_begin="16dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="24dp" />
+        app:layout_constraintGuide_end="16dp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabSearch"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:indeterminate="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:indicatorColor="?android:attr/textColor"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btnSearch"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="@color/transparent"
-        android:clickable="true"
-        android:src="@drawable/ic_round_search_24"
-        app:borderWidth="1dp"
-        app:elevation="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:strokeWidth="0dp"
+        app:iconTint="?attr/iconTint"
+        app:icon="@drawable/ic_round_navigate_next_24"
+        app:cornerRadius="24dp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="?android:attr/textColor" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/outlinedTextField"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_weight="1"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
         android:hint="Location name"
-        app:layout_constraintEnd_toStartOf="@+id/fabSearch"
+        app:layout_constraintEnd_toStartOf="@+id/btnSearch"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_round_search_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCity"
@@ -58,12 +73,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardMain"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:cardElevation="0dp"
-        app:cardCornerRadius="8dp"
         android:backgroundTint="@color/whiteBlur30"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/outlinedTextField">
@@ -71,8 +88,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -84,14 +101,14 @@
                     android:id="@+id/tvTemp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="48sp"
                     android:fontFamily="sans-serif-thin"
+                    android:textSize="48sp"
                     tools:text="9°" />
 
                 <LinearLayout
-                    android:layout_marginStart="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -103,9 +120,9 @@
                         tools:text="11° C" />
 
                     <View
-                        android:background="?android:attr/textColor"
                         android:layout_width="match_parent"
-                        android:layout_height="0.5dp"/>
+                        android:layout_height="0.5dp"
+                        android:background="?android:attr/textColor" />
 
                     <TextView
                         android:id="@+id/tvTempMin"

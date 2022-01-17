@@ -3,8 +3,10 @@ package com.hellguy39.hellweather.presentation.fragments.confirmation
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
@@ -12,6 +14,7 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.ConfirmationCityFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,10 +27,15 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     private val args: ConfirmationCityFragmentArgs by navArgs()
     private lateinit var fragView: View
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as MainActivity).setToolbarTittle("Location manager")
-        (activity as MainActivity).updateToolbarMenu("INVISIBLE")
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
+        (activity as MainActivity).updateToolbarMenu(DISABLE)
+
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(
@@ -49,13 +57,17 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     private fun updateUI(usrLoc: UserLocation) {
         binding.tvLocation.text = usrLoc.country + ", " + usrLoc.locationName
         binding.tvCoords.text = "Lat: ${usrLoc.lat} Lon: ${usrLoc.lon}"
-        if (usrLoc.timezone > 0)
+        if (usrLoc.timezone == 0)
+        {
+            binding.tvTimezone.text = "${usrLoc.timezone} GMT"
+        }
+        else if (usrLoc.timezone > 0)
         {
             binding.tvTimezone.text = "+${usrLoc.timezone} GMT"
         }
         else
         {
-            binding.tvTimezone.text = "${usrLoc.timezone} GMT"
+            binding.tvTimezone.text = "-${usrLoc.timezone} GMT"
         }
 
     }

@@ -2,8 +2,10 @@ package com.hellguy39.hellweather.presentation.fragments.add
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.hellguy39.hellweather.R
@@ -24,9 +26,18 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as MainActivity).setToolbarTittle("Location manager")
-        (activity as MainActivity).updateToolbarMenu("INVISIBLE")
         viewModel = ViewModelProvider(this, AddLocationViewModelFactory(requireContext()))[AddLocationViewModel::class.java]
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
+        (activity as MainActivity).updateToolbarMenu(DISABLE)
+
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(

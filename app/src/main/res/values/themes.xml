@@ -48,6 +48,13 @@
         <item name="android:fontFamily">@font/roboto_thin</item>
     </style>
 
+    <style name="toolbar_tittle" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">22sp</item>
+        <item name="fontFamily">@font/roboto_light</item>
+        <item name="android:fontFamily">@font/roboto_light</item>
+    </style>
+
+
     <style name="AppSplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_day</item>
         <!--<item name="android:navigationBarColor">@color/splash_day_background</item>

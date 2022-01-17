@@ -1,45 +1,50 @@
 package com.hellguy39.hellweather.presentation.adapter
 
 import android.content.Context
-import android.util.Log
+import android.media.metrics.Event
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 
 class LocationsAdapter(
     private val context: Context,
-    private val locationList: List<UserLocation>
+    private val locationList: List<UserLocation>,
+    private val listener: EventListener
     ) : RecyclerView.Adapter<LocationsAdapter.LocationViewHolder> () {
+
+    interface EventListener {
+        fun onDelete(userLocation: UserLocation)
+        fun onEdit(userLocation: UserLocation)
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): LocationsAdapter.LocationViewHolder {
+    ): LocationViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.location_item, parent, false)
-        return LocationViewHolder(itemView)
+        return LocationViewHolder(itemView, listener)
     }
 
     override fun onBindViewHolder(
-        holder: LocationsAdapter.LocationViewHolder,
+        holder: LocationViewHolder,
         position: Int)
     {
-        val userLocation: UserLocation = locationList[position]
-        holder.bind(userLocation, context)
+        //val userLocation: UserLocation = locationList[position]
+        holder.bind(locationList, context, position)
     }
 
     override fun getItemCount(): Int = locationList.size
 
-    class LocationViewHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
+    class LocationViewHolder(v: View, private val listener: EventListener) : RecyclerView.ViewHolder(v) {
 
         private var tvId: TextView
         private var tvLocationName: TextView
@@ -61,39 +66,39 @@ class LocationsAdapter(
             card = v.findViewById(R.id.rootCard)
         }
 
-        fun bind(usrLoc: UserLocation, context: Context) {
-            btnDelete.setOnClickListener(this)
-            btnEdit.setOnClickListener(this)
+        fun bind(locationList: List<UserLocation>, context: Context, position: Int) {
 
-            if (usrLoc.id == 1) {
+            btnDelete.setOnClickListener {
+                listener.onDelete(locationList[position])
+            }
+
+            btnEdit.setOnClickListener {
+                listener.onEdit(locationList[position])
+            }
+
+            if (locationList[position].id == 1) {
                 tvId.text = "Main"
             } else {
-                tvId.text = usrLoc.id.toString()
+                tvId.text =locationList[position].id.toString()
             }
-            tvLocationName.text = usrLoc.locationName
-            tvLatLon.text = "Lat: ${usrLoc.lat} | Lon: ${usrLoc.lon}"
+            tvLocationName.text = locationList[position].locationName
+            tvLatLon.text = "Lat: ${locationList[position].lat} | Lon: ${locationList[position].lon}"
 
-            if (usrLoc.timezone > 0)
+            if (locationList[position].timezone == 0)
             {
-                tvTimezone.text = "+${usrLoc.timezone} GMT"
+                tvTimezone.text = "${locationList[position].timezone} GMT"
+            }
+            else if (locationList[position].timezone > 0)
+            {
+                tvTimezone.text = "+${locationList[position].timezone} GMT"
             }
             else
             {
-                tvTimezone.text = "${usrLoc.timezone} GMT"
+                tvTimezone.text = "${locationList[position].timezone} GMT"
             }
 
         }
 
-        override fun onClick(p0: View?) {
-            when (p0?.id) {
-                R.id.btnDelete -> {
-
-                }
-                R.id.btnEdit -> {
-
-                }
-            }
-        }
     }
 
 }

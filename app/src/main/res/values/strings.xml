@@ -6,11 +6,14 @@
     <string name="open" translatable="false">Open</string>
     <string name="close" translatable="false">Close</string>
     <string name="loading">Loading…</string>
+    <string name="not_available">N/A</string>
 
     <!-- Tittles-->
+    <string name="tittle_welcome">Welcome</string>
     <string name="tittle_home">Home</string>
-    <string name="tittle_quick_weather">Quick weather</string>
+    <string name="tittle_search">Search city</string>
     <string name="tittle_location_manager">Location manager</string>
+    <string name="tittle_foreground_service">Foreground service</string>
     <string name="tittle_customize">Customize</string>
     <string name="tittle_settings">Settings</string>
     <string name="tittle_info">Info</string>

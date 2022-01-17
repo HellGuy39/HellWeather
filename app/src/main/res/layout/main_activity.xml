@@ -31,6 +31,7 @@
                 android:elevation="0dp"
                 app:navigationIcon="@drawable/ic_round_menu_24"
                 app:titleCentered="true"
+                app:titleTextAppearance="@style/toolbar_tittle"
                 app:menu="@menu/toolbar_menu"
                 app:titleTextColor="?android:attr/textColor"
                 app:navigationIconTint="?android:attr/textColor"

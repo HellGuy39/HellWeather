@@ -64,9 +64,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
         toggle.syncState()
 
         binding.topAppBar.setNavigationOnClickListener {
-            if (!firstBoot) {
-                openDrawer()
-            }
+            openDrawer()
         }
 
         binding.topAppBar.menu.getItem(0).setOnMenuItemClickListener(this)
@@ -129,10 +127,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
     fun drawerControl(action: String) {
         when(action) {
             ENABLE -> {
+                binding.topAppBar.setNavigationOnClickListener {
+                    openDrawer()
+                }
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
             DISABLE -> {
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                binding.topAppBar.setNavigationOnClickListener {
+                    Log.i("TAG", "Drawer disabled")
+                }
+
             }
         }
     }

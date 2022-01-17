@@ -7,22 +7,28 @@
         <item
             android:id="@+id/homeFragment"
             android:icon="@drawable/ic_round_cloud_queue_24"
-            android:title="Home" />
+            android:title="@string/tittle_home" />
 
         <item
-            android:id="@+id/quickWeatherFragment"
+            android:id="@+id/searchFragment"
             android:icon="@drawable/ic_outline_search_24"
-            android:title="Quick weather" />
+            android:title="@string/tittle_search" />
 
         <item
             android:id="@+id/locationManagerFragment"
             android:icon="@drawable/ic_outline_location_city_24"
-            android:title="Location manager" />
+            android:title="@string/tittle_location_manager" />
+
+        <item
+            android:id="@+id/serviceFragment"
+            android:icon="@drawable/ic_round_ad_units_24"
+            android:title="@string/tittle_foreground_service" />
+
 
         <item
             android:id="@+id/customizeFragment"
             android:icon="@drawable/ic_outline_format_paint_24"
-            android:title="Customize" />
+            android:title="@string/tittle_customize" />
 
 
     </group>

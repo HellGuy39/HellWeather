@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
@@ -17,18 +19,25 @@ import com.google.android.material.slider.Slider
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.CustomizeFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.utils.DISABLE
 
 class CustomizeFragment : Fragment(R.layout.customize_fragment) {
 
     private lateinit var viewModel: CustomizeViewModel
     private lateinit var binding: CustomizeFragmentBinding
     private val themes = listOf("Default", "Sky inspired")
-    private val themeMode = listOf("Auto", "Light", "Dark")
+    private val themeMode = listOf("Follow system", "Light", "Dark")
     private lateinit var sharedPreferences: SharedPreferences
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as MainActivity).setToolbarTittle("Customize")
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_customize))
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,6 +68,25 @@ class CustomizeFragment : Fragment(R.layout.customize_fragment) {
                 context?.resources?.displayMetrics)
             binding.cardBlur.radius = radius
         }
+
+        val adapterTheme = ArrayAdapter(requireContext(), R.layout.list_item, themes)
+        val adapterMode = ArrayAdapter(requireContext(), R.layout.list_item, themeMode)
+
+        binding.acTheme.setAdapter(adapterTheme)
+        binding.acMode.setAdapter(adapterMode)
+
+        binding.acTheme.setText(binding.acTheme.adapter.getItem(0).toString(), false)
+        binding.acMode.setText(binding.acMode.adapter.getItem(0).toString(), false)
+
+        binding.tfMode.isEnabled = false
+        binding.tfTheme.isEnabled = false
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.sliderBlur.isEnabled = false
+        binding.sliderCornerRad.isEnabled = false
     }
 
     override fun onDestroyView() {

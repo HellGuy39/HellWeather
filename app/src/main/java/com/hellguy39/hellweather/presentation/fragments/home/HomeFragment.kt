@@ -1,6 +1,7 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
+    private var selectedTab: TabLayout.Tab? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (activity as MainActivity).setToolbarTittle("Loading...")
+        (activity as MainActivity).setToolbarTittle(getString(R.string.loading))
         (activity as MainActivity).updateToolbarMenu(ENABLE)
 
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -59,7 +61,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
         binding = FragmentHomeBinding.bind(view)
 
         confGraph()
-        updateIndicator(ENABLE)
         binding.tabLayout.addOnTabSelectedListener(this)
         setObservers()
 
@@ -68,12 +69,25 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
     override fun onStart() {
         super.onStart()
 
-        if (viewModel.isUpdate.value == false || viewModel.isUpdate.value == null)
-            onRefresh()
+        /*if (viewModel.isUpdate.value == false || viewModel.isUpdate.value == null)
+            onRefresh()*/
     }
 
     fun onRefresh() {
 
+        val tab = selectedTab
+
+        if (tab != null) {
+            updateIndicator(ENABLE)
+            (activity as MainActivity).setToolbarTittle(getString(R.string.loading))
+            clearUI()
+
+            CoroutineScope(Dispatchers.Default).launch {
+                val id = tab.tag
+                val location = viewModel.getLocation(id!!)
+                viewModel.requestToApi(location)
+            }
+        }
     }
 
     private fun updateIndicator(action: String) {
@@ -125,7 +139,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
             .setVerticalGuideline(12)
             .setHorizontalGuideline(5)
             .setGuidelineColor(R.color.Gray)
-            .setNoDataMsg(R.string.loading.toString())
+            .setNoDataMsg(getString(R.string.loading))
             .setxAxisScaleTextColor(R.color.white)
             .setyAxisScaleTextColor(R.color.white)
             .setAnimationDuration(2000)
@@ -177,6 +191,26 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
         }
     }
 
+    private fun clearUI() {
+        CoroutineScope(Main).launch {
+            Glide.with(this@HomeFragment).clear(binding.ivWeather)
+
+            val na = getString(R.string.not_available)
+
+            binding.tvTemp.text = ""
+            binding.tvMaxTemp.text = ""
+            binding.tvMinTemp.text = ""
+            binding.tvWeather.text = ""
+
+            binding.tvSunrise.text = na
+            binding.tvSunset.text = na
+            binding.tvTempFeelsLike.text = na
+            binding.tvHumidity.text = na
+            binding.tvPressure.text = na
+            binding.tvWind.text = na
+        }
+    }
+
     private fun updateUI(wm : CurrentWeather) {
         CoroutineScope(Main).launch {
             Glide.with(this@HomeFragment)
@@ -200,13 +234,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         updateIndicator(ENABLE)
-
-        CoroutineScope(Dispatchers.Default).launch {
-            val id = tab?.tag
-            val location = viewModel.getLocation(id!!)
-            viewModel.requestToApi(location)
-        }
-
+        selectedTab = tab
+        onRefresh()
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {
