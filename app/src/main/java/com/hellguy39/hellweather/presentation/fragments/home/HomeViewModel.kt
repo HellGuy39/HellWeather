@@ -1,6 +1,5 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +10,6 @@ import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.repository.server.ApiService
-import com.hellguy39.hellweather.repository.server.Common
 import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -26,7 +24,8 @@ import kotlin.collections.ArrayList
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val repository: LocationRepository
+    val repository: LocationRepository,
+    private val mService: ApiService
 ) : ViewModel() {
 
     val isUpdate = MutableLiveData<Boolean>()
@@ -35,7 +34,7 @@ class HomeViewModel @Inject constructor(
     val currentWeatherLive = MutableLiveData<CurrentWeather>()
     val userLocationsLive = MutableLiveData<List<UserLocation>>()
 
-    private var mService: ApiService = Common.retrofitServices
+    //private var mService: ApiService = Common.retrofitServices
 
     init {
         viewModelScope.launch {
@@ -54,7 +53,7 @@ class HomeViewModel @Inject constructor(
         return repository.getLocationById(id.toString().toInt())!!
     }
 
-    private fun checkUserLocation(ul: UserLocation): Boolean {
+    /*private fun checkUserLocation(ul: UserLocation): Boolean {
 
         if (ul.requestName == "" &&
             ul.requestName == "N/A")
@@ -76,7 +75,7 @@ class HomeViewModel @Inject constructor(
 
         return true
     }
-
+*/
     private suspend fun updatePojo(jObj: JsonObject) {
 
         val currentWeather = CurrentWeather()

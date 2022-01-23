@@ -13,11 +13,12 @@ import com.hellguy39.hellweather.databinding.FragmentAddLocationBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
 
     private lateinit var binding: FragmentAddLocationBinding
@@ -26,7 +27,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, AddLocationViewModelFactory(requireContext()))[AddLocationViewModel::class.java]
+        viewModel = ViewModelProvider(this)[AddLocationViewModel::class.java]
     }
 
     override fun onCreateView(

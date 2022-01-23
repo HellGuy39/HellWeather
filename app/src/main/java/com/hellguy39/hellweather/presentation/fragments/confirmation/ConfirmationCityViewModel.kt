@@ -1,5 +1,6 @@
 package com.hellguy39.hellweather.presentation.fragments.confirmation
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hellguy39.hellweather.repository.database.LocationRepository
@@ -10,13 +11,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConfirmationCityViewModel @Inject constructor(
-    private val repository: LocationRepository
+    private val repository: LocationRepository,
+    private val defSharedPrefs: SharedPreferences
 ) : ViewModel() {
 
     fun saveToRoom(userLocation: UserLocation) {
         viewModelScope.launch {
             repository.insertLocation(userLocation)
         }
+    }
+
+    fun disableFirstBoot() {
+        defSharedPrefs.edit().apply {
+            putBoolean("first_boot", false)
+        }.apply()
     }
 
 }

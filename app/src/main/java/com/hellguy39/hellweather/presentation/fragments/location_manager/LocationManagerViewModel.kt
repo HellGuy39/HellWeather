@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LocationManagerViewModel @Inject constructor(
-    private val repository: LocationRepository
+    private val repository: LocationRepository,
 ): ViewModel() {
 
     var userLocations = MutableLiveData<List<UserLocation>>()

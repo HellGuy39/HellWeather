@@ -25,7 +25,6 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     private lateinit var binding: ConfirmationCityFragmentBinding
     private lateinit var userLocation: UserLocation
     private val args: ConfirmationCityFragmentArgs by navArgs()
-    private lateinit var fragView: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +42,6 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        fragView = view
         viewModel = ViewModelProvider(this)[ConfirmationCityViewModel::class.java]
         binding = ConfirmationCityFragmentBinding.bind(view)
 
@@ -75,26 +73,18 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.fabTrue -> {
-                disableFirstBoot()
+                viewModel.disableFirstBoot()
                 viewModel.saveToRoom(userLocation)
-                navigate()
+                navigate(p0)
                 (activity as MainActivity).drawerControl(ENABLE)
             }
             R.id.fabFalse -> {
-                //Log.d("DEBUG", )
-                fragView.findNavController().popBackStack()
+                p0.findNavController().popBackStack()
             }
         }
     }
 
-    private fun navigate() = fragView.findNavController()
+    private fun navigate(v: View) = v.findNavController()
         .navigate(ConfirmationCityFragmentDirections.actionConfirmationCityFragmentToHomeFragment())
-
-    private fun disableFirstBoot() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val edit: SharedPreferences.Editor = sharedPreferences.edit()
-        edit.putBoolean("first_boot", false)
-        edit.apply()
-    }
 
 }

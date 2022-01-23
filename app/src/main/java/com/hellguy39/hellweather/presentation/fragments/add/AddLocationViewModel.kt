@@ -1,28 +1,25 @@
 package com.hellguy39.hellweather.presentation.fragments.add
 
-import android.content.SharedPreferences
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.preference.PreferenceManager
 import com.google.gson.JsonObject
-import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-import com.hellguy39.hellweather.repository.server.Common
+import com.hellguy39.hellweather.repository.server.ApiService
 import com.hellguy39.hellweather.utils.*
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class AddLocationViewModel() : ViewModel() {
+@HiltViewModel
+class AddLocationViewModel @Inject constructor(
+    private val mService: ApiService
+) : ViewModel() {
 
-    private val mService = Common.retrofitServices
     val userLocationLive = MutableLiveData<UserLocation>()
     val isLoadingLive = MutableLiveData<Boolean>()
     val requestResLive = MutableLiveData<String?>()
