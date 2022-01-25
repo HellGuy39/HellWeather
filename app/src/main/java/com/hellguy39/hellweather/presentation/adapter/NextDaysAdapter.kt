@@ -43,7 +43,7 @@ class NextDaysAdapter(
         private var ivIcon : ImageView
 
         init {
-            tvMaxTemp = v.findViewById(R.id.tvMaxMinTemp)
+            tvMaxTemp = v.findViewById(R.id.tvMaxTemp)
             tvMinTemp = v.findViewById(R.id.tvMinTemp)
             tvHumidity = v.findViewById(R.id.tvHumidity)
             tvDay = v.findViewById(R.id.tvDay)
