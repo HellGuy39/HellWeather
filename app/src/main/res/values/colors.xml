@@ -13,6 +13,9 @@
 
     <color name="transparent">#00FFFFFF</color>
 
+    <color name="clearSkyDayStart50">#5051A4DB</color>
+    <color name="clearSkyDayEnd50">#5073BAE1</color>
+
     <color name="clearSkyDayStart">#51A4DB</color>
     <color name="clearSkyDayEnd">#73BAE1</color>
 
@@ -21,6 +24,9 @@
 
     <color name="cloudyNightStart">#0A0D13</color>
     <color name="cloudyNightEnd">#232325</color>
+
+    <color name="cloudyNightStart50">#500A0D13</color>
+    <color name="cloudyNightEnd50">#50232325</color>
 
     <color name="whiteBlur100">#FFFFFFFF</color>
     <color name="whiteBlur90">#90FFFFFF</color>

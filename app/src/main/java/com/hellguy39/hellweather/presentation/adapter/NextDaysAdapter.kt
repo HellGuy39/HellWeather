@@ -1,13 +1,11 @@
 package com.hellguy39.hellweather.presentation.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
@@ -45,7 +43,7 @@ class NextDaysAdapter(
         private var ivIcon : ImageView
 
         init {
-            tvMaxTemp = v.findViewById(R.id.tvMaxTemp)
+            tvMaxTemp = v.findViewById(R.id.tvMaxMinTemp)
             tvMinTemp = v.findViewById(R.id.tvMinTemp)
             tvHumidity = v.findViewById(R.id.tvHumidity)
             tvDay = v.findViewById(R.id.tvDay)

@@ -21,7 +21,7 @@
         app:layout_constraintGuide_end="24dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineMoreMenu"
+        android:id="@+id/guidelineMotion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -67,7 +67,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineMoreMenu"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineMotion"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toTopOf="@+id/guideline15"

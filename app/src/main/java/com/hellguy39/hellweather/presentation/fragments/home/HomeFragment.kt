@@ -197,9 +197,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
 
             val na = getString(R.string.not_available)
 
-            binding.tvTemp.text = ""
-            binding.tvMaxTemp.text = ""
-            binding.tvMinTemp.text = ""
+            binding.tvTextTop.text = "--"
+            binding.tvDot.text = ""
+            binding.tvTemp.text = "--"
+            binding.tvMaxMinTemp.text = ""
             binding.tvWeather.text = ""
 
             binding.tvSunrise.text = na
@@ -213,22 +214,24 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
 
     private fun updateUI(wm : CurrentWeather) {
         CoroutineScope(Main).launch {
-            Glide.with(this@HomeFragment)
+            /*Glide.with(this@HomeFragment)
                 .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
                 .centerCrop()
-                .into(binding.ivWeather)
+                .into(binding.ivWeather)*/
 
-            binding.tvTemp.text = wm.temp + "°"
-            binding.tvMaxTemp.text = wm.tempMax + "°C"
-            binding.tvMinTemp.text = wm.tempMin + "°C"
+            binding.tvTextTop.text = wm.temp + "°" + " | " + wm.wDescription
+
+            binding.tvDot.text = "°"
+            binding.tvTemp.text = wm.temp //+ "°"
+            binding.tvMaxMinTemp.text = "Max.: ${wm.tempMax}°, min.: ${wm.tempMin}°"
             binding.tvWeather.text = wm.wDescription
             (activity as MainActivity).setToolbarTittle(SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000)))
             binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
             binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))
             binding.tvTempFeelsLike.text = wm.tempFeelsLike + "°"
             binding.tvHumidity.text = wm.humidity + "%"
-            binding.tvPressure.text = wm.pressure + "hPa"
-            binding.tvWind.text = wm.windSpeed + "m/s"
+            binding.tvPressure.text = wm.pressure + " hPa"
+            binding.tvWind.text = wm.windSpeed + " m/s"
         }
     }
 

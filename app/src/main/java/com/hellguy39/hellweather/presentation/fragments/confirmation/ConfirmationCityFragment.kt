@@ -65,7 +65,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         }
         else
         {
-            binding.tvTimezone.text = "-${usrLoc.timezone} GMT"
+            binding.tvTimezone.text = "${usrLoc.timezone} GMT"
         }
 
     }

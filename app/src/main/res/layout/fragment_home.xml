@@ -7,6 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".presentation.fragments.home.HomeFragment">
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:trackColor="@color/transparent"
+        app:indicatorColor="?android:attr/textColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -15,25 +27,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressIndicator"
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabIndicatorColor="?android:attr/textColor"
+        app:tabIndicatorFullWidth="false"
         app:tabMode="auto"
         app:tabTextAppearance="@style/tab_text"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorAnimationMode="elastic"
-        app:tabTextColor="?android:attr/textColor"
-        app:tabIndicatorColor="?android:attr/textColor">
+        app:tabTextColor="?android:attr/textColor">
 
     </com.google.android.material.tabs.TabLayout>
-
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressIndicator"
-        android:indeterminate="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:indicatorColor="?android:attr/textColor"
-        android:visibility="invisible"/>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/rootMotionLayout"
@@ -44,6 +45,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.07" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineMotion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineStart"
@@ -59,612 +74,528 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="16dp" />
 
+        <TextView
+            android:id="@+id/tvTextTop"
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="center"
+            android:text=""
+            android:textSize="32sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/guideline7"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="9° | Light snow" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineMoreMenu"
+        <TextView
+            android:id="@+id/tvWeather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.97" />
+            android:layout_gravity="center"
+            android:autoSizeMaxTextSize="48dp"
+            android:autoSizeMinTextSize="16dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="42sp"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/tvTemp"
+            tools:text="Clear" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/moreContainer"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvMaxMinTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/roboto_thin"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeather"
+            tools:text="Max.: 26°, min.: 9°" />
+
+        <TextView
+            android:id="@+id/tvTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="center"
+            android:text=""
+            android:textSize="128sp"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toTopOf="@id/guideline7"
+            tools:text="9" />
+
+        <TextView
+            android:id="@+id/tvDot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="center"
+            android:text=""
+            android:textSize="128sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvTemp"
+            app:layout_constraintStart_toEndOf="@+id/tvTemp"
+            app:layout_constraintTop_toTopOf="@id/tvTemp"
+            tools:text="°" />
+
+
+        <ImageView
+            android:id="@+id/ivWeather"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedSV"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="-1dp"
-            android:background="@drawable/backdrop_shape"
-            android:paddingStart="24dp"
-            android:paddingTop="24dp"
-            android:paddingEnd="24dp"
+            android:fillViewport="true"
+            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guidelineMoreMenu">
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toTopOf="@+id/guidelineMotion">
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/nestedSV"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:fillViewport="true"
-                android:scrollbars="none"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/hourItemsCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/whiteBlur30"
+                    app:cardCornerRadius="@dimen/card_default_corner"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeWidth="0dp">
 
                     <LinearLayout
-                        android:id="@+id/nextHoursTittleContainer"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="12dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tvNextHours"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="8dp"
                             android:fontFamily="@font/roboto_light"
-                            android:text="Next 48 hours"
-                            android:textAllCaps="true"
+                            android:text="@string/hourly_forecast"
+                            android:textAllCaps="false"
                             android:textSize="18sp" />
 
-                        <View
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_next_hours"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            android:background="@color/black"
-                            android:backgroundTint="?android:attr/textColor" />
-
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
                     </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_next_hours"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal" />
+                </com.google.android.material.card.MaterialCardView>
 
-                    <LinearLayout
-                        android:id="@+id/detailsTittleContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/tvDetails"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/roboto_light"
-                            android:text="Details"
-                            android:textAllCaps="true"
-                            android:textSize="18sp" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            android:background="@color/black"
-                            android:backgroundTint="?android:attr/textColor" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/detailsContainer1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="0"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/whiteBlur30"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <ImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_sunrise"
-                                    app:tint="?android:attr/textColor" />
-
-                                <TextView
-                                    android:id="@+id/tvSunriseTittle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/roboto_light"
-                                    android:gravity="center"
-                                    android:text="@string/sunrise"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvSunrise"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:autoSizeMaxTextSize="24sp"
-                                    android:autoSizeMinTextSize="16sp"
-                                    android:autoSizeTextType="uniform"
-                                    android:fontFamily="@font/roboto_thin"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:textSize="24sp"
-                                    tools:text="9:41" />
-                            </LinearLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/whiteBlur30"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <ImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_sunset"
-                                    app:tint="?android:attr/textColor" />
-
-                                <TextView
-                                    android:id="@+id/tvSunsetTittle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/roboto_light"
-                                    android:gravity="center"
-                                    android:text="@string/sunset"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvSunset"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:autoSizeMaxTextSize="24sp"
-                                    android:autoSizeMinTextSize="16sp"
-                                    android:autoSizeTextType="uniform"
-                                    android:fontFamily="@font/roboto_thin"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:textSize="24sp"
-                                    tools:text="21:41" />
-                            </LinearLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/whiteBlur30"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <ImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_thermometer_2"
-                                    app:tint="?android:attr/textColor" />
-
-                                <TextView
-                                    android:id="@+id/tvFeelsLikeTittle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/roboto_light"
-                                    android:gravity="center"
-                                    android:text="@string/feels_like"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvTempFeelsLike"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:autoSizeMaxTextSize="24sp"
-                                    android:autoSizeMinTextSize="16sp"
-                                    android:autoSizeTextType="uniform"
-                                    android:fontFamily="@font/roboto_thin"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:textSize="24sp"
-                                    tools:text="10°" />
-                            </LinearLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/detailsContainer2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/whiteBlur30"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <ImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_pressure"
-                                    app:tint="?android:attr/textColor" />
-
-                                <TextView
-                                    android:id="@+id/tvPressureTittle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/roboto_light"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="@string/pressure"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvPressure"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:autoSizeMaxTextSize="24sp"
-                                    android:autoSizeMinTextSize="16sp"
-                                    android:autoSizeTextType="uniform"
-                                    android:fontFamily="@font/roboto_thin"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:textSize="24sp"
-                                    tools:text="24.25" />
-                            </LinearLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/whiteBlur30"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <ImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_humidity" />
-
-                                <TextView
-                                    android:id="@+id/tvHumidityTittle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/roboto_light"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="@string/humidity"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvHumidity"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:autoSizeMaxTextSize="24sp"
-                                    android:autoSizeMinTextSize="16sp"
-                                    android:autoSizeTextType="uniform"
-                                    android:fontFamily="@font/roboto_thin"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:textSize="24sp"
-                                    tools:text="15%" />
-                            </LinearLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/whiteBlur30"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <ImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_wind" />
-
-                                <TextView
-                                    android:id="@+id/tvWindTittle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/roboto_light"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="@string/wind"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvWind"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:autoSizeMaxTextSize="24sp"
-                                    android:autoSizeMinTextSize="16sp"
-                                    android:autoSizeTextType="uniform"
-                                    android:fontFamily="@font/roboto_thin"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:textSize="24sp"
-                                    tools:text="5 km/h" />
-                            </LinearLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/chanceOfRainTittleContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvChance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/roboto_light"
-                            android:text="@string/chance_of_rain"
-                            android:textAllCaps="true"
-                            android:textSize="18sp" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            android:background="@color/black"
-                            android:backgroundTint="?android:attr/textColor" />
-
-                    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/detailsContainer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/whiteBlur30"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="0dp">
+                        app:cardCornerRadius="@dimen/card_default_corner"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:padding="8dp">
-
-                            <com.broooapps.graphview.CurveGraphView
-                                android:id="@+id/graphView"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp" />
+                            android:padding="12dp">
 
                             <TextView
-                                android:id="@+id/tvDesc"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/tvSunriseTittle"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
-                                android:layout_marginStart="8dp"
                                 android:fontFamily="@font/roboto_light"
-                                android:text="@string/after_n_hours"
-                                android:textAllCaps="false"
-                                android:textSize="14sp" />
+                                android:gravity="start"
+                                android:text="@string/sunrise"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvSunrise"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeMaxTextSize="32sp"
+                                android:autoSizeMinTextSize="16sp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:textSize="32sp"
+                                tools:text="9:41" />
 
                         </LinearLayout>
+
                     </com.google.android.material.card.MaterialCardView>
 
-                    <LinearLayout
-                        android:id="@+id/NextDaysTittleContainer"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:orientation="horizontal">
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/whiteBlur30"
+                        app:cardCornerRadius="@dimen/card_default_corner"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/tvSunsetTittle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:text="@string/sunset"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvSunset"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:autoSizeMaxTextSize="32sp"
+                                android:autoSizeMinTextSize="16sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:textSize="32sp"
+                                tools:text="21:41" />
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/detailsContainer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/whiteBlur30"
+                        app:cardCornerRadius="@dimen/card_default_corner"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/tvPressureTittle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:text="@string/pressure"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvPressure"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeMaxTextSize="32sp"
+                                android:autoSizeMinTextSize="16sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:maxLines="1"
+                                android:textSize="32sp"
+                                tools:text="24.25" />
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/whiteBlur30"
+                        app:cardCornerRadius="@dimen/card_default_corner"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/tvWindTittle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:text="@string/wind"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvWind"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeMaxTextSize="32sp"
+                                android:autoSizeMinTextSize="16sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:textSize="32sp"
+                                tools:text="5 km/h" />
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/detailsContainer3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/whiteBlur30"
+                        app:cardCornerRadius="@dimen/card_default_corner"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/tvFeelsLikeTittle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:text="@string/feels_like"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvTempFeelsLike"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeMaxTextSize="32sp"
+                                android:autoSizeMinTextSize="16sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:textSize="32sp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                tools:text="10°" />
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/whiteBlur30"
+                        app:cardCornerRadius="@dimen/card_default_corner"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/tvHumidityTittle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:text="@string/humidity"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvHumidity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeMaxTextSize="32sp"
+                                android:autoSizeMinTextSize="16sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:maxLines="1"
+                                android:textSize="32sp"
+                                tools:text="15%" />
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="@color/whiteBlur30"
+                    app:cardCornerRadius="@dimen/card_default_corner"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/tvChance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/roboto_light"
+                            android:text="@string/chance_of_rain"
+                            android:textAllCaps="false"
+                            android:textSize="18sp" />
+
+                        <com.broooapps.graphview.CurveGraphView
+                            android:id="@+id/graphView"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp" />
+
+                        <TextView
+                            android:id="@+id/tvDesc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/roboto_light"
+                            android:text="@string/after_n_hours"
+                            android:textAllCaps="false"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/dailyCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="@color/whiteBlur30"
+                    app:cardCornerRadius="@dimen/card_default_corner"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="12dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tvNextDays"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="8dp"
                             android:fontFamily="@font/roboto_light"
-                            android:text="@string/next_7_days"
-                            android:textAllCaps="true"
+                            android:text="@string/daily_forecast"
+                            android:textAllCaps="false"
                             android:textSize="18sp" />
 
-                        <View
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_next_days"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            android:background="@color/black"
-                            android:backgroundTint="?android:attr/textColor" />
-
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
                     </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_next_days"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="64dp"
-                        android:orientation="horizontal" />
+                </com.google.android.material.card.MaterialCardView>
 
-                </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/tempContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/descriptionContainer">
-
-            <TextView
-                android:id="@+id/tvTemp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_thin"
-                android:gravity="end"
-                android:text=""
-                android:textSize="128sp"
-                tools:text="9°" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="24sp"
-                android:layout_marginBottom="24dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvMaxTemp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:fontFamily="@font/roboto_thin"
-                    android:textSize="32sp"
-                    tools:text="26° C" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/black"
-                    android:backgroundTint="?android:attr/textColor" />
-
-                <TextView
-                    android:id="@+id/tvMinTemp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:fontFamily="@font/roboto_thin"
-                    android:text=""
-                    android:textSize="32sp"
-                    tools:text="9° C" />
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/descriptionContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/tempContainer"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed">
-
-            <ImageView
-                android:id="@+id/ivWeather"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/tvWeather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:autoSizeMaxTextSize="64dp"
-                android:autoSizeMinTextSize="32dp"
-                android:autoSizeTextType="uniform"
-                android:fontFamily="@font/roboto_thin"
-                android:gravity="center"
-                android:maxLines="1"
-                android:text=""
-                android:textSize="42sp"
-                tools:text="Clear" />
-        </LinearLayout>
-
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.motion.widget.MotionLayout>
 
 

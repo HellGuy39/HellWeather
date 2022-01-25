@@ -4,74 +4,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
-    android:layout_width="wrap_content">
+    android:layout_width="wrap_content"
+    android:padding="8dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/rootCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/whiteBlur30"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="18sp"
+            tools:text="Fri" />
+
+        <TextView
+            android:id="@+id/tvHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:text=""
+            android:textSize="18sp"
+            tools:text="60%" />
+
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="TODO" />
+
+        <TextView
+            android:id="@+id/tvMaxMinTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="18sp"
+            tools:text="25°" />
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_height="0.5dp"
+            android:background="?android:attr/textColor" />
 
-            <TextView
-                android:id="@+id/tvDay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_thin"
-                android:textSize="18sp"
-                tools:text="Fri" />
+        <TextView
+            android:id="@+id/tvMinTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:text=""
+            android:textSize="18sp"
+            tools:text="15°" />
 
-            <TextView
-                android:id="@+id/tvHumidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_thin"
-                android:text=""
-                android:textSize="18sp"
-                tools:text="60%" />
-
-            <ImageView
-                android:id="@+id/ivIcon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:contentDescription="TODO" />
-
-            <TextView
-                android:id="@+id/tvMaxTemp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_thin"
-                android:textSize="18sp"
-                tools:text="25°" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="?android:attr/textColor" />
-
-            <TextView
-                android:id="@+id/tvMinTemp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_thin"
-                android:text=""
-                android:textSize="18sp"
-                tools:text="15°" />
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

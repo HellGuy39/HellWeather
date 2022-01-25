@@ -4,33 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
+    android:padding="8dp"
     android:layout_width="wrap_content">
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/rootCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/whiteBlur30"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_marginEnd="8dp">
 
             <TextView
                 android:id="@+id/tvHour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_thin"
+                android:fontFamily="@font/roboto_light"
                 android:textSize="18sp"
                 tools:text="12:00" />
 
@@ -38,18 +26,15 @@
             <ImageView
                 android:id="@+id/ivIcon"
                 android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:contentDescription="TODO" />
+                android:layout_height="32dp" />
 
             <TextView
                 android:id="@+id/tvTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_thin"
+                android:fontFamily="@font/roboto_light"
                 android:textSize="18sp"
                 tools:text="25°" />
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,14 +7,95 @@
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
+        motion:motionInterpolator="linear"
         motion:duration="500">
 
         <OnSwipe
             motion:autoTransition="animateToEnd"
-            motion:touchAnchorId="@+id/moreContainer"
+            motion:touchAnchorId="@+id/nestedSV"
+            motion:autoCompleteMode="spring"
             motion:dragDirection="dragUp"
             motion:touchAnchorSide="top" />
        <KeyFrameSet>
+
+           <!-- Frame 10 -->
+           <KeyAttribute
+               motion:motionTarget="@+id/tvMaxMinTemp"
+               motion:framePosition="10"
+               android:alpha="0.25"/>
+           <KeyAttribute
+               motion:motionTarget="@+id/tvWeather"
+               motion:framePosition="10"
+               android:alpha="0.75"/>
+
+           <!-- Frame 20 -->
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvMaxMinTemp"
+               motion:framePosition="20"
+               android:alpha="0.0"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvWeather"
+               motion:framePosition="20"
+               android:alpha="0.5"/>
+
+           <!-- Frame 30 -->
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvWeather"
+               motion:framePosition="30"
+               android:alpha="0.0"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvTemp"
+               motion:framePosition="30"
+               android:alpha="1.0"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvDot"
+               motion:framePosition="30"
+               android:alpha="1.0"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvTextTop"
+               motion:framePosition="30"
+               android:alpha="0.5"/>
+
+           <!-- Frame 50 -->
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvTemp"
+               motion:framePosition="50"
+               android:alpha="0.5"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvDot"
+               motion:framePosition="50"
+               android:alpha="0.5"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvTextTop"
+               motion:framePosition="50"
+               android:alpha="0.5"/>
+
+           <!-- Frame 60 -->
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvTextTop"
+               motion:framePosition="60"
+               android:alpha="0.9"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvTemp"
+               motion:framePosition="60"
+               android:alpha="0.1"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/tvDot"
+               motion:framePosition="60"
+               android:alpha="0.1"/>
+
        </KeyFrameSet>
     </Transition>
 
@@ -25,48 +106,43 @@
     <ConstraintSet android:id="@+id/end">
 
         <Constraint
-            android:id="@+id/guidelineMoreMenu"
+            android:visibility="invisible"
+            android:id="@+id/tvMaxMinTemp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+        <Constraint
+            android:visibility="invisible"
+            android:id="@+id/tvDot"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+        <Constraint
+            android:visibility="invisible"
+            android:id="@+id/tvWeather"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+        <Constraint
+            android:visibility="invisible"
+            android:id="@+id/tvTemp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+        <Constraint
+            android:id="@+id/guidelineMotion"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            motion:layout_constraintGuide_percent="0.0"
-            />
+            motion:layout_constraintGuide_percent="0.07" />
 
         <Constraint
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            motion:layout_constraintBottom_toTopOf="@+id/tempContainer"
-            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            motion:layout_constraintHorizontal_bias="0.5"
-            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintVertical_chainStyle="packed"
-            android:visibility="invisible"
-            android:id="@+id/descriptionContainer" />
+            android:id="@+id/tvTextTop"
+            android:visibility="visible"/>
 
-        <Constraint
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            motion:layout_constraintHorizontal_bias="0.5"
-            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            motion:layout_constraintTop_toBottomOf="@+id/descriptionContainer"
-            android:visibility="invisible"
-            android:id="@+id/tempContainer"/>
-
-        <Constraint
-            android:layout_height="0dp"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="-1dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="0dp"
-            android:id="@+id/moreContainer"
-            motion:layout_constraintTop_toBottomOf="@+id/guidelineMoreMenu" />
     </ConstraintSet>
 
 </MotionScene>

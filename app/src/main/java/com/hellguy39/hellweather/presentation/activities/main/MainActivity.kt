@@ -35,13 +35,12 @@ import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModel
 import com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-private lateinit var drawerLayout: DrawerLayout
-private lateinit var binding: MainActivityBinding
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuItemClickListener {
 
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var binding: MainActivityBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
