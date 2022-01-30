@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/whiteBlur30"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="@dimen/card_default_corner"
         app:cardElevation="0dp"
+        app:strokeWidth="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
@@ -22,6 +23,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -31,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="sans-serif-thin"
+                android:fontFamily="@font/roboto_light"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,10 +87,11 @@
 
                 <TextView
                     android:id="@+id/tvLanLon"
+                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_thin"
+                    android:fontFamily="@font/roboto_light"
                     android:textSize="16sp"
                     tools:text="Lat: 45 | Lon: 40" />
 
@@ -97,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_thin"
+                    android:fontFamily="@font/roboto_light"
                     android:textSize="16sp"
                     tools:text="+3 GMT" />
 

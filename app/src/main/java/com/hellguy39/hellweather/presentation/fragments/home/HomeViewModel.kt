@@ -10,7 +10,7 @@ import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.repository.server.ApiService
-import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
+import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -28,7 +28,9 @@ class HomeViewModel @Inject constructor(
     private val mService: ApiService
 ) : ViewModel() {
 
+    val requestStatus = MutableLiveData<String>()
     val isUpdate = MutableLiveData<Boolean>()
+
     val dailyWeatherLive = MutableLiveData<MutableList<DailyWeather>>()
     val hourlyWeatherLive = MutableLiveData<MutableList<HourlyWeather>>()
     val currentWeatherLive = MutableLiveData<CurrentWeather>()
@@ -53,29 +55,6 @@ class HomeViewModel @Inject constructor(
         return repository.getLocationById(id.toString().toInt())!!
     }
 
-    /*private fun checkUserLocation(ul: UserLocation): Boolean {
-
-        if (ul.requestName == "" &&
-            ul.requestName == "N/A")
-        {
-            return false
-        }
-
-        if (ul.lat == "" &&
-            ul.lat == "N/A")
-        {
-            return false
-        }
-
-        if (ul.lon == "" &&
-            ul.lon == "N/A")
-        {
-            return false
-        }
-
-        return true
-    }
-*/
     private suspend fun updatePojo(jObj: JsonObject) {
 
         val currentWeather = CurrentWeather()
@@ -95,6 +74,12 @@ class HomeViewModel @Inject constructor(
             it.pressure = current.get("pressure").asString
             it.humidity = current.get("humidity").asString
             it.windSpeed = current.get("wind_speed").asString
+            it.windDeg = current.get("wind_deg").asString
+            it.windGust = current.get("wind_gust").asString
+            it.dewPoint = current.get("dew_point").asFloat.toInt().toString()
+            it.uvi = current.get("uvi").asDouble
+            it.visibility = current.get("visibility").asInt
+
             val wt = current.getAsJsonArray("weather").get(0).asJsonObject
             it.wMain = wt.get("main").asString
             it.wDescription = wt.get("description").asString.replaceFirstChar {
@@ -151,11 +136,13 @@ class HomeViewModel @Inject constructor(
             hourlyWeatherLive.value = hourlyWeather
             dailyWeatherLive.value = dailyWeather
             isUpdate.value = true
+            requestStatus.value = SUCCESSFUL
         }
     }
 
     suspend fun requestToApi(userLocation: UserLocation) = viewModelScope.launch {
         isUpdate.value = false
+        requestStatus.value = IN_PROGRESS
 
         mService.getWeatherOneCall(
             userLocation.lat.toDouble(),
@@ -172,18 +159,23 @@ class HomeViewModel @Inject constructor(
                     {
                         viewModelScope.launch {
                             updatePojo(response.body() as JsonObject)
+                            //Request status will be changed when data loaded to the objects
                         }
+                    }
+                    else
+                    {
+                        requestStatus.value = EMPTY_BODY
                     }
                 }
                 else
                 {
-
+                    requestStatus.value = ERROR
                 }
 
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-
+                requestStatus.value = FAILURE
             }
 
         })

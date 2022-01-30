@@ -4,11 +4,20 @@ data class CurrentWeather(
     var dt: Long = 0,
     var temp: String = "N/A",
     var tempFeelsLike: String = "N/A",
+
     var humidity: String = "N/A",
     var pressure: String = "N/A",
+    var uvi: Double = 1.0,
+    var dewPoint: String = "N/A",
+    var visibility: Int = 0,
+
     var sunrise: Long = 0,
     var sunset: Long = 0,
+
     var windSpeed: String = "N/A",
+    var windDeg: String = "N/A",
+    var windGust: String ="N/A",
+
     var wMain: String = "N/A",
     var wDescription: String = "N/A",
     var icon: String = "N/A",

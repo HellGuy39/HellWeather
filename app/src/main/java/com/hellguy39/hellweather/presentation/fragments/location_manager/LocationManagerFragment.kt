@@ -46,9 +46,9 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
         fragView = view
         binding = LocationManagerFragmentBinding.bind(view)
 
-        viewModel.userLocations.observe(this, {
+        viewModel.userLocations.observe(viewLifecycleOwner) {
             updateRecycler(it)
-        })
+        }
 
         binding.fabAdd.setOnClickListener {
             fragView.findNavController().navigate(R.id.action_locationManagerFragment_to_addCityFragment)

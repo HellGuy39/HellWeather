@@ -7,6 +7,7 @@
     <string name="close" translatable="false">Close</string>
     <string name="loading">Loading…</string>
     <string name="not_available">N/A</string>
+    <string name="try_again">Try again</string>
 
     <!-- Tittles-->
     <string name="tittle_welcome">Welcome</string>
@@ -41,8 +42,13 @@
     <string name="pressure">Pressure</string>
     <string name="humidity">Humidity</string>
     <string name="wind">Wind</string>
+    <string name="uv_index">UV index</string>
+    <string name="visibility">Visibility</string>
 
     <!-- Helper texts -->
     <string name="after_n_hours">*after N hours</string>
+
+    <!-- Snakbar texts -->
+    <string name="on_failure">Failure. Please, check your internet connection</string>
 
 </resources>

@@ -8,6 +8,8 @@ const val SUCCESSFUL = "suc" // хаха сак хахаха смешно
 const val EMPTY_BODY = "emp"
 const val FAILURE = "fail"
 const val ERROR = "err"
+const val IN_PROGRESS = "prg"
+const val INACTION = "ina"
 
 //CONTROLLER
 const val DISABLE = "dis"

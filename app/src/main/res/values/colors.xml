@@ -28,6 +28,13 @@
     <color name="cloudyNightStart50">#500A0D13</color>
     <color name="cloudyNightEnd50">#50232325</color>
 
+    <color name="green_A400">#76FF03</color>
+    <color name="yellow_A400">#FFEA00</color>
+    <color name="orange_A400">#FF9100</color>
+    <color name="red_A400">#FF1744</color>
+    <color name="deep_purple_A400">#651FFF</color>
+
+
     <color name="whiteBlur100">#FFFFFFFF</color>
     <color name="whiteBlur90">#90FFFFFF</color>
     <color name="whiteBlur80">#80FFFFFF</color>

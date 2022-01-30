@@ -13,6 +13,7 @@ import com.broooapps.graphview.CurveGraphConfig
 import com.broooapps.graphview.models.GraphData
 import com.broooapps.graphview.models.PointMap
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
@@ -22,8 +23,7 @@ import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import com.hellguy39.hellweather.utils.DISABLE
-import com.hellguy39.hellweather.utils.ENABLE
+import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,8 +69,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
     override fun onStart() {
         super.onStart()
 
-        /*if (viewModel.isUpdate.value == false || viewModel.isUpdate.value == null)
-            onRefresh()*/
     }
 
     fun onRefresh() {
@@ -102,8 +100,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
 
     private fun setObservers() {
 
-        viewModel.userLocationsLive.observe(this,{
-            for(n in it.indices) {
+        viewModel.userLocationsLive.observe(viewLifecycleOwner) {
+            for (n in it.indices) {
                 val tab = binding.tabLayout.newTab()
                 tab.text = it[n].locationName
                 tab.tag = it[n].id
@@ -112,9 +110,29 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
                 }*/
                 binding.tabLayout.addTab(tab)
             }
-        })
+        }
 
-        viewModel.isUpdate.observe(this, {
+        viewModel.requestStatus.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESSFUL -> {
+                    onSuccessfulRequest()
+                }
+                ERROR -> {
+                    onErrorRequest()
+                }
+                FAILURE -> {
+                    onFailureRequest()
+                }
+                EMPTY_BODY -> {
+                    onEmptyBodyRequest()
+                }
+                IN_PROGRESS -> {
+                    onInProgressRequest()
+                }
+            }
+        }
+
+        /*viewModel.isUpdate.observe(this, {
             if (it == true) {
                 val currentWeather = viewModel.currentWeatherLive.value
                 val hourlyWeather = viewModel.hourlyWeatherLive.value
@@ -128,7 +146,42 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
                     updateIndicator(DISABLE)
                 }
             }
-        })
+        })*/
+    }
+
+    private fun onErrorRequest() {
+        Log.d("DEBUG", "ERROR")
+    }
+
+    private fun onFailureRequest() {
+        Snackbar.make(binding.rootLayout, R.string.on_failure, Snackbar.LENGTH_LONG)
+            .setAction(R.string.try_again) {
+                Log.d("DEBUG", "TRY AGAIN")
+            }.show()
+    }
+
+    private fun onEmptyBodyRequest() {
+        Log.d("DEBUG", "EMPTY")
+    }
+
+
+    private fun onInProgressRequest() {
+        Log.d("DEBUG", "IN PROGRESS")
+    }
+
+
+    private fun onSuccessfulRequest() {
+        val currentWeather = viewModel.currentWeatherLive.value
+        val hourlyWeather = viewModel.hourlyWeatherLive.value
+        val dailyWeather = viewModel.dailyWeatherLive.value
+
+        if (currentWeather != null && hourlyWeather != null && dailyWeather != null) {
+            updateUI(currentWeather)
+            updateGraph(hourlyWeather)
+            dailyWeather.removeAt(0) // Delete element 0, because it is today
+            updateRecyclersView(dailyWeather, hourlyWeather)
+            updateIndicator(DISABLE)
+        }
     }
 
     private fun confGraph() {
@@ -228,10 +281,68 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
             (activity as MainActivity).setToolbarTittle(SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000)))
             binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
             binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))
+
+            //Feels like
             binding.tvTempFeelsLike.text = wm.tempFeelsLike + "°"
+            binding.tvTempFeelsDescription.text =
+                if (wm.tempFeelsLike.toInt() == wm.temp.toInt()
+                    || wm.tempFeelsLike.toInt() == wm.temp.toInt() - 1
+                    || wm.tempFeelsLike.toInt() == wm.temp.toInt() + 1)
+                    "Feels about the same"
+                else if (wm.tempFeelsLike.toInt() <= wm.temp.toInt())
+                    "Feels colder with the wind"
+                else
+                    ""
+
+            // UV index
+            binding.tvUV.text = if (wm.uvi < 1) "1" else wm.uvi.toInt().toString()
+            binding.tvUVDescription.text =
+                if (wm.uvi.toInt() == 0 || wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
+                    "Low"
+                else if (wm.uvi.toInt() == 3 || wm.uvi.toInt() == 4 || wm.uvi.toInt() == 5)
+                    "Medium"
+                else if (wm.uvi.toInt() == 6 || wm.uvi.toInt() == 7)
+                    "High"
+                else if (wm.uvi.toInt() == 8 || wm.uvi.toInt() == 9 || wm.uvi.toInt() == 10)
+                    "Very high"
+                else
+                    "Extreme"
+
+            binding.vUVColor.backgroundTintList = if (wm.uvi.toInt() == 0)
+                ResourcesCompat.getColorStateList(resources, R.color.green_A400, null)
+            else if (wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
+                ResourcesCompat.getColorStateList(resources, R.color.green_A400, null)
+            else if (wm.uvi.toInt() == 3 || wm.uvi.toInt() == 4 || wm.uvi.toInt() == 5)
+                ResourcesCompat.getColorStateList(resources, R.color.yellow_A400, null)
+            else if (wm.uvi.toInt() == 6 || wm.uvi.toInt() == 7)
+                ResourcesCompat.getColorStateList(resources, R.color.orange_A400, null)
+            else if (wm.uvi.toInt() == 8 || wm.uvi.toInt() == 9 || wm.uvi.toInt() == 10)
+                ResourcesCompat.getColorStateList(resources, R.color.red_A400, null)
+            else
+                ResourcesCompat.getColorStateList(resources, R.color.deep_purple_A400, null)
+
+
+            //Visibility
+            binding.tvVisibility.text = (wm.visibility / 1000).toString() + " km"
+            binding.tvVisibilityDescription.text = if ((wm.visibility / 1000) >= 7 && (wm.visibility / 1000) <= 10)
+                "Visibility reduced due to light haze"
+            else if ((wm.visibility / 1000) >= 11 && (wm.visibility / 1000) <= 13)
+                "Now it's clear"
+            else if ((wm.visibility / 1000) >= 14)
+                "Now it's quite clear"
+            else ""
+
+            //Humidity
             binding.tvHumidity.text = wm.humidity + "%"
+            binding.tvDewPoint.text = "Dew point now: " + wm.dewPoint + "°"
+
+            //Pressure
             binding.tvPressure.text = wm.pressure + " hPa"
+
+            //Wind
             binding.tvWind.text = wm.windSpeed + " m/s"
+            binding.tvWindDirection.text = "Direction: " + wm.windDeg + "°"
+            binding.tvWindGust.text = "Gust: " + wm.windGust + " m/s"
         }
     }
 

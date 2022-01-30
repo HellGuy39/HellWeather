@@ -9,5 +9,6 @@
     <dimen name="drawer_corner">24dp</dimen>
 
     <dimen name="card_default_corner">12dp</dimen>
+    <dimen name="card_def_height">160dp</dimen>
 
 </resources>

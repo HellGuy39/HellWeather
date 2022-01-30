@@ -50,13 +50,13 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
         fragView = view
         binding = FragmentAddLocationBinding.bind(view)
 
-        viewModel.userLocationLive.observe(this, {
+        viewModel.userLocationLive.observe(viewLifecycleOwner) {
             //saveCord(it)
-        })
+        }
 
-        viewModel.requestResLive.observe(this, {
+        viewModel.requestResLive.observe(viewLifecycleOwner) {
             loadController(DISABLE)
-            when(it) {
+            when (it) {
                 SUCCESSFUL -> {
                     navigate(viewModel.userLocationLive.value!!)
                     viewModel.clearData() //strange solution
@@ -71,17 +71,15 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
                     fragView.shortSnackBar("Server not responding")
                 }
             }
-        })
+        }
 
-        viewModel.isLoadingLive.observe(this, {
+        viewModel.isLoadingLive.observe(viewLifecycleOwner) {
             if (it) {
                 loadController(ENABLE)
-            }
-            else
-            {
+            } else {
                 loadController(DISABLE)
             }
-        })
+        }
 
         binding.fabNext.setOnClickListener {
 

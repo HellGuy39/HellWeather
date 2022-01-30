@@ -226,7 +226,7 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/card_def_height"
                         android:layout_marginEnd="6dp"
                         android:layout_weight="1"
                         android:backgroundTint="@color/whiteBlur30"
@@ -270,7 +270,7 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/card_def_height"
                         android:layout_marginStart="6dp"
                         android:layout_weight="1"
                         android:backgroundTint="@color/whiteBlur30"
@@ -322,7 +322,147 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/card_def_height"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/whiteBlur30"
+                        app:cardCornerRadius="@dimen/card_default_corner"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/tvUVTittle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:text="@string/uv_index"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvUV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeMaxTextSize="32sp"
+                                android:autoSizeMinTextSize="16sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:maxLines="1"
+                                android:textSize="32sp"
+                                tools:text="4" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/vUVColor"
+                                    android:background="@drawable/circle_shape"
+                                    android:layout_gravity="center"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"/>
+
+                                <TextView
+                                    android:id="@+id/tvUVDescription"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:autoSizeMaxTextSize="24sp"
+                                    android:autoSizeMinTextSize="8sp"
+                                    android:autoSizeTextType="uniform"
+                                    android:layout_marginStart="8dp"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="start"
+                                    android:maxLines="1"
+                                    android:textSize="24sp"
+                                    tools:text="Moderate" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/card_def_height"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/whiteBlur30"
+                        app:cardCornerRadius="@dimen/card_default_corner"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/tvVisibilityTittle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:text="@string/visibility"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvVisibility"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeMaxTextSize="32sp"
+                                android:autoSizeMinTextSize="16sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:textSize="32sp"
+                                tools:text="10 km" />
+
+                            <TextView
+                                android:id="@+id/tvVisibilityDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autoSizeMaxTextSize="16sp"
+                                android:autoSizeMinTextSize="8sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start|bottom"
+                                android:maxLines="2"
+                                android:textSize="16sp"
+                                tools:text="Visibility reduced due to light haze" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/detailsContainer3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/card_def_height"
                         android:layout_marginEnd="6dp"
                         android:layout_weight="1"
                         android:backgroundTint="@color/whiteBlur30"
@@ -366,7 +506,7 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/card_def_height"
                         android:layout_marginStart="6dp"
                         android:layout_weight="1"
                         android:backgroundTint="@color/whiteBlur30"
@@ -404,13 +544,47 @@
                                 android:maxLines="1"
                                 android:textSize="32sp"
                                 tools:text="5 km/h" />
+
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:gravity="bottom"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/tvWindDirection"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:autoSizeMaxTextSize="16sp"
+                                    android:autoSizeMinTextSize="8sp"
+                                    android:autoSizeTextType="uniform"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="start"
+                                    android:maxLines="1"
+                                    android:textSize="16sp"
+                                    tools:text="Direction: 225°" />
+
+                                <TextView
+                                    android:id="@+id/tvWindGust"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:autoSizeMaxTextSize="16sp"
+                                    android:autoSizeMinTextSize="8sp"
+                                    android:autoSizeTextType="uniform"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="start"
+                                    android:maxLines="1"
+                                    android:textSize="16sp"
+                                    tools:text="Gust: 10.1 m/s" />
+
+                            </LinearLayout>
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/detailsContainer3"
+                    android:id="@+id/detailsContainer4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -418,7 +592,7 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/card_def_height"
                         android:layout_marginEnd="6dp"
                         android:layout_weight="1"
                         android:backgroundTint="@color/whiteBlur30"
@@ -455,13 +629,27 @@
                                 android:layout_marginTop="8dp"
                                 android:layout_marginBottom="8dp"
                                 tools:text="10°" />
+
+                            <TextView
+                                android:id="@+id/tvTempFeelsDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autoSizeMaxTextSize="16sp"
+                                android:autoSizeMinTextSize="8sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:maxLines="2"
+                                android:gravity="start|bottom"
+                                android:textSize="16sp"
+                                tools:text="Feels about the same" />
+
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/card_def_height"
                         android:layout_marginStart="6dp"
                         android:layout_weight="1"
                         android:backgroundTint="@color/whiteBlur30"
@@ -499,6 +687,20 @@
                                 android:maxLines="1"
                                 android:textSize="32sp"
                                 tools:text="15%" />
+
+                            <TextView
+                                android:id="@+id/tvDewPoint"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autoSizeMaxTextSize="16sp"
+                                android:autoSizeMinTextSize="8sp"
+                                android:autoSizeTextType="uniform"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="start|bottom"
+                                android:maxLines="2"
+                                android:textSize="16sp"
+                                tools:text="Dew point now: -14°" />
+
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
