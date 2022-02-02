@@ -133,7 +133,7 @@
             android:id="@+id/guidelineMotion"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            motion:layout_constraintGuide_percent="0.07" />
+            motion:layout_constraintGuide_begin="48dp" />
 
         <Constraint
             android:layout_width="match_parent"

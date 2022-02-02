@@ -5,44 +5,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.broooapps.graphview.CurveGraphConfig
-import com.broooapps.graphview.models.GraphData
-import com.broooapps.graphview.models.PointMap
-import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
-import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
-import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
-import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
+import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
+import com.hellguy39.hellweather.presentation.adapter.WeatherPageAdapter
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedListener {
+class HomeFragment : Fragment(R.layout.fragment_home)/*,TabLayout.OnTabSelectedListener*/ {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private var selectedTab: TabLayout.Tab? = null
+    private lateinit var mainActivityViewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        mainActivityViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -50,8 +35,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (activity as MainActivity).setToolbarTittle(getString(R.string.loading))
-        (activity as MainActivity).updateToolbarMenu(ENABLE)
+        //(activity as MainActivity).setToolbarTittle(getString(R.string.loading))
+        //(activity as MainActivity).updateToolbarMenu(ENABLE)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -60,9 +45,19 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
 
-        confGraph()
+        mainActivityViewModel.statusLive.observe(activity as MainActivity) {
+            if (it == SUCCESSFUL) {
+                val list = mainActivityViewModel.weatherJsonListLive.value
+                if (list != null) {
+                    val pagerAdapter = WeatherPageAdapter(activity as MainActivity, list)
+                    binding.viewPager.adapter = pagerAdapter
+                }
+            }
+        }
+
+        /*confGraph()
         binding.tabLayout.addOnTabSelectedListener(this)
-        setObservers()
+        setObservers()*/
 
     }
 
@@ -71,7 +66,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
 
     }
 
-    fun onRefresh() {
+    /*fun onRefresh() {
 
         val tab = selectedTab
 
@@ -96,18 +91,18 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
         {
             binding.progressIndicator.visibility = View.INVISIBLE
         }
-    }
+    }*/
 
-    private fun setObservers() {
+    /*private fun setObservers() {
 
         viewModel.userLocationsLive.observe(viewLifecycleOwner) {
             for (n in it.indices) {
                 val tab = binding.tabLayout.newTab()
                 tab.text = it[n].locationName
                 tab.tag = it[n].id
-                /*if (n == 0) {
+                *//*if (n == 0) {
                     tab.icon = (ResourcesCompat.getDrawable(resources, R.drawable.ic_round_home_24, null))
-                }*/
+                }*//*
                 binding.tabLayout.addTab(tab)
             }
         }
@@ -130,7 +125,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
                     onInProgressRequest()
                 }
             }
-        }
+        }*/
 
         /*viewModel.isUpdate.observe(this, {
             if (it == true) {
@@ -146,10 +141,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
                     updateIndicator(DISABLE)
                 }
             }
-        })*/
-    }
+        })
+    }*/
 
-    private fun onErrorRequest() {
+    /*private fun onErrorRequest() {
         Log.d("DEBUG", "ERROR")
     }
 
@@ -267,10 +262,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
 
     private fun updateUI(wm : CurrentWeather) {
         CoroutineScope(Main).launch {
-            /*Glide.with(this@HomeFragment)
+            *//*Glide.with(this@HomeFragment)
                 .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
                 .centerCrop()
-                .into(binding.ivWeather)*/
+                .into(binding.ivWeather)*//*
 
             binding.tvTextTop.text = wm.temp + "°" + " | " + wm.wDescription
 
@@ -344,9 +339,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
             binding.tvWindDirection.text = "Direction: " + wm.windDeg + "°"
             binding.tvWindGust.text = "Gust: " + wm.windGust + " m/s"
         }
-    }
+    }*/
 
-    override fun onTabSelected(tab: TabLayout.Tab?) {
+   /* override fun onTabSelected(tab: TabLayout.Tab?) {
         updateIndicator(ENABLE)
         selectedTab = tab
         onRefresh()
@@ -358,5 +353,5 @@ class HomeFragment : Fragment(R.layout.fragment_home), TabLayout.OnTabSelectedLi
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
 
-    }
+    }*/
 }

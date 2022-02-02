@@ -44,7 +44,7 @@ class CustomizeFragment : Fragment(R.layout.customize_fragment) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[CustomizeViewModel::class.java]
         binding = CustomizeFragmentBinding.bind(view)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        //sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         binding.sliderBlur.addOnChangeListener { slider, value, fromUser ->
             val cardBlur : MaterialCardView = binding.cardBlur

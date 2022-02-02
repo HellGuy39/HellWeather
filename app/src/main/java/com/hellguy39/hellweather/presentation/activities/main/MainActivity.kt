@@ -1,38 +1,27 @@
 package com.hellguy39.hellweather.presentation.activities.main
 
-import android.R.attr
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationBarView
-import com.google.android.material.navigation.NavigationView
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
+import com.hellguy39.hellweather.presentation.fragments.home.HomeFragment
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
-import android.R.attr.radius
-import android.view.*
-import android.widget.Button
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.ui.NavigationUI
-
-import com.google.android.material.shape.CornerFamily
-
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.hellguy39.hellweather.presentation.fragments.home.HomeFragment
-import com.hellguy39.hellweather.presentation.fragments.home.HomeViewModel
-import com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerViewModel
+import com.hellguy39.hellweather.utils.SUCCESSFUL
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,6 +29,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
 
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var viewModel: MainActivityViewModel
     private lateinit var binding: MainActivityBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
@@ -51,6 +41,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
         binding = MainActivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         toolBarMenu = binding.topAppBar.menu
 
@@ -96,6 +87,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
                 navController.navigate(HomeFragmentDirections.actionHomeFragmentToWelcomeFragment())
             }
         }
+
+        viewModel.userLocationsLive.observe(this) {
+            viewModel.loadAllLocation(it)
+        }
+
+        viewModel.statusLive.observe(this) {
+            if (it == SUCCESSFUL) {
+
+            }
+        }
+
     }
 
     override fun onClick(p0: View?) {
@@ -168,9 +170,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         when (p0?.itemId) {
             R.id.update -> {
-                if (navController.currentDestination?.id == R.id.homeFragment) {
+                /*if (navController.currentDestination?.id == R.id.homeFragment) {
                     (navHostFragment.childFragmentManager.fragments[0] as HomeFragment).onRefresh()
-                }
+                }*/
             }
         }
         return true
