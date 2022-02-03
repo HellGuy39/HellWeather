@@ -10,14 +10,20 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.JsonObject
 import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.databinding.LocationItemBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.utils.Converter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LocationsAdapter(
     private val context: Context,
     private val locationList: List<UserLocation>,
+    private val weatherJsonList: List<JsonObject>,
     private val listener: EventListener
     ) : RecyclerView.Adapter<LocationsAdapter.LocationViewHolder> () {
 
@@ -38,67 +44,36 @@ class LocationsAdapter(
         holder: LocationViewHolder,
         position: Int)
     {
-        //val userLocation: UserLocation = locationList[position]
-        holder.bind(locationList, context, position)
+        if (weatherJsonList.isNotEmpty()) {
+            holder.bindWithWeather(locationList, weatherJsonList, position)
+        }
+        else
+        {
+            holder.bind(locationList, position)
+        }
     }
 
     override fun getItemCount(): Int = locationList.size
 
     class LocationViewHolder(v: View, private val listener: EventListener) : RecyclerView.ViewHolder(v) {
 
-        private var tvId: TextView
-        private var tvLocationName: TextView
-        private var tvTimezone: TextView
-        private var tvLatLon: TextView
-        private var btnEdit: Button
-        private var btnDelete: Button
-        private var card: MaterialCardView
+        private val _binding = LocationItemBinding.bind(v)
 
-
-        init {
-            tvId = v.findViewById(R.id.tvId)
-            tvLocationName = v.findViewById(R.id.tvLocationName)
-            tvTimezone = v.findViewById(R.id.tvTimezone)
-            tvLatLon = v.findViewById(R.id.tvLanLon)
-
-            btnEdit = v.findViewById(R.id.btnEdit)
-            btnDelete = v.findViewById(R.id.btnDelete)
-            card = v.findViewById(R.id.rootCard)
+        fun bind(locationList: List<UserLocation>, position: Int) {
+            _binding.tvLocationName.text = locationList[position].locationName
         }
 
-        fun bind(locationList: List<UserLocation>, context: Context, position: Int) {
+        fun bindWithWeather(locationList: List<UserLocation>, weatherJsonList: List<JsonObject>, position: Int) {
 
-            btnDelete.setOnClickListener {
-                listener.onDelete(locationList[position])
-            }
+            val converter = Converter()
+            val weatherObject = converter.toWeatherObject(weatherJsonList[position])
 
-            btnEdit.setOnClickListener {
-                listener.onEdit(locationList[position])
-            }
-
-            if (locationList[position].id == 1) {
-                tvId.text = "Main"
-            } else {
-                tvId.text =locationList[position].id.toString()
-            }
-            tvLocationName.text = locationList[position].locationName
-            tvLatLon.text = "Lat: ${locationList[position].lat} | Lon: ${locationList[position].lon}"
-
-            if (locationList[position].timezone == 0)
-            {
-                tvTimezone.text = "${locationList[position].timezone} GMT"
-            }
-            else if (locationList[position].timezone > 0)
-            {
-                tvTimezone.text = "+${locationList[position].timezone} GMT"
-            }
-            else
-            {
-                tvTimezone.text = "${locationList[position].timezone} GMT"
-            }
-
+            _binding.tvLocationName.text = locationList[position].locationName
+            _binding.tvWeatherDescription.text = weatherObject.currentWeather.wDescription
+            _binding.tvTemp.text = weatherObject.currentWeather.temp + "°"
+            _binding.tvTempMinMax.text = "Max.: ${weatherObject.currentWeather.tempMax}°, min.: ${weatherObject.currentWeather.tempMin}°"
+            _binding.tvTime.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(weatherObject.currentWeather.dt * 1000))
         }
-
     }
 
 }

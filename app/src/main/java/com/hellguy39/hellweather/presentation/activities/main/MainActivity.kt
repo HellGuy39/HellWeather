@@ -170,9 +170,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         when (p0?.itemId) {
             R.id.update -> {
-                /*if (navController.currentDestination?.id == R.id.homeFragment) {
+                if (navController.currentDestination?.id == R.id.homeFragment) {
                     (navHostFragment.childFragmentManager.fragments[0] as HomeFragment).onRefresh()
-                }*/
+                }
             }
         }
         return true

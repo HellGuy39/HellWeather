@@ -23,88 +23,69 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-
+            android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <TextView
-                android:id="@+id/tvId"
+                android:id="@+id/tvTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_light"
+                android:textSize="32sp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvTempMinMax"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="-9°" />
+
+            <TextView
+                android:id="@+id/tvLocationName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_light"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Moscow" />
+
+            <TextView
+                android:id="@+id/tvTempMinMax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:fontFamily="@font/roboto_light"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="Main" />
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Max.: 26°, min.: 9°" />
 
-            <Button
-                android:id="@+id/btnDelete"
-                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            <TextView
+                android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_round_delete_24"
-                app:iconTint="?attr/iconTint"
-                app:cornerRadius="24dp"
-                app:layout_constraintBottom_toTopOf="@+id/btnEdit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:strokeWidth="0dp" />
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_light"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/tvLocationName"
+                app:layout_constraintTop_toBottomOf="@+id/tvLocationName"
+                tools:text="21:00" />
 
-            <Button
-                android:id="@+id/btnEdit"
-                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            <TextView
+                android:id="@+id/tvWeatherDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_round_edit_24"
-                app:iconTint="?attr/iconTint"
-                app:cornerRadius="24dp"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_light"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnDelete"
-                app:strokeWidth="0dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/tvLocationName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_light"
-                    android:textSize="24sp"
-                    tools:text="Moscow" />
-
-                <TextView
-                    android:id="@+id/tvLanLon"
-                    android:layout_marginTop="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_light"
-                    android:textSize="16sp"
-                    tools:text="Lat: 45 | Lon: 40" />
-
-                <TextView
-                    android:id="@+id/tvTimezone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_light"
-                    android:textSize="16sp"
-                    tools:text="+3 GMT" />
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@+id/tvTime"
+                tools:text="Overcast clouds" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

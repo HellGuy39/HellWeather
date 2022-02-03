@@ -31,7 +31,6 @@ class MainActivityViewModel @Inject constructor(
     private val jsonList: MutableList<JsonObject> = mutableListOf()
 
     init {
-        //weatherJsonListLive.value?.add(JsonObject()) // 0 element
         statusLive.value = IN_PROGRESS
 
         viewModelScope.launch {

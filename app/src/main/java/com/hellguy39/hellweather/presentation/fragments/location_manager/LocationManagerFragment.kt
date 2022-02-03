@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationManagerFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.DISABLE
@@ -21,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), LocationsAdapter.EventListener {
 
+    private lateinit var mainViewModel: MainActivityViewModel
     private lateinit var viewModel: LocationManagerViewModel
     private lateinit var binding: LocationManagerFragmentBinding
     private lateinit var fragView: View
@@ -28,6 +30,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[LocationManagerViewModel::class.java]
+        mainViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -59,7 +62,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
     private fun updateRecycler(list: List<UserLocation>) {
         binding.recyclerLocations.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = LocationsAdapter(context, list, this@LocationManagerFragment)
+            adapter = LocationsAdapter(context, list, mainViewModel.weatherJsonListLive.value!!,this@LocationManagerFragment)
         }
     }
 
