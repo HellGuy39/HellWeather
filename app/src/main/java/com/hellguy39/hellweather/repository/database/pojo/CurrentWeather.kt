@@ -16,7 +16,7 @@ data class CurrentWeather(
 
     var windSpeed: String = "N/A",
     var windDeg: String = "N/A",
-    var windGust: String ="N/A",
+    var windGust: Double = 0.0,
 
     var wMain: String = "N/A",
     var wDescription: String = "N/A",

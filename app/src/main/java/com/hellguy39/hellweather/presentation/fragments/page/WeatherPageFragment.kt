@@ -11,22 +11,25 @@ import com.broooapps.graphview.CurveGraphConfig
 import com.broooapps.graphview.models.GraphData
 import com.broooapps.graphview.models.PointMap
 import com.bumptech.glide.Glide
-import com.google.gson.JsonObject
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherPageBinding
-import com.hellguy39.hellweather.utils.Converter
-import com.hellguy39.hellweather.utils.WeatherObject
-import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
 import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import kotlinx.coroutines.*
+import com.hellguy39.hellweather.utils.WeatherData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WeatherPageFragment(private val weatherJsonObject: JsonObject): Fragment(R.layout.fragment_weather_page) {
+class WeatherPageFragment(
+    private val weatherData: WeatherData
+    ): Fragment(R.layout.fragment_weather_page) {
 
     private lateinit var _binding: FragmentWeatherPageBinding
 
@@ -43,14 +46,12 @@ class WeatherPageFragment(private val weatherJsonObject: JsonObject): Fragment(R
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWeatherPageBinding.bind(view)
 
-        CoroutineScope(Dispatchers.Default).launch {
-            val converter = Converter()
-            val weatherObject: WeatherObject = converter.toWeatherObject(weatherJsonObject)
-            withContext(Dispatchers.Main) {
+        CoroutineScope(Default).launch {
+            withContext(Main) {
                 confGraph()
-                updateUI(weatherObject)
-                updateRecyclersView(weatherObject)
-                updateGraph(weatherObject)
+                updateUI(weatherData)
+                updateRecyclersView(weatherData)
+                updateGraph(weatherData)
             }
         }
     }
@@ -70,9 +71,9 @@ class WeatherPageFragment(private val weatherJsonObject: JsonObject): Fragment(R
                 .build())
     }
 
-    private fun updateGraph(weatherObject: WeatherObject) {
+    private fun updateGraph(weatherData: WeatherData) {
 
-        val list: MutableList<HourlyWeather> = WeatherObject.hourlyWeather
+        val list: List<HourlyWeather> = weatherData.hourlyWeather
 
         val pointMap = PointMap()
         pointMap.addPoint(0, list[0].pop.toInt())
@@ -103,10 +104,10 @@ class WeatherPageFragment(private val weatherJsonObject: JsonObject): Fragment(R
 
     }
 
-    private fun updateRecyclersView(weatherObject: WeatherObject) = CoroutineScope(Main).launch {
+    private fun updateRecyclersView(weatherData: WeatherData) = CoroutineScope(Main).launch {
 
-        val listDays: MutableList<DailyWeather> = weatherObject.dailyWeather
-        val listHours: MutableList<HourlyWeather> = weatherObject.hourlyWeather
+        val listDays: MutableList<DailyWeather> = weatherData.dailyWeather
+        val listHours: MutableList<HourlyWeather> = weatherData.hourlyWeather
 
         _binding.recyclerNextDays.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -118,22 +119,21 @@ class WeatherPageFragment(private val weatherJsonObject: JsonObject): Fragment(R
         }
     }
 
-    private fun updateUI(weatherObject: WeatherObject) {
+    private fun updateUI(weatherData: WeatherData) {
 
-        val wm = weatherObject.currentWeather
+        val wm = weatherData.currentWeather
 
         Glide.with(this)
         .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
             .centerCrop()
             .into(_binding.ivWeather)
 
-                _binding.tvTextTop.text = wm.temp + "°" + " | " + wm.wDescription
+        _binding.tvTextTop.text = wm.temp + "°" + " | " + wm.wDescription
 
         _binding.tvDot.text = "°"
         _binding.tvTemp.text = wm.temp //+ "°"
         _binding.tvMaxMinTemp.text = "Max.: ${wm.tempMax}°, min.: ${wm.tempMin}°"
         _binding.tvWeather.text = wm.wDescription
-        (activity as MainActivity).setToolbarTittle(SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(Date(wm.dt * 1000)))
         _binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
         _binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))
 
@@ -144,13 +144,13 @@ class WeatherPageFragment(private val weatherJsonObject: JsonObject): Fragment(R
                 || wm.tempFeelsLike.toInt() == wm.temp.toInt() - 1
                 || wm.tempFeelsLike.toInt() == wm.temp.toInt() + 1)
                 "Feels about the same"
-            else if (wm.tempFeelsLike.toInt() <= wm.temp.toInt())
-                "Feels colder with the wind"
+            /*else if (wm.tempFeelsLike.toInt() <= wm.temp.toInt())
+                "Feels colder with the wind"*/
             else
                 ""
 
         // UV index
-        _binding.tvUV.text = if (wm.uvi < 1) "1" else wm.uvi.toInt().toString()
+        _binding.tvUV.text = wm.uvi.toInt().toString()
         _binding.tvUVDescription.text =
             if (wm.uvi.toInt() == 0 || wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
                 "Low"
@@ -163,9 +163,7 @@ class WeatherPageFragment(private val weatherJsonObject: JsonObject): Fragment(R
             else
                 "Extreme"
 
-        _binding.vUVColor.backgroundTintList = if (wm.uvi.toInt() == 0)
-            ResourcesCompat.getColorStateList(resources, R.color.green_A400, null)
-        else if (wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
+        _binding.vUVColor.backgroundTintList = if (wm.uvi.toInt() == 0 || wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
             ResourcesCompat.getColorStateList(resources, R.color.green_A400, null)
         else if (wm.uvi.toInt() == 3 || wm.uvi.toInt() == 4 || wm.uvi.toInt() == 5)
             ResourcesCompat.getColorStateList(resources, R.color.yellow_A400, null)
@@ -179,13 +177,13 @@ class WeatherPageFragment(private val weatherJsonObject: JsonObject): Fragment(R
 
         //Visibility
         _binding.tvVisibility.text = (wm.visibility / 1000).toString() + " km"
-        _binding.tvVisibilityDescription.text = if ((wm.visibility / 1000) >= 7 && (wm.visibility / 1000) <= 10)
+        /*_binding.tvVisibilityDescription.text = if ((wm.visibility / 1000) >= 7 && (wm.visibility / 1000) <= 10)
             "Visibility reduced due to light haze"
         else if ((wm.visibility / 1000) >= 11 && (wm.visibility / 1000) <= 13)
             "Now it's clear"
         else if ((wm.visibility / 1000) >= 14)
             "Now it's quite clear"
-        else ""
+        else ""*/
 
         //Humidity
         _binding.tvHumidity.text = wm.humidity + "%"

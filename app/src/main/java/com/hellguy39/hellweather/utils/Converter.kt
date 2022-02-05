@@ -10,7 +10,7 @@ import kotlin.collections.ArrayList
 
 class Converter {
 
-    fun toWeatherObject(jsonObject: JsonObject): WeatherObject {
+    fun toWeatherObject(jsonObject: JsonObject): WeatherData {
 
         val currentWeather = CurrentWeather()
         val hourlyWeather: MutableList<HourlyWeather> = ArrayList()
@@ -30,7 +30,7 @@ class Converter {
             it.humidity = current.get("humidity").asString
             it.windSpeed = current.get("wind_speed").asString
             it.windDeg = current.get("wind_deg").asString
-            it.windGust = current.get("wind_gust").asString
+            it.windGust = current.get("wind_gust").asDouble
             it.dewPoint = current.get("dew_point").asFloat.toInt().toString()
             it.uvi = current.get("uvi").asDouble
             it.visibility = current.get("visibility").asInt
@@ -86,12 +86,12 @@ class Converter {
             //dailyWeather[n].windSpeed = obj.get("wind_speed").asString
         }
 
-        val obj = WeatherObject
+        val data = WeatherData()
 
-        WeatherObject.currentWeather = currentWeather
-        WeatherObject.dailyWeather = dailyWeather
-        WeatherObject.hourlyWeather = hourlyWeather
+        data.currentWeather = currentWeather
+        data.dailyWeather = dailyWeather
+        data.hourlyWeather = hourlyWeather
 
-        return obj
+        return data
     }
 }

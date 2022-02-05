@@ -24,12 +24,15 @@
             android:icon="@drawable/ic_round_ad_units_24"
             android:title="@string/tittle_foreground_service" />
 
+        <item
+            android:id="@+id/settingsFragment"
+            android:icon="@drawable/ic_outline_settings_24"
+            android:title="@string/tittle_settings" />
 
         <item
-            android:id="@+id/customizeFragment"
-            android:icon="@drawable/ic_outline_format_paint_24"
-            android:title="@string/tittle_customize" />
-
+            android:id="@+id/appInfoFragment"
+            android:icon="@drawable/ic_outline_info_24"
+            android:title="@string/tittle_info" />
 
     </group>
 

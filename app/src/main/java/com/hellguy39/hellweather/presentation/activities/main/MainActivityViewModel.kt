@@ -27,8 +27,11 @@ class MainActivityViewModel @Inject constructor(
 
     val userLocationsLive = MutableLiveData<List<UserLocation>>()
     val weatherJsonListLive = MutableLiveData<List<JsonObject>>()
+    val weatherDataListLive = MutableLiveData<List<WeatherData>>()
     val statusLive = MutableLiveData<String>()
     private val jsonList: MutableList<JsonObject> = mutableListOf()
+    private val weatherDataList: MutableList<WeatherData> = mutableListOf()
+
 
     init {
         statusLive.value = IN_PROGRESS
@@ -42,12 +45,18 @@ class MainActivityViewModel @Inject constructor(
 
     fun loadAllLocation(list: List<UserLocation>) {
         viewModelScope.launch {
+            val converter = Converter()
             if (list.isNotEmpty()) {
                 for (n in list.indices) {
                     val request: JsonObject = sendRequest(list[n])
                     jsonList.add(request)
+                    val obj : WeatherData = converter.toWeatherObject(request)
+                    weatherDataList.add(obj)
                 }
-                weatherJsonListLive.value = jsonList
+                /*for(n in jsonList.indices) {
+                    weatherObjList.add(convertToWeatherObject(jsonList[n]))
+                }*/
+                weatherDataListLive.value = weatherDataList
                 statusLive.value = SUCCESSFUL
             }
         }
@@ -59,7 +68,7 @@ class MainActivityViewModel @Inject constructor(
                 userLocation.lat.toDouble(),
                 userLocation.lon.toDouble(),
                 "minutely,alerts",
-                "metric",
+                METRIC,
                 OPEN_WEATHER_API_KEY
             ).enqueue(object : Callback<JsonObject> {
 

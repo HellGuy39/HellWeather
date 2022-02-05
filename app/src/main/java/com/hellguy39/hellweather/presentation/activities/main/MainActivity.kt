@@ -25,7 +25,7 @@ import com.hellguy39.hellweather.utils.SUCCESSFUL
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuItemClickListener {
+class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
     private lateinit var drawerLayout: DrawerLayout
@@ -49,9 +49,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
+        /*toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
         binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        toggle.syncState()*/
 
         binding.topAppBar.setNavigationOnClickListener {
             openDrawer()
@@ -59,17 +59,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
 
         binding.topAppBar.menu.getItem(0).setOnMenuItemClickListener(this)
 
-        val btnInfo = binding.navigationView.getHeaderView(0).findViewById<Button>(R.id.btnInfo)
-        val btnSettings = binding.navigationView.getHeaderView(0).findViewById<Button>(R.id.btnSettings)
-
-        btnInfo.setOnClickListener(this)
-        btnSettings.setOnClickListener(this)
-
         binding.navigationView.setCheckedItem(R.id.homeFragment)
         NavigationUI.setupWithNavController(binding.navigationView, navController)
-
         /*setSupportActionBar(binding.topAppBar)
-        NavigationUI.setupActionBarWithNavController(this, navController)*/
+        NavigationUI.setupActionBarWithNavController(this, navController, binding.drawerLayout)*/
 
         val navViewBackground:MaterialShapeDrawable = binding.navigationView.background as MaterialShapeDrawable
         navViewBackground.shapeAppearanceModel = navViewBackground.shapeAppearanceModel
@@ -92,25 +85,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MenuItem.OnMenuI
             viewModel.loadAllLocation(it)
         }
 
+        viewModel.weatherDataListLive.observe(this) {
+
+        }
+
         viewModel.statusLive.observe(this) {
             if (it == SUCCESSFUL) {
 
             }
         }
 
-    }
-
-    override fun onClick(p0: View?) {
-        when (p0?.id) {
-            R.id.btnInfo -> {
-                navController.navigate(R.id.appInfoFragment)
-                closeDrawer()
-            }
-            R.id.btnSettings -> {
-                navController.navigate(R.id.settingsFragment)
-                closeDrawer()
-            }
-        }
     }
 
     fun setToolbarTittle(s: String) {

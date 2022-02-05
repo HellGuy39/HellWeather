@@ -8,41 +8,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/btnInfo"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            app:cornerRadius="24dp"
-            app:icon="@drawable/ic_outline_info_24"
-            app:iconTint="?attr/colorOnSurface"
-            app:strokeWidth="0dp" />
-
-        <Button
-            android:id="@+id/btnSettings"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            app:cornerRadius="24dp"
-            app:icon="@drawable/ic_outline_settings_24"
-            app:iconTint="?attr/colorOnSurface"
-            app:strokeWidth="0dp" />
-    </LinearLayout>
-
-
     <TextView
         android:id="@+id/tvAppTittle"
         android:layout_width="wrap_content"
@@ -53,6 +18,7 @@
         android:text="HellWeather"
         android:textColor="?attr/colorOnSurface"
         android:textSize="32sp"
+        android:layout_margin="16dp"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

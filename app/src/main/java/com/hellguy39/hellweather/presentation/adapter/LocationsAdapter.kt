@@ -1,29 +1,22 @@
 package com.hellguy39.hellweather.presentation.adapter
 
 import android.content.Context
-import android.media.metrics.Event
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.android.material.card.MaterialCardView
-import com.google.gson.JsonObject
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationItemBinding
-import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-import com.hellguy39.hellweather.utils.Converter
+import com.hellguy39.hellweather.utils.WeatherData
 import java.text.SimpleDateFormat
 import java.util.*
 
 class LocationsAdapter(
     private val context: Context,
     private val locationList: List<UserLocation>,
-    private val weatherJsonList: List<JsonObject>,
+    private val weatherDataList: List<WeatherData>,
     private val listener: EventListener
     ) : RecyclerView.Adapter<LocationsAdapter.LocationViewHolder> () {
 
@@ -44,12 +37,12 @@ class LocationsAdapter(
         holder: LocationViewHolder,
         position: Int)
     {
-        if (weatherJsonList.isNotEmpty()) {
-            holder.bindWithWeather(locationList, weatherJsonList, position)
+        if (weatherDataList.isNotEmpty()) {
+            holder.bindWithWeather(locationList, weatherDataList, position, context)
         }
         else
         {
-            holder.bind(locationList, position)
+            holder.bind(locationList, position, context)
         }
     }
 
@@ -59,20 +52,44 @@ class LocationsAdapter(
 
         private val _binding = LocationItemBinding.bind(v)
 
-        fun bind(locationList: List<UserLocation>, position: Int) {
+        fun bind(locationList: List<UserLocation>, position: Int, context: Context) {
             _binding.tvLocationName.text = locationList[position].locationName
+
+            _binding.rootCard.setOnClickListener {
+                MaterialAlertDialogBuilder(context)
+                    .setMessage("Delete action")
+                    .setNegativeButton("Decline") { dialog, which ->
+                        // Respond to negative button press
+                    }
+                    .setPositiveButton("Accept") { dialog, which ->
+                        // Respond to positive button press
+                    }
+                    .show()
+            }
         }
 
-        fun bindWithWeather(locationList: List<UserLocation>, weatherJsonList: List<JsonObject>, position: Int) {
+        fun bindWithWeather(locationList: List<UserLocation>, weatherDataList: List<WeatherData>, position: Int,  context: Context) {
 
-            val converter = Converter()
-            val weatherObject = converter.toWeatherObject(weatherJsonList[position])
+            val weatherItem = weatherDataList[position]
 
             _binding.tvLocationName.text = locationList[position].locationName
-            _binding.tvWeatherDescription.text = weatherObject.currentWeather.wDescription
-            _binding.tvTemp.text = weatherObject.currentWeather.temp + "°"
-            _binding.tvTempMinMax.text = "Max.: ${weatherObject.currentWeather.tempMax}°, min.: ${weatherObject.currentWeather.tempMin}°"
-            _binding.tvTime.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(weatherObject.currentWeather.dt * 1000))
+            _binding.tvWeatherDescription.text = weatherItem.currentWeather.wDescription
+            _binding.tvTemp.text = weatherItem.currentWeather.temp + "°"
+            _binding.tvTempMinMax.text = "Max.: ${weatherItem.currentWeather.tempMax}°, min.: ${weatherItem.currentWeather.tempMin}°"
+            _binding.tvTime.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(weatherItem.currentWeather.dt * 1000))
+
+            _binding.rootCard.setOnLongClickListener {
+                MaterialAlertDialogBuilder(context)
+                    .setMessage("Delete action")
+                    .setNegativeButton("Decline") { dialog, which ->
+                        // Respond to negative button press
+                    }
+                    .setPositiveButton("Accept") { dialog, which ->
+                        // Respond to positive button press
+                    }
+                    .show()
+                true
+            }
         }
     }
 

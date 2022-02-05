@@ -100,6 +100,69 @@
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/guidelineMotion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            motion:layout_constraintGuide_begin="320dp" />
+
+        <Constraint
+            android:id="@+id/tvTextTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="center"
+            android:textSize="32sp"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@id/guideline7"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toTopOf="parent"/>
+
+        <Constraint
+            android:id="@+id/tvWeather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toBottomOf="@+id/tvTemp" />
+
+        <TextView
+            android:id="@+id/tvMaxMinTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            motion:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toBottomOf="@+id/tvWeather" />
+
+        <TextView
+            android:id="@+id/tvTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="center"
+            android:text=""
+            android:textSize="128sp"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toTopOf="@id/guideline7" />
+
+        <TextView
+            android:id="@+id/tvDot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            motion:layout_constraintBottom_toBottomOf="@id/tvTemp"
+            motion:layout_constraintStart_toEndOf="@+id/tvTemp"
+            motion:layout_constraintTop_toTopOf="@id/tvTemp" />
 
     </ConstraintSet>
 
@@ -108,24 +171,36 @@
         <Constraint
             android:visibility="invisible"
             android:id="@+id/tvMaxMinTemp"
+            motion:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toBottomOf="@+id/tvWeather"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
 
         <Constraint
             android:visibility="invisible"
             android:id="@+id/tvDot"
+            motion:layout_constraintBottom_toBottomOf="@id/tvTemp"
+            motion:layout_constraintStart_toEndOf="@+id/tvTemp"
+            motion:layout_constraintTop_toTopOf="@id/tvTemp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
 
         <Constraint
             android:visibility="invisible"
             android:id="@+id/tvWeather"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toBottomOf="@+id/tvTemp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
 
         <Constraint
             android:visibility="invisible"
             android:id="@+id/tvTemp"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toTopOf="@id/guideline7"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
 
@@ -133,6 +208,7 @@
             android:id="@+id/guidelineMotion"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:orientation="horizontal"
             motion:layout_constraintGuide_begin="48dp" />
 
         <Constraint
@@ -140,6 +216,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="@id/guideline7"
+            motion:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            motion:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            motion:layout_constraintTop_toTopOf="parent"
             android:id="@+id/tvTextTop"
             android:visibility="visible"/>
 
