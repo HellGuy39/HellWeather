@@ -19,9 +19,8 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragment
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
-import com.hellguy39.hellweather.utils.DISABLE
-import com.hellguy39.hellweather.utils.ENABLE
-import com.hellguy39.hellweather.utils.SUCCESSFUL
+import com.hellguy39.hellweather.presentation.services.WeatherService
+import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +44,8 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
         toolBarMenu = binding.topAppBar.menu
 
-        val firstBoot: Boolean = intent.getBooleanExtra("first_boot", false)
+        val firstBoot: Boolean = intent.getBooleanExtra(FIRST_BOOT, false)
+        val serviceMode: Boolean = intent.getBooleanExtra(SERVICE_MODE, false)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
@@ -83,6 +83,9 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
         viewModel.userLocationsLive.observe(this) {
             viewModel.loadAllLocation(it)
+            if (serviceMode) {
+                serviceControl(REBOOT)
+            }
         }
 
         viewModel.weatherDataListLive.observe(this) {
@@ -94,7 +97,24 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
             }
         }
+    }
 
+    fun serviceControl(action: String) {
+        if (action == ENABLE) {
+            if (viewModel.userLocationsLive.value != null) {
+                WeatherService.startService(this, 5 * 10000, viewModel.userLocationsLive.value!![0])
+            }
+        }
+        else if (action == REBOOT) {
+            if (!WeatherService.isRunning()) {
+                serviceControl(ENABLE)
+            }
+        }
+        else {
+            if (WeatherService.isRunning()) {
+                WeatherService.stopService(this)
+            }
+        }
     }
 
     fun setToolbarTittle(s: String) {

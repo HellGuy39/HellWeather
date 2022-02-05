@@ -99,4 +99,9 @@
         android:name="com.hellguy39.hellweather.presentation.fragments.quick_weather.SearchFragment"
         android:label="search_fragment"
         tools:layout="@layout/search_fragment" />
+    <fragment
+        android:id="@+id/foregroundServiceFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.foreground_service.ForegroundServiceFragment"
+        android:label="foreground_service_fragment"
+        tools:layout="@layout/foreground_service_fragment" />
 </navigation>

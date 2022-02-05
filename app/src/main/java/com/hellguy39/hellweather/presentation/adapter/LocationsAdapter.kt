@@ -9,7 +9,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationItemBinding
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-import com.hellguy39.hellweather.utils.WeatherData
+import com.hellguy39.hellweather.repository.database.pojo.WeatherData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,7 +68,7 @@ class LocationsAdapter(
             }
         }
 
-        fun bindWithWeather(locationList: List<UserLocation>, weatherDataList: List<WeatherData>, position: Int,  context: Context) {
+        fun bindWithWeather(locationList: List<UserLocation>, weatherDataList: List<WeatherData>, position: Int, context: Context) {
 
             val weatherItem = weatherDataList[position]
 

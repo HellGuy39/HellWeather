@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.hellguy39.hellweather.presentation.fragments.page.WeatherPageFragment
-import com.hellguy39.hellweather.utils.WeatherData
+import com.hellguy39.hellweather.repository.database.pojo.WeatherData
 
 class WeatherPageAdapter(
     fa: FragmentActivity,

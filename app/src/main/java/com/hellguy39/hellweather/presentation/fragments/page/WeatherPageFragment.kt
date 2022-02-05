@@ -17,7 +17,7 @@ import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
 import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import com.hellguy39.hellweather.utils.WeatherData
+import com.hellguy39.hellweather.repository.database.pojo.WeatherData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
@@ -30,6 +30,10 @@ import java.util.*
 class WeatherPageFragment(
     private val weatherData: WeatherData
     ): Fragment(R.layout.fragment_weather_page) {
+
+    /*companion object {
+        fun newInstance(weatherData: WeatherData) = WeatherPageFragment(weatherData)
+    }*/
 
     private lateinit var _binding: FragmentWeatherPageBinding
 

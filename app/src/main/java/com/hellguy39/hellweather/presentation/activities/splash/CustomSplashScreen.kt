@@ -8,6 +8,8 @@ import android.util.Log
 import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.utils.FIRST_BOOT
+import com.hellguy39.hellweather.utils.SERVICE_MODE
 
 private var isFirstBoot = false
 
@@ -19,17 +21,19 @@ class CustomSplashScreen : AppCompatActivity() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val intent = Intent(this, MainActivity::class.java)
 
-        isFirstBoot = sharedPreferences.getBoolean("first_boot", true)
+        isFirstBoot = sharedPreferences.getBoolean(FIRST_BOOT, true)
+        val serviceMode = sharedPreferences.getBoolean(SERVICE_MODE, false)
 
         if (isFirstBoot)
         {
-            intent.putExtra("first_boot", true)
+            intent.putExtra(FIRST_BOOT, true)
         }
         else
         {
-            intent.putExtra("first_boot", false)
+            intent.putExtra(FIRST_BOOT, false)
         }
 
+        intent.putExtra(SERVICE_MODE, serviceMode)
         startActivity(intent)
         finish()
 

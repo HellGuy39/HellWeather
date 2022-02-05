@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
+import com.hellguy39.hellweather.repository.database.pojo.WeatherData
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

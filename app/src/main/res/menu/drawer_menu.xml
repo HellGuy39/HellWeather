@@ -20,7 +20,7 @@
             android:title="@string/tittle_location_manager" />
 
         <item
-            android:id="@+id/serviceFragment"
+            android:id="@+id/foregroundServiceFragment"
             android:icon="@drawable/ic_round_ad_units_24"
             android:title="@string/tittle_foreground_service" />
 

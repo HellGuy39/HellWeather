@@ -1,12 +1,12 @@
 package com.hellguy39.hellweather.presentation.activities.main
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.hellguy39.hellweather.repository.database.LocationRepository
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.repository.database.pojo.WeatherData
 import com.hellguy39.hellweather.repository.server.ApiService
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
