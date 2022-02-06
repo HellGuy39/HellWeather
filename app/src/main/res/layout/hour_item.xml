@@ -18,7 +18,7 @@
                 android:id="@+id/tvHour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_light"
+                android:fontFamily="@font/roboto_medium"
                 android:textSize="18sp"
                 tools:text="12:00" />
 
@@ -32,7 +32,7 @@
                 android:id="@+id/tvTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_light"
+                android:fontFamily="@font/roboto_medium"
                 android:textSize="18sp"
                 tools:text="25°" />
 

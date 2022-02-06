@@ -5,7 +5,5 @@
         android:id="@+id/update"
         android:icon="@drawable/ic_round_autorenew_24"
         android:title="Update"
-        android:contentDescription="TODO"
-        app:iconTint="?android:attr/textColor"
         app:showAsAction="ifRoom" />
 </menu>

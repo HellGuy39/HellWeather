@@ -18,7 +18,7 @@
             android:id="@+id/tvDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_medium"
             android:textSize="18sp"
             tools:text="Fri" />
 
@@ -26,7 +26,7 @@
             android:id="@+id/tvHumidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_medium"
             android:text=""
             android:textSize="18sp"
             tools:text="60%" />
@@ -34,27 +34,21 @@
         <ImageView
             android:id="@+id/ivIcon"
             android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="TODO" />
+            android:layout_height="32dp" />
 
         <TextView
             android:id="@+id/tvMaxTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_medium"
             android:textSize="18sp"
             tools:text="25°" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="?android:attr/textColor" />
 
         <TextView
             android:id="@+id/tvMinTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_medium"
             android:text=""
             android:textSize="18sp"
             tools:text="15°" />

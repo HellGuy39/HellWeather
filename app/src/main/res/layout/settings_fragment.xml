@@ -6,28 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.fragments.settings.SettingsFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
-
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -39,10 +25,13 @@
                 android:id="@+id/generalCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteBlur30"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="16dp"
                 app:cardCornerRadius="@dimen/card_default_corner"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
+                app:cardElevation="@dimen/card_default_elevation"
+                app:strokeWidth="@dimen/card_default_stroke_width">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -59,62 +48,60 @@
                         android:textSize="18sp" />
 
                     <LinearLayout
-                        android:layout_marginTop="12dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
 
                         <TextView
                             android:id="@+id/tvLanguage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textSize="22sp"
                             android:fontFamily="@font/roboto_light"
-                            android:text="Language" />
+                            android:text="Language"
+                            android:textSize="22sp" />
 
                         <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            android:layout_weight="1">
 
                             <AutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="none"
-                                />
+                                android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="12dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
 
                         <TextView
                             android:id="@+id/tvUnits"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textSize="22sp"
                             android:fontFamily="@font/roboto_light"
-                            android:text="Units" />
+                            android:text="Units"
+                            android:textSize="22sp" />
 
                         <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            android:layout_weight="1">
 
                             <AutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="none"
-                                />
+                                android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
@@ -125,11 +112,13 @@
                 android:id="@+id/customizeCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="@color/whiteBlur30"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="16dp"
                 app:cardCornerRadius="@dimen/card_default_corner"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
+                app:cardElevation="@dimen/card_default_elevation"
+                app:strokeWidth="@dimen/card_default_stroke_width">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -146,69 +135,67 @@
                         android:textSize="18sp" />
 
                     <LinearLayout
-                        android:layout_marginTop="12dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
 
                         <TextView
                             android:id="@+id/tvTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textSize="22sp"
                             android:fontFamily="@font/roboto_light"
-                            android:text="Theme" />
+                            android:text="Theme"
+                            android:textSize="22sp" />
 
                         <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            android:layout_weight="1">
 
                             <AutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="none"
-                                />
+                                android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="12dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
 
                         <TextView
                             android:id="@+id/tvThemeMode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textSize="22sp"
                             android:fontFamily="@font/roboto_light"
-                            android:text="Mode" />
+                            android:text="Mode"
+                            android:textSize="22sp" />
 
                         <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            android:layout_weight="1">
 
                             <AutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="none"
-                                />
+                                android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="12dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
                         android:orientation="vertical">
 
                         <TextView
@@ -223,17 +210,17 @@
                             android:id="@+id/sliderBlur"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:valueFrom="0.0"
+                            android:stepSize="10.0"
                             android:value="30.0"
+                            android:valueFrom="0.0"
                             android:valueTo="100.0"
-                            app:values="@array/blur_slider_values"
-                            android:stepSize="10.0"/>
+                            app:values="@array/blur_slider_values" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="12dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
                         android:orientation="vertical">
 
                         <TextView

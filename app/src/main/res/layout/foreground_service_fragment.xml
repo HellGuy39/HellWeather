@@ -6,29 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.fragments.foreground_service.ForegroundServiceFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/serviceCard"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/whiteBlur30"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
         app:cardCornerRadius="@dimen/card_default_corner"
-        app:cardElevation="0dp"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeWidth="0dp">
 
@@ -40,12 +28,11 @@
 
             <Switch
                 android:id="@+id/serviceSwith"
-                android:textColor="?android:attr/textColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
                 android:fontFamily="@font/roboto_light"
-                android:text="Service" />
+                android:text="Service"
+                android:textSize="22sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -53,12 +40,13 @@
         android:id="@+id/optionsCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/whiteBlur30"
-        app:cardCornerRadius="@dimen/card_default_corner"
-        app:cardElevation="0dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="@dimen/card_default_corner"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/serviceCard"
         app:strokeWidth="0dp">
 
@@ -77,60 +65,58 @@
                 android:textSize="18sp" />
 
             <LinearLayout
-                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <TextView
                     android:id="@+id/tvLanguage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="22sp"
                     android:fontFamily="@font/roboto_light"
-                    android:text="Location" />
+                    android:text="Location"
+                    android:textSize="22sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                    android:layout_weight="1">
 
                     <AutoCompleteTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"
-                        />
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <TextView
                     android:id="@+id/tvUpdateTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="22sp"
                     android:fontFamily="@font/roboto_light"
-                    android:text="Update time" />
+                    android:text="Update time"
+                    android:textSize="22sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                    android:layout_weight="1">
 
                     <AutoCompleteTextView
                         android:id="@+id/acUpdTime"
-                        android:textColor="?android:attr/textColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none" />

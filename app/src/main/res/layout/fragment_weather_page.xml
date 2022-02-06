@@ -27,27 +27,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="320dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
-
     <TextView
         android:id="@+id/tvTextTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/roboto_thin"
+        android:fontFamily="@font/roboto_light"
         android:gravity="center"
         android:text=""
         android:textSize="32sp"
@@ -62,17 +48,16 @@
         android:id="@+id/tvWeather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:autoSizeMaxTextSize="48dp"
         android:autoSizeMinTextSize="16dp"
         android:autoSizeTextType="uniform"
-        android:fontFamily="@font/roboto_thin"
+        android:fontFamily="@font/roboto_light"
         android:gravity="center"
         android:maxLines="1"
         android:textSize="42sp"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/tvTemp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:text="Clear" />
 
     <TextView
@@ -80,10 +65,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="@font/roboto_thin"
+        android:fontFamily="@font/roboto_light"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWeather"
         tools:text="Max.: 26°, min.: 9°" />
 
@@ -92,12 +77,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="@font/roboto_thin"
+        android:fontFamily="@font/roboto_light"
         android:gravity="center"
         android:text=""
         android:textSize="128sp"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline7"
         tools:text="9" />
 
@@ -106,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="@font/roboto_thin"
+        android:fontFamily="@font/roboto_light"
         android:gravity="center"
         android:text=""
         android:textSize="128sp"
@@ -131,8 +116,8 @@
         android:fillViewport="true"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineMotion">
 
         <LinearLayout
@@ -145,15 +130,17 @@
                 android:id="@+id/hourItemsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/whiteBlur30"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="6dp"
                 app:cardCornerRadius="@dimen/card_default_corner"
-                app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeWidth="0dp">
+                app:cardElevation="@dimen/card_default_elevation"
+                app:strokeWidth="@dimen/card_default_stroke_width">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -169,7 +156,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/roboto_light"
+                        android:fontFamily="@font/roboto_regular"
                         android:text="@string/hourly_forecast"
                         android:textAllCaps="false"
                         android:textSize="18sp" />
@@ -188,18 +175,19 @@
                 android:id="@+id/detailsContainer1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
                     android:layout_marginEnd="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/whiteBlur30"
                     app:cardCornerRadius="@dimen/card_default_corner"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    app:cardElevation="@dimen/card_default_elevation"
+                    app:strokeWidth="@dimen/card_default_stroke_width">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -211,7 +199,7 @@
                             android:id="@+id/tvSunriseTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start"
                             android:text="@string/sunrise"
                             android:textSize="18sp" />
@@ -225,7 +213,7 @@
                             android:autoSizeMaxTextSize="32sp"
                             android:autoSizeMinTextSize="16sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
                             android:maxLines="1"
                             android:textSize="32sp"
@@ -238,12 +226,14 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
+                    android:layout_marginTop="6dp"
                     android:layout_marginStart="6dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/whiteBlur30"
                     app:cardCornerRadius="@dimen/card_default_corner"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    app:cardElevation="@dimen/card_default_elevation"
+                    app:strokeWidth="@dimen/card_default_stroke_width">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -255,7 +245,7 @@
                             android:id="@+id/tvSunsetTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start"
                             android:text="@string/sunset"
                             android:textSize="18sp" />
@@ -269,7 +259,7 @@
                             android:autoSizeMaxTextSize="32sp"
                             android:autoSizeMinTextSize="16sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
                             android:maxLines="1"
                             android:textSize="32sp"
@@ -284,18 +274,19 @@
                 android:id="@+id/detailsContainer2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
+                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/whiteBlur30"
                     app:cardCornerRadius="@dimen/card_default_corner"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    app:cardElevation="@dimen/card_default_elevation"
+                    app:strokeWidth="@dimen/card_default_stroke_width">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -307,7 +298,7 @@
                             android:id="@+id/tvUVTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start"
                             android:maxLines="1"
                             android:text="@string/uv_index"
@@ -322,7 +313,7 @@
                             android:autoSizeMaxTextSize="32sp"
                             android:autoSizeMinTextSize="16sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
                             android:maxLines="1"
                             android:textSize="32sp"
@@ -349,7 +340,7 @@
                                 android:autoSizeMaxTextSize="24sp"
                                 android:autoSizeMinTextSize="8sp"
                                 android:autoSizeTextType="uniform"
-                                android:fontFamily="@font/roboto_light"
+                                android:fontFamily="@font/roboto_regular"
                                 android:gravity="start"
                                 android:maxLines="1"
                                 android:textSize="24sp"
@@ -364,12 +355,14 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/whiteBlur30"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
                     app:cardCornerRadius="@dimen/card_default_corner"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    app:cardElevation="@dimen/card_default_elevation"
+                    app:strokeWidth="@dimen/card_default_stroke_width">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -381,7 +374,7 @@
                             android:id="@+id/tvVisibilityTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start"
                             android:maxLines="1"
                             android:text="@string/visibility"
@@ -396,7 +389,7 @@
                             android:autoSizeMaxTextSize="32sp"
                             android:autoSizeMinTextSize="16sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
                             android:maxLines="1"
                             android:textSize="32sp"
@@ -409,7 +402,7 @@
                             android:autoSizeMaxTextSize="16sp"
                             android:autoSizeMinTextSize="8sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start|bottom"
                             android:maxLines="2"
                             android:textSize="16sp"
@@ -424,18 +417,19 @@
                 android:id="@+id/detailsContainer3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/whiteBlur30"
                     app:cardCornerRadius="@dimen/card_default_corner"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="6dp"
+                    app:cardElevation="@dimen/card_default_elevation"
+                    app:strokeWidth="@dimen/card_default_stroke_width">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -447,7 +441,7 @@
                             android:id="@+id/tvPressureTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start"
                             android:maxLines="1"
                             android:text="@string/pressure"
@@ -462,7 +456,7 @@
                             android:autoSizeMaxTextSize="32sp"
                             android:autoSizeMinTextSize="16sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
                             android:maxLines="1"
                             android:textSize="32sp"
@@ -474,12 +468,14 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/whiteBlur30"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
                     app:cardCornerRadius="@dimen/card_default_corner"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    app:cardElevation="@dimen/card_default_elevation"
+                    app:strokeWidth="@dimen/card_default_stroke_width">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -491,7 +487,7 @@
                             android:id="@+id/tvWindTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start"
                             android:maxLines="1"
                             android:text="@string/wind"
@@ -506,7 +502,7 @@
                             android:autoSizeMaxTextSize="32sp"
                             android:autoSizeMinTextSize="16sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
                             android:maxLines="1"
                             android:textSize="32sp"
@@ -525,7 +521,7 @@
                                 android:autoSizeMaxTextSize="16sp"
                                 android:autoSizeMinTextSize="8sp"
                                 android:autoSizeTextType="uniform"
-                                android:fontFamily="@font/roboto_light"
+                                android:fontFamily="@font/roboto_regular"
                                 android:gravity="start"
                                 android:maxLines="1"
                                 android:textSize="16sp"
@@ -538,7 +534,7 @@
                                 android:autoSizeMaxTextSize="16sp"
                                 android:autoSizeMinTextSize="8sp"
                                 android:autoSizeTextType="uniform"
-                                android:fontFamily="@font/roboto_light"
+                                android:fontFamily="@font/roboto_regular"
                                 android:gravity="start"
                                 android:maxLines="1"
                                 android:textSize="16sp"
@@ -554,18 +550,19 @@
                 android:id="@+id/detailsContainer4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/whiteBlur30"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="6dp"
                     app:cardCornerRadius="@dimen/card_default_corner"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    app:cardElevation="@dimen/card_default_elevation"
+                    app:strokeWidth="@dimen/card_default_stroke_width">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -577,7 +574,7 @@
                             android:id="@+id/tvFeelsLikeTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start"
                             android:text="@string/feels_like"
                             android:textSize="18sp" />
@@ -591,7 +588,7 @@
                             android:autoSizeMaxTextSize="32sp"
                             android:autoSizeMinTextSize="16sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
                             android:maxLines="1"
                             android:textSize="32sp"
@@ -604,7 +601,7 @@
                             android:autoSizeMaxTextSize="16sp"
                             android:autoSizeMinTextSize="8sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start|bottom"
                             android:maxLines="2"
                             android:textSize="16sp"
@@ -617,12 +614,14 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/whiteBlur30"
                     app:cardCornerRadius="@dimen/card_default_corner"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    android:layout_marginTop="6dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="6dp"
+                    app:cardElevation="@dimen/card_default_elevation"
+                    app:strokeWidth="@dimen/card_default_stroke_width">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -634,7 +633,7 @@
                             android:id="@+id/tvHumidityTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start"
                             android:maxLines="1"
                             android:text="@string/humidity"
@@ -649,7 +648,7 @@
                             android:autoSizeMaxTextSize="32sp"
                             android:autoSizeMinTextSize="16sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
                             android:maxLines="1"
                             android:textSize="32sp"
@@ -662,7 +661,7 @@
                             android:autoSizeMaxTextSize="16sp"
                             android:autoSizeMinTextSize="8sp"
                             android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="start|bottom"
                             android:maxLines="2"
                             android:textSize="16sp"
@@ -676,17 +675,19 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="@color/whiteBlur30"
                 app:cardCornerRadius="@dimen/card_default_corner"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="6dp"
+                app:cardElevation="@dimen/card_default_elevation"
+                app:strokeWidth="@dimen/card_default_stroke_width">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tvChance"
@@ -695,7 +696,7 @@
                         android:layout_gravity="start"
                         android:layout_marginStart="4dp"
                         android:layout_marginBottom="4dp"
-                        android:fontFamily="@font/roboto_light"
+                        android:fontFamily="@font/roboto_regular"
                         android:text="@string/chance_of_rain"
                         android:textAllCaps="false"
                         android:textSize="18sp" />
@@ -711,7 +712,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:layout_marginStart="8dp"
-                        android:fontFamily="@font/roboto_light"
+                        android:fontFamily="@font/roboto_regular"
                         android:text="@string/after_n_hours"
                         android:textAllCaps="false"
                         android:textSize="14sp" />
@@ -723,21 +724,21 @@
                 android:id="@+id/dailyCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/whiteBlur30"
                 app:cardCornerRadius="@dimen/card_default_corner"
-                app:cardElevation="0dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeWidth="0dp">
+                app:cardElevation="@dimen/card_default_elevation"
+                app:strokeWidth="@dimen/card_default_stroke_width">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="12dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -748,7 +749,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/roboto_light"
+                        android:fontFamily="@font/roboto_regular"
                         android:text="@string/daily_forecast"
                         android:textAllCaps="false"
                         android:textSize="18sp" />

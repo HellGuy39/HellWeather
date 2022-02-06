@@ -21,13 +21,6 @@
         app:layout_constraintGuide_end="24dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineMotion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.66" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,27 +32,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:backgroundTint="?android:attr/colorSecondary"
         android:clickable="true"
-        android:contentDescription="TODO"
         android:src="@drawable/ic_round_check_24"
         app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:tint="?attr/iconTint" />
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabFalse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:backgroundTint="?android:attr/colorSecondary"
-        android:contentDescription="TODO"
         android:src="@drawable/ic_round_clear_24"
         app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:tint="?attr/iconTint" />
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -67,18 +54,17 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineMotion"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:layout_constraintTop_toTopOf="@+id/guideline15"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintTop_toTopOf="@+id/guideline15">
 
 
         <TextView
             android:id="@+id/tvFragTittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="@font/roboto_medium"
             android:gravity="center"
             android:text="That's right?"
             android:textSize="48sp" />
@@ -88,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="@font/roboto_regular"
             android:textSize="20sp"
             tools:text="RU, Krasnodar" />
 
@@ -97,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="@font/roboto_regular"
             android:textSize="20sp"
             tools:text="Lan: 40 Lon: 45" />
 
@@ -106,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="@font/roboto_regular"
             android:textSize="20sp"
             tools:text="+3 GMT" />
 

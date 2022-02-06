@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootMotionLayout"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:transitionName="shared_element_container"
     tools:context=".presentation.fragments.add.AddLocationFragment">
 
     <LinearLayout
@@ -21,7 +22,7 @@
             android:id="@+id/tvFragTittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_thin"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="center"
             android:text="Enter your location"
             android:textSize="32sp" />
@@ -39,9 +40,7 @@
             app:boxCornerRadiusBottomStart="@dimen/card_default_corner"
             app:boxCornerRadiusTopEnd="@dimen/card_default_corner"
             app:boxCornerRadiusTopStart="@dimen/card_default_corner"
-            app:boxStrokeColor="?attr/colorSecondary"
             app:endIconMode="clear_text"
-            app:hintTextColor="?attr/colorSecondary"
             app:startIconDrawable="@drawable/ic_round_location_on_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -59,7 +58,6 @@
         android:id="@+id/progressLinear"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?android:attr/textColor"
         android:indeterminate="true"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,30 +80,20 @@
         app:layout_constraintGuide_end="24dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineMotion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.66" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="110dp" />
+        app:layout_constraintGuide_begin="64dp" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="?attr/colorPrimary"
         android:text="Continue"
-        android:textColor="?android:attr/textColor"
+        android:layout_marginBottom="16dp"
         app:borderWidth="0dp"
         app:icon="@drawable/ic_round_navigate_next_24"
-        app:iconTint="?attr/iconTint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd" />
 

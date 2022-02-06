@@ -13,26 +13,22 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="invisible"
-        app:trackColor="@color/transparent"
-        app:indicatorColor="?android:attr/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
+        android:elevation="0dp"
+        app:tabTextAppearance="@style/tab_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressIndicator"
         app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorColor="?android:attr/textColor"
         app:tabIndicatorFullWidth="false"
-        app:tabMode="auto"
-        app:tabTextAppearance="@style/tab_text"
-        app:tabTextColor="?android:attr/textColor">
+        app:tabMode="auto">
 
     </com.google.android.material.tabs.TabLayout>
 

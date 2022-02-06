@@ -35,9 +35,9 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         binding = SearchFragmentBinding.bind(view)
         viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
 
-        binding.btnSearch.setOnClickListener {
+        /*binding.btnSearch.setOnClickListener {
 
-        }
+        }*/
     }
 
     private fun search() {

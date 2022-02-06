@@ -1,13 +1,16 @@
 package com.hellguy39.hellweather.presentation.fragments.add
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.google.android.material.transition.MaterialContainerTransform
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentAddLocationBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
