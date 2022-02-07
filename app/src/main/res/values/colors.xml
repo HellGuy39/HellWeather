@@ -34,6 +34,11 @@
     <color name="red_A400">#FF1744</color>
     <color name="deep_purple_A400">#651FFF</color>
 
+    <color name="green_400">#66BB6A</color>
+    <color name="yellow_400">#FFEE58</color>
+    <color name="orange_400">#FFA726</color>
+    <color name="red_400">#EF5350</color>
+    <color name="deep_purple_400">#7E57C2</color>
 
     <color name="whiteBlur100">#FFFFFFFF</color>
     <color name="whiteBlur90">#90FFFFFF</color>

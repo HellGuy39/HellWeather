@@ -168,15 +168,15 @@ class WeatherPageFragment(
                 "Extreme"
 
         _binding.vUVColor.backgroundTintList = if (wm.uvi.toInt() == 0 || wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
-            ResourcesCompat.getColorStateList(resources, R.color.green_A400, null)
+            ResourcesCompat.getColorStateList(resources, R.color.green_400, null)
         else if (wm.uvi.toInt() == 3 || wm.uvi.toInt() == 4 || wm.uvi.toInt() == 5)
-            ResourcesCompat.getColorStateList(resources, R.color.yellow_A400, null)
+            ResourcesCompat.getColorStateList(resources, R.color.yellow_400, null)
         else if (wm.uvi.toInt() == 6 || wm.uvi.toInt() == 7)
-            ResourcesCompat.getColorStateList(resources, R.color.orange_A400, null)
+            ResourcesCompat.getColorStateList(resources, R.color.orange_400, null)
         else if (wm.uvi.toInt() == 8 || wm.uvi.toInt() == 9 || wm.uvi.toInt() == 10)
-            ResourcesCompat.getColorStateList(resources, R.color.red_A400, null)
+            ResourcesCompat.getColorStateList(resources, R.color.red_400, null)
         else
-            ResourcesCompat.getColorStateList(resources, R.color.deep_purple_A400, null)
+            ResourcesCompat.getColorStateList(resources, R.color.deep_purple_400, null)
 
 
         //Visibility

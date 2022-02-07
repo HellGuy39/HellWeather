@@ -6,21 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.presentation.adapter.WeatherPageAdapter
-import com.hellguy39.hellweather.utils.DISABLE
-import com.hellguy39.hellweather.utils.ENABLE
-import com.hellguy39.hellweather.utils.SUCCESSFUL
+import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment() : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
@@ -56,18 +55,37 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 val weatherDataList = mainActivityViewModel.weatherDataListLive.value
                 val userLocations = mainActivityViewModel.userLocationsLive.value
 
+                if (userLocations?.isEmpty() == true)
+                    return@observe
+
+                if (weatherDataList?.isEmpty() == true)
+                    return@observe
+
                 if (weatherDataList != null) {
                     val pagerAdapter = WeatherPageAdapter(activity as MainActivity, weatherDataList)
                     binding.viewPager.adapter = pagerAdapter
                     TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                        tab.text =
-                            userLocations?.get(position)?.locationName
-                        (activity as MainActivity).setToolbarTittle(
-                            SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
-                                Date(weatherDataList[position].currentWeather.dt * 1000)
-                            ))
+                        tab.text = userLocations?.get(position)?.locationName
+
+                        if (findNavController().currentDestination?.id == R.id.homeFragment) {
+                            (activity as MainActivity).setToolbarTittle(
+                                SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
+                                    Date(weatherDataList[position].currentWeather.dt * 1000)
+                                )
+                            )
+                        }
                     }.attach()
                 }
+            }
+            else if (it == FAILURE)
+            {
+                refreshing(DISABLE)
+                (activity as MainActivity).setToolbarTittle("Connection lost")
+            }
+            else if (it == ERROR)
+            {
+                refreshing(DISABLE)
+                (activity as MainActivity).setToolbarTittle("Error")
             }
         }
     }

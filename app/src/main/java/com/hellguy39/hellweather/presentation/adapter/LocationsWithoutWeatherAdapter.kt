@@ -13,48 +13,34 @@ import com.hellguy39.hellweather.repository.database.pojo.WeatherData
 import java.text.SimpleDateFormat
 import java.util.*
 
-class LocationsAdapter(
+class LocationsWithoutWeatherAdapter(
     private val context: Context,
     private val locationList: List<UserLocation>,
-    private val weatherDataList: List<WeatherData>,
-    private val listener: EventListener
-    ) : RecyclerView.Adapter<LocationsAdapter.LocationViewHolder> () {
-
-    interface EventListener {
-        fun onDelete(userLocation: UserLocation)
-        fun onEdit(userLocation: UserLocation)
-    }
+    ) : RecyclerView.Adapter<LocationsWithoutWeatherAdapter.LocationWithoutWeatherViewHolder> () {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): LocationViewHolder {
+    ): LocationWithoutWeatherViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.location_item, parent, false)
-        return LocationViewHolder(itemView, listener)
+        return LocationWithoutWeatherViewHolder(itemView)
     }
 
     override fun onBindViewHolder(
-        holder: LocationViewHolder,
+        holder: LocationWithoutWeatherViewHolder,
         position: Int)
     {
-        holder.bindWithWeather(locationList, weatherDataList, position, context)
+        holder.bind(locationList, position, context)
     }
 
     override fun getItemCount(): Int = locationList.size
 
-    class LocationViewHolder(v: View, private val listener: EventListener) : RecyclerView.ViewHolder(v) {
+    class LocationWithoutWeatherViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         private val _binding = LocationItemBinding.bind(v)
 
-        fun bindWithWeather(locationList: List<UserLocation>, weatherDataList: List<WeatherData>, position: Int, context: Context) {
-
-            val weatherItem = weatherDataList[position]
-
+        fun bind(locationList: List<UserLocation>, position: Int, context: Context) {
             _binding.tvLocationName.text = locationList[position].locationName
-            _binding.tvWeatherDescription.text = weatherItem.currentWeather.wDescription
-            _binding.tvTemp.text = weatherItem.currentWeather.temp + "°"
-            _binding.tvTempMinMax.text = "Max.: ${weatherItem.currentWeather.tempMax}°, min.: ${weatherItem.currentWeather.tempMin}°"
-            _binding.tvTime.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(weatherItem.currentWeather.dt * 1000))
 
             _binding.rootCard.setOnLongClickListener {
                 MaterialAlertDialogBuilder(context)

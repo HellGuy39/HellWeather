@@ -87,16 +87,6 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
                 serviceControl(REBOOT)
             }
         }
-
-        viewModel.weatherDataListLive.observe(this) {
-
-        }
-
-        viewModel.statusLive.observe(this) {
-            if (it == SUCCESSFUL) {
-
-            }
-        }
     }
 
     fun serviceControl(action: String) {

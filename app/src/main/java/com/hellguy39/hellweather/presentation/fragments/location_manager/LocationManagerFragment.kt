@@ -18,6 +18,7 @@ import com.hellguy39.hellweather.databinding.LocationManagerFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
+import com.hellguy39.hellweather.presentation.adapter.LocationsWithoutWeatherAdapter
 import com.hellguy39.hellweather.presentation.fragments.add.AddLocationFragment
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.DISABLE
@@ -67,11 +68,17 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
 
     private fun updateRecycler(list: List<UserLocation>) {
         val weatherDataList = mainViewModel.weatherDataListLive.value
-
         if (weatherDataList != null) {
             binding.recyclerLocations.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 adapter = LocationsAdapter(context, list, weatherDataList ,this@LocationManagerFragment)
+            }
+        }
+        else
+        {
+            binding.recyclerLocations.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                adapter = LocationsWithoutWeatherAdapter(context, list)
             }
         }
     }

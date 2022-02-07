@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="6dp"
                 android:layout_marginEnd="16dp"
                 app:cardCornerRadius="@dimen/card_default_corner"
                 app:cardElevation="@dimen/card_default_elevation"
@@ -70,6 +70,7 @@
                             android:layout_weight="1">
 
                             <AutoCompleteTextView
+                                android:id="@+id/acLanguage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="none" />
@@ -99,6 +100,7 @@
                             android:layout_weight="1">
 
                             <AutoCompleteTextView
+                                android:id="@+id/acUnits"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="none" />
@@ -114,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="6dp"
                 android:layout_marginEnd="16dp"
                 app:cardCornerRadius="@dimen/card_default_corner"
                 app:cardElevation="@dimen/card_default_elevation"
@@ -157,6 +159,7 @@
                             android:layout_weight="1">
 
                             <AutoCompleteTextView
+                                android:id="@+id/acTheme"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="none" />
@@ -186,62 +189,12 @@
                             android:layout_weight="1">
 
                             <AutoCompleteTextView
+                                android:id="@+id/acMode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="12dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvTittleBlur"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
-                            android:text="Background blur of elements"
-                            android:textSize="18sp" />
-
-                        <com.google.android.material.slider.Slider
-                            android:id="@+id/sliderBlur"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:stepSize="10.0"
-                            android:value="30.0"
-                            android:valueFrom="0.0"
-                            android:valueTo="100.0"
-                            app:values="@array/blur_slider_values" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="12dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvTittleCornerRad"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
-                            android:text="Corner radius of elements"
-                            android:textSize="18sp" />
-
-                        <com.google.android.material.slider.Slider
-                            android:id="@+id/sliderCornerRad"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:stepSize="4.0"
-                            android:value="8.0"
-                            android:valueFrom="0.0"
-                            android:valueTo="32.0"
-                            app:values="@array/cor_rad_slider_values" />
-                    </LinearLayout>
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

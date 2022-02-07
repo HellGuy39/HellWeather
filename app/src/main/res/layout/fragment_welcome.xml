@@ -49,13 +49,10 @@
         android:id="@+id/fabNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="?attr/colorPrimary"
+        android:layout_marginBottom="16dp"
         android:text="Let's start"
-        android:textColor="?android:attr/textColor"
         app:borderWidth="0dp"
         app:icon="@drawable/ic_round_navigate_next_24"
-        app:iconTint="?attr/iconTint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd" />
 
@@ -92,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="center"
             android:text="We thank you for choosing our application"
             android:textSize="20sp" />

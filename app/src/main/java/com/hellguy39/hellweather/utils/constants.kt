@@ -7,6 +7,7 @@ const val SERVICE_CHANNEL_ID = "hellweather_service_channel_01"
 //PREFS
 const val SERVICE_MODE = "service_mode"
 const val FIRST_BOOT = "first_boot"
+const val PREFS_UNITS = "units"
 
 //ACTIONS
 const val SUCCESSFUL = "suc" // хаха сак хахаха смешно
@@ -22,6 +23,6 @@ const val ENABLE = "enb"
 const val REBOOT = "rbt"
 
 //UNITS
-const val METRIC = "metric"
-const val IMPERIAL = "imperial"
-const val STANDARD = "standard"
+const val METRIC = "Metric"
+const val IMPERIAL = "Imperial"
+const val STANDARD = "Standard"

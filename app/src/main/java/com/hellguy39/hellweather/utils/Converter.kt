@@ -31,7 +31,12 @@ class Converter {
             it.humidity = current.get("humidity").asString
             it.windSpeed = current.get("wind_speed").asString
             it.windDeg = current.get("wind_deg").asString
-            it.windGust = current.get("wind_gust").asDouble
+
+            if (current.get("wind_gust")?.asDouble != null)
+                it.windGust = current.get("wind_gust").asDouble
+            else
+                it.windGust = 0.0
+
             it.dewPoint = current.get("dew_point").asFloat.toInt().toString()
             it.uvi = current.get("uvi").asDouble
             it.visibility = current.get("visibility").asInt
