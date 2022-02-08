@@ -7,11 +7,12 @@ import com.hellguy39.hellweather.presentation.fragments.page.WeatherPageFragment
 import com.hellguy39.hellweather.repository.database.pojo.WeatherData
 
 class WeatherPageAdapter(
-    fa: FragmentActivity,
+    frag: Fragment,
     private val weatherDataList: List<WeatherData>
-) : FragmentStateAdapter(fa) {
+) : FragmentStateAdapter(frag) {
 
     override fun getItemCount(): Int = weatherDataList.size
 
-    override fun createFragment(position: Int): Fragment = WeatherPageFragment(weatherDataList[position])
+    override fun createFragment(position: Int): WeatherPageFragment
+        = WeatherPageFragment.newInstance(weatherDataList[position])
 }

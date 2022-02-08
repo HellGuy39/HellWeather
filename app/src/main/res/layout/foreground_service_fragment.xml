@@ -30,7 +30,7 @@
                 android:id="@+id/serviceSwith"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_light"
+                android:fontFamily="@font/roboto_regular"
                 android:text="Service"
                 android:textSize="22sp" />
         </LinearLayout>
@@ -76,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/roboto_light"
+                    android:fontFamily="@font/roboto_regular"
                     android:text="Location"
                     android:textSize="22sp" />
 
@@ -105,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/roboto_light"
+                    android:fontFamily="@font/roboto_regular"
                     android:text="Update time"
                     android:textSize="22sp" />
 

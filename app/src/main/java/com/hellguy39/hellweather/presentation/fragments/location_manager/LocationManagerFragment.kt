@@ -68,6 +68,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
 
     private fun updateRecycler(list: List<UserLocation>) {
         val weatherDataList = mainViewModel.weatherDataListLive.value
+
         if (weatherDataList != null) {
             binding.recyclerLocations.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

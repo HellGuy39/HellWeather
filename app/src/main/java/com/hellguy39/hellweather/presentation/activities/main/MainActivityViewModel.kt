@@ -23,7 +23,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    repository: LocationRepository,
+    private val repository: LocationRepository,
     private val mService: ApiService,
     private val defSharPrefs: SharedPreferences
 ): ViewModel() {
@@ -34,15 +34,24 @@ class MainActivityViewModel @Inject constructor(
     private val jsonList: MutableList<JsonObject> = mutableListOf()
     private val weatherDataList: MutableList<WeatherData> = mutableListOf()
     private var _units = STANDARD
+    private var _firstBoot = false
 
     init {
         statusLive.value = IN_PROGRESS
 
         _units = defSharPrefs.getString(PREFS_UNITS, STANDARD).toString()
+        _firstBoot = defSharPrefs.getBoolean(FIRST_BOOT, false)
 
-        viewModelScope.launch {
-            repository.getLocations().collect {
-                userLocationsLive.value = it
+        getLocationsFromRepository()
+    }
+
+    fun getLocationsFromRepository() {
+        _firstBoot = defSharPrefs.getBoolean(FIRST_BOOT, false)
+        if (!_firstBoot) {
+            viewModelScope.launch {
+                repository.getLocations().collect {
+                    userLocationsLive.value = it
+                }
             }
         }
     }
@@ -50,6 +59,9 @@ class MainActivityViewModel @Inject constructor(
     fun loadAllLocation(list: List<UserLocation>) {
         viewModelScope.launch {
             val converter = Converter()
+            weatherDataList.clear()
+            weatherDataListLive.value = weatherDataList
+
             if (list.isNotEmpty()) {
                 for (n in list.indices) {
                     val request: JsonObject = sendRequest(list[n])

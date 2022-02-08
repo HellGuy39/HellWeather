@@ -33,6 +33,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
         (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).drawerControl(DISABLE)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }

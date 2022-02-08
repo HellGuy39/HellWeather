@@ -1,6 +1,7 @@
 package com.hellguy39.hellweather.presentation.fragments.page
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,23 +28,27 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WeatherPageFragment(
-    private val weatherData: WeatherData
-    ): Fragment(R.layout.fragment_weather_page) {
+private const val WEATHER_DATA_ARG = "wd_arg"
 
-    /*companion object {
-        fun newInstance(weatherData: WeatherData) = WeatherPageFragment(weatherData)
-    }*/
+class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
+
+    companion object {
+        @JvmStatic
+        fun newInstance(weatherData: WeatherData) = WeatherPageFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(WEATHER_DATA_ARG,weatherData)
+            }
+        }
+    }
 
     private lateinit var _binding: FragmentWeatherPageBinding
+    private lateinit var _weatherData: WeatherData
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        return super.onCreateView(inflater, container, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            _weatherData = it.getSerializable(WEATHER_DATA_ARG) as WeatherData
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,11 +56,13 @@ class WeatherPageFragment(
         _binding = FragmentWeatherPageBinding.bind(view)
 
         CoroutineScope(Default).launch {
-            withContext(Main) {
-                confGraph()
-                updateUI(weatherData)
-                updateRecyclersView(weatherData)
-                updateGraph(weatherData)
+            if (this@WeatherPageFragment::_weatherData.isInitialized) {
+                withContext(Main) {
+                    confGraph()
+                    updateUI(_weatherData)
+                    updateRecyclersView(_weatherData)
+                    updateGraph(_weatherData)
+                }
             }
         }
     }

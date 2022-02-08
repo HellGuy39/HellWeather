@@ -11,15 +11,13 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import com.google.gson.JsonObject
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.repository.server.ApiService
-import com.hellguy39.hellweather.utils.BASE_URL
+import com.hellguy39.hellweather.utils.*
 import com.hellguy39.hellweather.utils.Converter
-import com.hellguy39.hellweather.utils.METRIC
-import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
-import com.hellguy39.hellweather.utils.SERVICE_CHANNEL_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -37,6 +35,10 @@ class WeatherService : Service() {
 
         fun startService(context: Context, pauseTime: Long, userLocation: UserLocation) {
             val service = Intent(context, WeatherService::class.java)
+            val units = PreferenceManager.getDefaultSharedPreferences(context).getString(
+                PREFS_UNITS, STANDARD)
+
+            service.putExtra("units", units)
             service.putExtra("pauseTime", pauseTime)
             service.putExtra("location", userLocation)
             ContextCompat.startForegroundService(context, service)
@@ -59,6 +61,7 @@ class WeatherService : Service() {
 
         isRunning = true
         val mService = provideApiService()
+        val units = intent?.getStringExtra("units")
         val pauseTime = intent?.getLongExtra("pauseTime", 5 * 10000)
         val userLocation = intent?.getParcelableExtra<UserLocation>("location")
         val converter = Converter()
@@ -69,7 +72,7 @@ class WeatherService : Service() {
         CoroutineScope(Dispatchers.Default).launch {
             while (isRunning) {
                 Log.d("DEBUG", "CALLED")
-                val weatherJson = request(mService, userLocation!!)
+                val weatherJson = request(mService, userLocation!!, units.toString())
                 val weatherData = converter.toWeatherObject(weatherJson)
                 val contentText = weatherData.currentWeather.wDescription + " | " +
                         "Max.: ${weatherData.currentWeather.tempMax}°, " +
@@ -126,13 +129,13 @@ class WeatherService : Service() {
 
     }
 
-    private suspend fun request(mService: ApiService, userLocation: UserLocation): JsonObject {
+    private suspend fun request(mService: ApiService, userLocation: UserLocation, units: String): JsonObject {
         return suspendCoroutine { continuation ->
             mService.getWeatherOneCall(
                 userLocation.lat.toDouble(),
                 userLocation.lon.toDouble(),
                 "minutely,alerts",
-                METRIC,
+                units,
                 OPEN_WEATHER_API_KEY
             ).enqueue(object : Callback<JsonObject> {
 

@@ -40,6 +40,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
         (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).drawerControl(DISABLE)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }

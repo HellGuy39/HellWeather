@@ -1,6 +1,7 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
-@AndroidEntryPoint
 class HomeFragment() : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
@@ -55,27 +55,27 @@ class HomeFragment() : Fragment(R.layout.fragment_home) {
                 val weatherDataList = mainActivityViewModel.weatherDataListLive.value
                 val userLocations = mainActivityViewModel.userLocationsLive.value
 
-                if (userLocations?.isEmpty() == true)
+                if (userLocations == null || userLocations.isEmpty())
                     return@observe
 
-                if (weatherDataList?.isEmpty() == true)
+                if (weatherDataList == null || weatherDataList.isEmpty())
                     return@observe
 
-                if (weatherDataList != null) {
-                    val pagerAdapter = WeatherPageAdapter(activity as MainActivity, weatherDataList)
-                    binding.viewPager.adapter = pagerAdapter
-                    TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                        tab.text = userLocations?.get(position)?.locationName
+                //Log.d("DEBUG", "W: ${weatherDataList.size}\nU: ${userLocations.size}")
 
-                        if (findNavController().currentDestination?.id == R.id.homeFragment) {
-                            (activity as MainActivity).setToolbarTittle(
-                                SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
-                                    Date(weatherDataList[position].currentWeather.dt * 1000)
-                                )
+                val pagerAdapter = WeatherPageAdapter(this, weatherDataList)
+                binding.viewPager.adapter = pagerAdapter
+                TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+                    tab.text = userLocations[position].locationName
+
+                    if (findNavController().currentDestination?.id == R.id.homeFragment) {
+                        (activity as MainActivity).setToolbarTittle(
+                            SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
+                                Date(weatherDataList[position].currentWeather.dt * 1000)
                             )
-                        }
-                    }.attach()
-                }
+                        )
+                    }
+                }.attach()
             }
             else if (it == FAILURE)
             {

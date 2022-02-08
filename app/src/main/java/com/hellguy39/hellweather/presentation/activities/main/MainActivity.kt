@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -20,6 +18,7 @@ import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragment
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 import com.hellguy39.hellweather.presentation.services.WeatherService
+import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,6 +34,9 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
     private lateinit var navHostFragment: NavHostFragment
     private  var toolBarMenu: Menu? = null
 
+    private var _firstBoot = false
+    private var _serviceMode = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
@@ -44,8 +46,8 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
         toolBarMenu = binding.topAppBar.menu
 
-        val firstBoot: Boolean = intent.getBooleanExtra(FIRST_BOOT, false)
-        val serviceMode: Boolean = intent.getBooleanExtra(SERVICE_MODE, false)
+        _firstBoot = intent.getBooleanExtra(FIRST_BOOT, false)
+        _serviceMode = intent.getBooleanExtra(SERVICE_MODE, false)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
@@ -71,7 +73,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
             .setBottomRightCorner(CornerFamily.ROUNDED, resources.getDimensionPixelSize(R.dimen.drawer_corner).toFloat())
             .build()
 
-        if (firstBoot)
+        if (_firstBoot)
         {
             drawerControl(DISABLE)
 
@@ -82,10 +84,26 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         }
 
         viewModel.userLocationsLive.observe(this) {
-            viewModel.loadAllLocation(it)
-            if (serviceMode) {
-                serviceControl(REBOOT)
+            if (it.isNullOrEmpty())
+                return@observe
+
+            val weatherDataList = viewModel.weatherDataListLive.value
+
+            if (weatherDataList == null)
+                updateData(it)
+
+            if (weatherDataList != null) {
+                if (weatherDataList.isEmpty()) {
+                    updateData(it)
+                }
             }
+        }
+    }
+
+    private fun updateData(list: List<UserLocation>) {
+        viewModel.loadAllLocation(list)
+        if (_serviceMode) {
+            serviceControl(REBOOT)
         }
     }
 
@@ -165,7 +183,10 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         when (p0?.itemId) {
             R.id.update -> {
                 if (navController.currentDestination?.id == R.id.homeFragment) {
-                    (navHostFragment.childFragmentManager.fragments[0] as HomeFragment).onRefresh()
+                    //(navHostFragment.childFragmentManager.fragments[0] as HomeFragment).onRefresh()
+                    val list = viewModel.userLocationsLive.value
+                    if (list != null)
+                        updateData(list)
                 }
             }
         }
