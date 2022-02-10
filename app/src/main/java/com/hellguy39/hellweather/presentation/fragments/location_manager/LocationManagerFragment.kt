@@ -22,6 +22,7 @@ import com.hellguy39.hellweather.presentation.adapter.LocationsWithoutWeatherAda
 import com.hellguy39.hellweather.presentation.fragments.add.AddLocationFragment
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.DISABLE
+import com.hellguy39.hellweather.utils.ENABLE
 import com.hellguy39.hellweather.utils.shortSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,6 +47,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
         (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).drawerControl(ENABLE)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -55,8 +57,18 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
         fragView = view
         binding = LocationManagerFragmentBinding.bind(view)
 
-        viewModel.userLocations.observe(viewLifecycleOwner) {
-            updateRecycler(it)
+        mainViewModel.userLocationsLive.observe(activity as MainActivity) {
+            if (it.isNotEmpty())
+                updateRecycler(it)
+        }
+
+        mainViewModel.weatherDataListLive.observe(activity as MainActivity) {
+            val list = mainViewModel.userLocationsLive.value
+
+            if (list != null)
+                if (list.isNotEmpty())
+                    updateRecycler(list)
+
         }
 
         binding.fabAdd.setOnClickListener {
@@ -69,7 +81,10 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
     private fun updateRecycler(list: List<UserLocation>) {
         val weatherDataList = mainViewModel.weatherDataListLive.value
 
-        if (weatherDataList != null) {
+        if (weatherDataList == null)
+            return
+
+        if (weatherDataList.isNotEmpty()) {
             binding.recyclerLocations.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 adapter = LocationsAdapter(context, list, weatherDataList ,this@LocationManagerFragment)
@@ -85,18 +100,13 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
     }
 
     override fun onDelete(userLocation: UserLocation) {
-        if (userLocation.id != 1) {
-            viewModel.onDeleteItem(userLocation)
-            fragView.shortSnackBar("Item deleted")
-        }
-        else
-        {
-            fragView.shortSnackBar("You can't delete your main location")
-        }
+        viewModel.onDeleteItem(userLocation)
+        mainViewModel.onRepositoryChanged()
+        fragView.shortSnackBar("Item deleted")
     }
 
     override fun onEdit(userLocation: UserLocation) {
-        Log.d("DEBUG", "HERE")
+        //No way
     }
 
 }

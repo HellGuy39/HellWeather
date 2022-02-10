@@ -2,6 +2,7 @@ package com.hellguy39.hellweather.presentation.activities.main
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +13,10 @@ import com.hellguy39.hellweather.repository.database.pojo.WeatherData
 import com.hellguy39.hellweather.repository.server.ApiService
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,22 +35,51 @@ class MainActivityViewModel @Inject constructor(
     val userLocationsLive = MutableLiveData<List<UserLocation>>()
     val weatherDataListLive = MutableLiveData<List<WeatherData>>()
     val statusLive = MutableLiveData<String>()
+    val firstBootLive = MutableLiveData<Boolean>()
+
     private val jsonList: MutableList<JsonObject> = mutableListOf()
     private val weatherDataList: MutableList<WeatherData> = mutableListOf()
+
     private var _units = STANDARD
     private var _firstBoot = false
 
     init {
-        statusLive.value = IN_PROGRESS
+        statusLive.value = EXPECTATION
 
         _units = defSharPrefs.getString(PREFS_UNITS, STANDARD).toString()
-        _firstBoot = defSharPrefs.getBoolean(FIRST_BOOT, false)
+        _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, true)
+        firstBootLive.value = _firstBoot
 
         getLocationsFromRepository()
     }
 
-    fun getLocationsFromRepository() {
-        _firstBoot = defSharPrefs.getBoolean(FIRST_BOOT, false)
+    fun onRepositoryChanged() {
+        _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, false)
+        firstBootLive.value = _firstBoot
+
+        if (statusLive.value != IN_PROGRESS) {
+            statusLive.value = IN_PROGRESS
+            jsonList.clear()
+            weatherDataList.clear()
+
+            weatherDataListLive.value = weatherDataList
+            userLocationsLive.value = listOf()
+
+            viewModelScope.launch {
+                userLocationsLive.value = getAndLoadLocationsFromRepository()
+                val list = userLocationsLive.value
+                if (list != null)
+                    loadAllLocation(list)
+            }
+        }
+    }
+
+    private suspend fun getAndLoadLocationsFromRepository() : List<UserLocation> {
+        return repository.getLocations().first()
+    }
+
+    private fun getLocationsFromRepository() {
+        _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, false)
         if (!_firstBoot) {
             viewModelScope.launch {
                 repository.getLocations().collect {
@@ -58,11 +91,18 @@ class MainActivityViewModel @Inject constructor(
 
     fun loadAllLocation(list: List<UserLocation>) {
         viewModelScope.launch {
+            _units = defSharPrefs.getString(PREFS_UNITS, STANDARD).toString() //Needs to be updated here
+
             val converter = Converter()
             weatherDataList.clear()
+            jsonList.clear()
+
             weatherDataListLive.value = weatherDataList
 
+            //Log.d("DEBUG", list.toString())
+
             if (list.isNotEmpty()) {
+                //Log.d("DEBUG", "IN IF")
                 for (n in list.indices) {
                     val request: JsonObject = sendRequest(list[n])
 
@@ -83,6 +123,7 @@ class MainActivityViewModel @Inject constructor(
                 /*for(n in jsonList.indices) {
                     weatherObjList.add(convertToWeatherObject(jsonList[n]))
                 }*/
+                Log.d("DEBUG", "SUCCESSFUL")
                 weatherDataListLive.value = weatherDataList
                 statusLive.value = SUCCESSFUL
             }

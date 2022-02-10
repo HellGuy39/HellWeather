@@ -44,11 +44,15 @@ class SettingsFragment() : Fragment(R.layout.settings_fragment) {
         super.onViewCreated(view, savedInstanceState)
         _binding = SettingsFragmentBinding.bind(view)
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         setupThemes()
         setupMode()
         setupLanguages()
         setupUnits()
-
     }
 
     private fun setupThemes() {
@@ -90,7 +94,7 @@ class SettingsFragment() : Fragment(R.layout.settings_fragment) {
         }
 
         _binding.acUnits.setOnItemClickListener { adapterView, view, i, l ->
-            _binding.acUnits.setText(_binding.acUnits.adapter.getItem(i).toString(), false)
+            //_binding.acUnits.setText(_binding.acUnits.adapter.getItem(i).toString(), false)
             _viewModel.saveUnits(_binding.acUnits.adapter.getItem(i).toString())
         }
 

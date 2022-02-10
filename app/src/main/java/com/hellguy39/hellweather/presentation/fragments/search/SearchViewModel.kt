@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.presentation.fragments.quick_weather
+package com.hellguy39.hellweather.presentation.fragments.search
 
 import androidx.lifecycle.ViewModel
 

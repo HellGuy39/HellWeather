@@ -2,6 +2,7 @@ package com.hellguy39.hellweather.presentation.fragments.foreground_service
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,24 +12,31 @@ import android.widget.AutoCompleteTextView
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.ForegroundServiceFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
+import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
+import com.hellguy39.hellweather.utils.NONE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment) {
 
-    companion object {
+    /*companion object {
         fun newInstance() = ForegroundServiceFragment()
-    }
+    }*/
 
-    val updTimeItems = listOf("15 min", "30 min", "1 hour", "3 hour")
+    private val updTimeItemsStr = listOf("15 mins", "30 mins", "1 hour", "3 hours", "6 hours")
+    private val updTimeItemsInt = listOf(15, 30, 60, 60 * 3, 60 * 6)
+
     private lateinit var _viewModel: ForegroundServiceViewModel
+    private lateinit var _mainViewModel: MainActivityViewModel
     private lateinit var _binding: ForegroundServiceFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _viewModel = ViewModelProvider(this)[ForegroundServiceViewModel::class.java]
+        _mainViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -45,10 +53,23 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
         super.onViewCreated(view, savedInstanceState)
         _binding = ForegroundServiceFragmentBinding.bind(view)
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, updTimeItems)
-        (_binding.acUpdTime as? AutoCompleteTextView)?.setAdapter(adapter)
-        _binding.acUpdTime.setText(_binding.acUpdTime.adapter.getItem(0).toString(), false)
+    }
 
+    override fun onStart() {
+        super.onStart()
+
+        val userLocationList = _mainViewModel.userLocationsLive.value
+
+        if (userLocationList != null)
+            setupLocation(userLocationList)
+        else
+            _binding.acLocation.isEnabled = false
+
+        setupUpdTime()
+        setupServiceSwitch()
+    }
+
+    private fun setupServiceSwitch() {
         _binding.serviceSwith.setOnCheckedChangeListener { compoundButton, b ->
             if (b) {
                 (activity as MainActivity).serviceControl(ENABLE)
@@ -59,6 +80,58 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
             }
             _viewModel.saveServiceMode(b)
         }
+    }
+
+    private fun setupLocation(list: List<UserLocation>) {
+        val locationNameList = mutableListOf<String>()
+
+        if (list.isEmpty())
+            return
+
+        val selectedLoc = _viewModel.getServiceLocation()
+        var selectedListPos = 0
+
+        for (n in list.indices) {
+
+            if (selectedLoc != NONE && list[n].locationName == selectedLoc)
+                selectedListPos = n
+
+            locationNameList.add(list[n].locationName)
+        }
+
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, locationNameList)
+        (_binding.acLocation as? AutoCompleteTextView)?.setAdapter(adapter)
+
+        if (_binding.acLocation.adapter.getItem(selectedListPos) != null)
+            _binding.acLocation.setText(_binding.acLocation.adapter.getItem(selectedListPos).toString(), false)
+
+        _binding.acLocation.setOnItemClickListener { adapterView, view, i, l ->
+            _viewModel.saveServiceLocation(_binding.acLocation.adapter.getItem(i).toString())
+        }
 
     }
+
+    private fun setupUpdTime() {
+
+        val selectedTime = _viewModel.getUpdateTime()
+        var selectedPos = 3 // 3 hour
+
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, updTimeItemsStr)
+        (_binding.acUpdTime as? AutoCompleteTextView)?.setAdapter(adapter)
+
+        for (n in updTimeItemsInt.indices) {
+
+            if (selectedTime == updTimeItemsInt[n])
+                selectedPos = n
+
+        }
+
+        _binding.acUpdTime.setText(_binding.acUpdTime.adapter.getItem(selectedPos).toString(), false)
+
+        _binding.acUpdTime.setOnItemClickListener { adapterView, view, i, l ->
+            _viewModel.saveUpdateTime(updTimeItemsInt[i])
+        }
+
+    }
+
 }

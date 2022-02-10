@@ -37,7 +37,8 @@ class LocationsAdapter(
         holder: LocationViewHolder,
         position: Int)
     {
-        holder.bindWithWeather(locationList, weatherDataList, position, context)
+        if (weatherDataList.isNotEmpty())
+            holder.bindWithWeather(locationList, weatherDataList, position, context)
     }
 
     override fun getItemCount(): Int = locationList.size
@@ -61,10 +62,10 @@ class LocationsAdapter(
                     //.setMessage("Delete action")
                     .setTitle("Do you want to delete this location?")
                     .setNegativeButton("Cancel") { dialog, which ->
-                        // Respond to negative button press
+                        //Nothing
                     }
                     .setPositiveButton("Yes, do it") { dialog, which ->
-                        // Respond to positive button press
+                        listener.onDelete(locationList[position])
                     }
                     .show()
                 true

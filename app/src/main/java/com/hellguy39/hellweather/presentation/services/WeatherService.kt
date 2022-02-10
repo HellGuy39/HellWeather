@@ -8,7 +8,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -33,10 +32,12 @@ class WeatherService : Service() {
 
         private var isRunning = false
 
-        fun startService(context: Context, pauseTime: Long, userLocation: UserLocation) {
+        fun startService(context: Context, userLocation: UserLocation) {
             val service = Intent(context, WeatherService::class.java)
             val units = PreferenceManager.getDefaultSharedPreferences(context).getString(
                 PREFS_UNITS, STANDARD)
+            val pauseTime = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+                PREFS_SERVICE_UPD_TIME, 3 * 60)
 
             service.putExtra("units", units)
             service.putExtra("pauseTime", pauseTime)
@@ -62,26 +63,65 @@ class WeatherService : Service() {
         isRunning = true
         val mService = provideApiService()
         val units = intent?.getStringExtra("units")
-        val pauseTime = intent?.getLongExtra("pauseTime", 5 * 10000)
+        var pauseTime = intent?.getLongExtra("pauseTime", 90 * 10000)
         val userLocation = intent?.getParcelableExtra<UserLocation>("location")
         val converter = Converter()
+
+        val failedRequestPauseTime: Long = 15 * 10000
+
+        if (pauseTime != null) {
+            pauseTime *= 10000
+        }
 
         createNotificationsChannel()
         val ntfService = createNotification("Loading...", "")
 
         CoroutineScope(Dispatchers.Default).launch {
             while (isRunning) {
-                Log.d("DEBUG", "CALLED")
-                val weatherJson = request(mService, userLocation!!, units.toString())
-                val weatherData = converter.toWeatherObject(weatherJson)
-                val contentText = weatherData.currentWeather.wDescription + " | " +
-                        "Max.: ${weatherData.currentWeather.tempMax}°, " +
-                        "min.: ${weatherData.currentWeather.tempMin}°" + " | " +
-                        "Chance of rain ${weatherData.hourlyWeather[0].pop.toInt()}%"
-                val tittle = userLocation.locationName + "   —   ${weatherData.currentWeather.temp}°"
-                val _ntfService = createNotification(tittle, contentText)
-                startForeground(1, _ntfService)
-                delay(pauseTime!!)
+                if (userLocation != null) {
+                    val weatherJson = request(mService, userLocation, units.toString())
+                    var ntfService: Notification
+                    var contentText = ""
+                    var tittle = ""
+
+                    if (weatherJson.has("request")) {
+                        if (weatherJson.asJsonObject.get("request").asString == "failed") {
+                            tittle = "Server connection lost"
+                            contentText = "We will try again later"
+                        } else if (weatherJson.asJsonObject.get("request").asString == "incorrect obj") {
+                            tittle = "Error"
+                            contentText = "Incorrect server response"
+                        } else {
+                            tittle = "Something went wrong..."
+                            contentText = ""
+                        }
+
+                        ntfService = createNotification(tittle, contentText)
+                        startForeground(1, ntfService)
+                        delay(failedRequestPauseTime)
+
+                    } else {
+                        val weatherData = converter.toWeatherObject(weatherJson)
+
+                        contentText = weatherData.currentWeather.wDescription + " | " +
+                                "Max.: ${weatherData.currentWeather.tempMax}°, " +
+                                "min.: ${weatherData.currentWeather.tempMin}°" + " | " +
+                                "Chance of rain ${weatherData.hourlyWeather[0].pop.toInt()}%"
+                        tittle =
+                            userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°"
+
+                        ntfService = createNotification(tittle, contentText)
+                        startForeground(1, ntfService)
+                        delay(pauseTime!!)
+
+                    }
+                }
+                else
+                {
+                    val ntfService = createNotification("Error", "Location can't be load")
+                    startForeground(1, ntfService)
+                    delay(pauseTime!!)
+                }
             }
         }
 
@@ -145,16 +185,16 @@ class WeatherService : Service() {
                         if (response.body() != null) {
                             continuation.resume(response.body() as JsonObject)
                         } else {
-                            continuation.resume(JsonObject())
+                            continuation.resume(JsonObject().apply { addProperty("request", "incorrect obj") })
                         }
                     } else {
-                        //continuation.resume(response.body() as JsonObject)
+                        continuation.resume(JsonObject().apply { addProperty("request", "incorrect obj") })
                     }
 
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-
+                    continuation.resume(JsonObject().apply { addProperty("request", "failed") })
                 }
 
             })

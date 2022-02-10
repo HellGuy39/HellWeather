@@ -18,16 +18,6 @@ class LocationManagerViewModel @Inject constructor(
     private val repository: LocationRepository,
 ): ViewModel() {
 
-    var userLocations = MutableLiveData<List<UserLocation>>()
-
-    init {
-        viewModelScope.launch {
-            repository.getLocations().collect {
-                userLocations.value = it
-            }
-        }
-    }
-
     fun onDeleteItem(userLocation: UserLocation) = viewModelScope.launch {
         repository.deleteLocation(userLocation)
     }

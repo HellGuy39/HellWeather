@@ -3,6 +3,7 @@ package com.hellguy39.hellweather.presentation.fragments.confirmation
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -13,6 +14,9 @@ import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.ConfirmationCityFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
+import com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerFragment
+import com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerFragmentDirections
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
@@ -22,9 +26,16 @@ import dagger.hilt.android.AndroidEntryPoint
 class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), View.OnClickListener {
 
     private lateinit var viewModel: ConfirmationCityViewModel
+    private lateinit var mainViewModel: MainActivityViewModel
     private lateinit var binding: ConfirmationCityFragmentBinding
     private lateinit var userLocation: UserLocation
     private val args: ConfirmationCityFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[ConfirmationCityViewModel::class.java]
+        mainViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +54,6 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[ConfirmationCityViewModel::class.java]
         binding = ConfirmationCityFragmentBinding.bind(view)
 
         userLocation = args.userLocation
@@ -74,10 +84,16 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.fabTrue -> {
-                viewModel.disableFirstBoot()
                 viewModel.saveToRoom(userLocation)
-                navigate(p0)
+                mainViewModel.onRepositoryChanged()
                 (activity as MainActivity).drawerControl(ENABLE)
+
+                if (viewModel.isFirstBoot()) {
+                    viewModel.disableFirstBoot()
+                    navigateToHome(p0)
+                } else {
+                    navigateToLocationManager(p0)
+                }
             }
             R.id.fabFalse -> {
                 p0.findNavController().popBackStack()
@@ -85,7 +101,10 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         }
     }
 
-    private fun navigate(v: View) = v.findNavController()
+    private fun navigateToHome(v: View) = v.findNavController()
         .navigate(ConfirmationCityFragmentDirections.actionConfirmationCityFragmentToHomeFragment())
 
+
+    private fun navigateToLocationManager(v: View) = v.findNavController()
+        .navigate(ConfirmationCityFragmentDirections.actionConfirmationCityFragmentToLocationManagerFragment())
 }

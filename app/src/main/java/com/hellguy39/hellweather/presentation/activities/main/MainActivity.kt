@@ -11,11 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.preference.PreferenceManager
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
-import com.hellguy39.hellweather.presentation.fragments.home.HomeFragment
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 import com.hellguy39.hellweather.presentation.services.WeatherService
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
@@ -46,8 +46,8 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
         toolBarMenu = binding.topAppBar.menu
 
-        _firstBoot = intent.getBooleanExtra(FIRST_BOOT, false)
-        _serviceMode = intent.getBooleanExtra(SERVICE_MODE, false)
+        _firstBoot = intent.getBooleanExtra(PREFS_FIRST_BOOT, false)
+        _serviceMode = intent.getBooleanExtra(PREFS_SERVICE_MODE, false)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
@@ -84,24 +84,33 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         }
 
         viewModel.userLocationsLive.observe(this) {
-            if (it.isNullOrEmpty())
-                return@observe
+            if (viewModel.statusLive.value != IN_PROGRESS) {
+                if (it.isNullOrEmpty())
+                    return@observe
 
-            val weatherDataList = viewModel.weatherDataListLive.value
+                val weatherDataList = viewModel.weatherDataListLive.value
 
-            if (weatherDataList == null)
-                updateData(it)
-
-            if (weatherDataList != null) {
-                if (weatherDataList.isEmpty()) {
+                if (weatherDataList == null) {
+                    //Log.d("DEBUG", "HERE 1")
                     updateData(it)
+                }
+
+                if (weatherDataList != null) {
+                    if (weatherDataList.isEmpty()) {
+                        //Log.d("DEBUG", "HERE 2")
+                        updateData(it)
+                    }
                 }
             }
         }
     }
 
     private fun updateData(list: List<UserLocation>) {
+        //Log.d("DEBUG", "UPDATE DATA")
         viewModel.loadAllLocation(list)
+        /*for (n in list.indices) {
+            Log.d("DEBUG", "Item $n: ${list[n]}")
+        }*/
         if (_serviceMode) {
             serviceControl(REBOOT)
         }
@@ -110,7 +119,20 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
     fun serviceControl(action: String) {
         if (action == ENABLE) {
             if (viewModel.userLocationsLive.value != null) {
-                WeatherService.startService(this, 5 * 10000, viewModel.userLocationsLive.value!![0])
+
+                val locationList = viewModel.userLocationsLive.value ?: return
+
+                val locationStr = PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString(PREFS_SERVICE_LOCATION, NONE)
+
+                var userLocationPos = 0
+
+                for (n in locationList.indices) {
+                    if (locationStr == locationList[n].locationName)
+                        userLocationPos = n
+                }
+
+                WeatherService.startService(this, locationList[userLocationPos])
             }
         }
         else if (action == REBOOT) {
@@ -148,9 +170,8 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
             DISABLE -> {
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 binding.topAppBar.setNavigationOnClickListener {
-                    Log.i("TAG", "Drawer disabled")
+                    //Nothing
                 }
-
             }
         }
     }

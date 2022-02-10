@@ -160,6 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            motion:layout_constraintVertical_bias="0.25"
             motion:layout_constraintBottom_toBottomOf="@id/tvTemp"
             motion:layout_constraintStart_toEndOf="@+id/tvTemp"
             motion:layout_constraintTop_toTopOf="@id/tvTemp" />
@@ -180,6 +181,7 @@
         <Constraint
             android:visibility="invisible"
             android:id="@+id/tvDot"
+            motion:layout_constraintVertical_bias="0.25"
             motion:layout_constraintBottom_toBottomOf="@id/tvTemp"
             motion:layout_constraintStart_toEndOf="@+id/tvTemp"
             motion:layout_constraintTop_toTopOf="@id/tvTemp"

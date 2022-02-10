@@ -1,5 +1,6 @@
 package com.hellguy39.hellweather.presentation.fragments.page
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.broooapps.graphview.CurveGraphConfig
 import com.broooapps.graphview.models.GraphData
@@ -19,6 +21,10 @@ import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
 import com.hellguy39.hellweather.repository.database.pojo.WeatherData
+import com.hellguy39.hellweather.utils.IMPERIAL
+import com.hellguy39.hellweather.utils.METRIC
+import com.hellguy39.hellweather.utils.PREFS_UNITS
+import com.hellguy39.hellweather.utils.STANDARD
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
@@ -43,12 +49,15 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
 
     private lateinit var _binding: FragmentWeatherPageBinding
     private lateinit var _weatherData: WeatherData
+    private lateinit var units: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             _weatherData = it.getSerializable(WEATHER_DATA_ARG) as WeatherData
         }
+        units = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .getString(PREFS_UNITS, STANDARD).toString()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -139,9 +148,16 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
             .centerCrop()
             .into(_binding.ivWeather)
 
-        _binding.tvTextTop.text = wm.temp + "°" + " | " + wm.wDescription
+        val tempDesignation = when (units) {
+            STANDARD -> " K"
+            METRIC -> "°C"
+            IMPERIAL -> "°F"
+            else -> "°"
+        }
 
-        _binding.tvDot.text = "°"
+        _binding.tvTextTop.text = wm.temp + tempDesignation + " | " + wm.wDescription
+
+        _binding.tvDot.text = tempDesignation
         _binding.tvTemp.text = wm.temp //+ "°"
         _binding.tvMaxMinTemp.text = "Max.: ${wm.tempMax}°, min.: ${wm.tempMin}°"
         _binding.tvWeather.text = wm.wDescription

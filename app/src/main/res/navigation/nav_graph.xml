@@ -68,7 +68,10 @@
         <action
             android:id="@+id/action_confirmationCityFragment_to_locationManagerFragment"
             app:destination="@id/locationManagerFragment"
-            app:popUpTo="@id/nav_graph"
+            app:enterAnim="@anim/to_left_in"
+            app:exitAnim="@anim/to_left_out"
+            app:popEnterAnim="@anim/to_right_in"
+            app:popExitAnim="@anim/to_right_out"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -96,7 +99,7 @@
         tools:layout="@layout/fragment_app_info" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.quick_weather.SearchFragment"
+        android:name="com.hellguy39.hellweather.presentation.fragments.search.SearchFragment"
         android:label="search_fragment"
         tools:layout="@layout/search_fragment" />
     <fragment
