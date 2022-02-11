@@ -27,7 +27,7 @@
 
     <string name="details">Details</string>
 
-    <string name="chance_of_rain">Chance of rain</string>
+    <string name="chance_of_rain">Chance of rain (in %)</string>
 
     <string name="daily_forecast">Daily forecast</string>
     <string name="next_7_days">Next 7 days</string>
@@ -47,6 +47,7 @@
 
     <!-- Helper texts -->
     <string name="after_n_hours">*after N hours</string>
+    <string name="values_in_percents">values in %</string>
 
     <!-- Snakbar texts -->
     <string name="on_failure">Failure. Please, check your internet connection</string>

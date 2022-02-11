@@ -19,7 +19,7 @@ const val FAILURE = "fail"
 const val ERROR = "err"
 const val IN_PROGRESS = "prg"
 const val EXPECTATION = "exp"
-const val INACTION = "ina"
+const val EMPTY_LIST = "emp"
 
 //CONTROLLER
 const val DISABLE = "dis"

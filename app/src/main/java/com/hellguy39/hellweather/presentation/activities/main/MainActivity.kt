@@ -85,8 +85,10 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
         viewModel.userLocationsLive.observe(this) {
             if (viewModel.statusLive.value != IN_PROGRESS) {
-                if (it.isNullOrEmpty())
+                if (it.isNullOrEmpty()) {
+                    viewModel.statusLive.value = EMPTY_LIST
                     return@observe
+                }
 
                 val weatherDataList = viewModel.weatherDataListLive.value
 
@@ -106,33 +108,39 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun updateData(list: List<UserLocation>) {
-        //Log.d("DEBUG", "UPDATE DATA")
-        viewModel.loadAllLocation(list)
-        /*for (n in list.indices) {
-            Log.d("DEBUG", "Item $n: ${list[n]}")
-        }*/
-        if (_serviceMode) {
-            serviceControl(REBOOT)
+
+        if (viewModel.statusLive.value != IN_PROGRESS) {
+            viewModel.statusLive.value = IN_PROGRESS
+
+            if (list.isNotEmpty()) {
+                viewModel.loadAllLocation(list)
+                if (_serviceMode) {
+                    serviceControl(REBOOT)
+                }
+            }
+            else
+            {
+                viewModel.statusLive.value = EMPTY_LIST
+            }
         }
     }
 
     fun serviceControl(action: String) {
         if (action == ENABLE) {
-            if (viewModel.userLocationsLive.value != null) {
-
-                val locationList = viewModel.userLocationsLive.value ?: return
+            val list = viewModel.userLocationsLive.value
+            if (!list.isNullOrEmpty()) {
 
                 val locationStr = PreferenceManager.getDefaultSharedPreferences(this)
                     .getString(PREFS_SERVICE_LOCATION, NONE)
 
                 var userLocationPos = 0
 
-                for (n in locationList.indices) {
-                    if (locationStr == locationList[n].locationName)
+                for (n in list.indices) {
+                    if (locationStr == list[n].locationName)
                         userLocationPos = n
                 }
 
-                WeatherService.startService(this, locationList[userLocationPos])
+                WeatherService.startService(this, list[userLocationPos])
             }
         }
         else if (action == REBOOT) {

@@ -50,7 +50,11 @@ class MainActivityViewModel @Inject constructor(
         _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, true)
         firstBootLive.value = _firstBoot
 
-        getLocationsFromRepository()
+        viewModelScope.launch {
+            if (!_firstBoot) {
+                userLocationsLive.value = getLocationsFromRepository()
+            }
+        }
     }
 
     fun onRepositoryChanged() {
@@ -66,27 +70,21 @@ class MainActivityViewModel @Inject constructor(
             userLocationsLive.value = listOf()
 
             viewModelScope.launch {
-                userLocationsLive.value = getAndLoadLocationsFromRepository()
+                userLocationsLive.value = getLocationsFromRepository()
                 val list = userLocationsLive.value
-                if (list != null)
+                if (!list.isNullOrEmpty()) {
                     loadAllLocation(list)
-            }
-        }
-    }
-
-    private suspend fun getAndLoadLocationsFromRepository() : List<UserLocation> {
-        return repository.getLocations().first()
-    }
-
-    private fun getLocationsFromRepository() {
-        _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, false)
-        if (!_firstBoot) {
-            viewModelScope.launch {
-                repository.getLocations().collect {
-                    userLocationsLive.value = it
+                }
+                else
+                {
+                    statusLive.value = EMPTY_LIST
                 }
             }
         }
+    }
+
+    private suspend fun getLocationsFromRepository() : List<UserLocation> {
+        return repository.getLocations().first()
     }
 
     fun loadAllLocation(list: List<UserLocation>) {
@@ -127,6 +125,7 @@ class MainActivityViewModel @Inject constructor(
                 weatherDataListLive.value = weatherDataList
                 statusLive.value = SUCCESSFUL
             }
+
         }
     }
 

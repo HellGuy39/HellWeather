@@ -19,11 +19,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomeFragment() : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var mainActivityViewModel: MainActivityViewModel
+    private lateinit var tabLayoutMediator: TabLayoutMediator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,57 +44,90 @@ class HomeFragment() : Fragment(R.layout.fragment_home) {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
-        refreshing(ENABLE)
+    }
 
+    override fun onStart() {
+        super.onStart()
+        if(mainActivityViewModel.firstBootLive.value == false) {
+            refreshing(ENABLE)
+            setStatusObserver()
+        }
+    }
+
+    private fun setStatusObserver() {
         mainActivityViewModel.statusLive.observe(activity as MainActivity) {
-            if (it == SUCCESSFUL) {
-                refreshing(DISABLE)
-                //val list = mainActivityViewModel.weatherJsonListLive.value
-                val weatherDataList = mainActivityViewModel.weatherDataListLive.value
-                val userLocations = mainActivityViewModel.userLocationsLive.value
+            if (it == null)
+                return@observe
 
-                if (userLocations == null || userLocations.isEmpty())
-                    return@observe
+            when (it) {
+                SUCCESSFUL -> {
+                    refreshing(DISABLE)
 
-                if (weatherDataList == null || weatherDataList.isEmpty())
-                    return@observe
+                    val weatherDataList = mainActivityViewModel.weatherDataListLive.value
+                    val userLocations = mainActivityViewModel.userLocationsLive.value
 
-                //Log.d("DEBUG", "W: ${weatherDataList.size}\nU: ${userLocations.size}")
+                    if (userLocations == null || userLocations.isEmpty())
+                        return@observe
 
-                val pagerAdapter = WeatherPageAdapter(this, weatherDataList)
-                binding.viewPager.adapter = pagerAdapter
-                TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                    tab.text = userLocations[position].locationName
+                    if (weatherDataList == null || weatherDataList.isEmpty())
+                        return@observe
 
-                    if (findNavController().currentDestination?.id == R.id.homeFragment) {
-                        (activity as MainActivity).setToolbarTittle(
-                            SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
-                                Date(weatherDataList[position].currentWeather.dt * 1000)
+                    val pagerAdapter = WeatherPageAdapter(this, weatherDataList)
+                    binding.viewPager.adapter = pagerAdapter
+                    tabLayoutMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+                        tab.text = userLocations[position].locationName
+
+                        if (findNavController().currentDestination?.id == R.id.homeFragment) {
+                            (activity as MainActivity).setToolbarTittle(
+                                SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
+                                    Date(weatherDataList[position].currentWeather.dt * 1000)
+                                )
                             )
-                        )
+                        }
                     }
-                }.attach()
-            }
-            else if (it == FAILURE)
-            {
-                refreshing(DISABLE)
-                (activity as MainActivity).setToolbarTittle("Connection lost")
-            }
-            else if (it == ERROR)
-            {
-                refreshing(DISABLE)
-                (activity as MainActivity).setToolbarTittle("Error")
+                    tabLayoutMediator.attach()
+                }
+                FAILURE -> {
+                    refreshing(DISABLE)
+                    (activity as MainActivity).setToolbarTittle("Connection lost")
+                }
+                ERROR -> {
+                    refreshing(DISABLE)
+                    (activity as MainActivity).setToolbarTittle("Error")
+                }
+                IN_PROGRESS -> {
+                    refreshing(ENABLE)
+                }
+                EMPTY_LIST -> {
+                    refreshing(DISABLE)
+                    (activity as MainActivity).setToolbarTittle("No locations")
+                }
+                /*EXPECTATION -> {
+                    refreshing(ENABLE)
+                }*/
             }
         }
     }
 
-    fun onRefresh() {
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (this::tabLayoutMediator.isInitialized) {
+            if (tabLayoutMediator.isAttached) {
+                tabLayoutMediator.detach()
+            }
+        }
+        //mainActivityViewModel.statusLive.removeObservers(activity as MainActivity)
     }
 
-    fun refreshing(action: String) {
+
+    private fun refreshing(action: String) {
+        if (findNavController().currentDestination?.id != R.id.homeFragment)
+            return
+
         if (action == ENABLE) {
             binding.progressIndicator.visibility = View.VISIBLE
             (activity as MainActivity).setToolbarTittle(getString(R.string.loading))
@@ -102,10 +136,5 @@ class HomeFragment() : Fragment(R.layout.fragment_home) {
         {
             binding.progressIndicator.visibility = View.INVISIBLE
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
     }
 }

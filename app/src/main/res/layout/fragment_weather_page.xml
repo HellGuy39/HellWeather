@@ -703,27 +703,16 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:layout_marginStart="4dp"
-                        android:layout_marginBottom="4dp"
+                        android:layout_marginBottom="8dp"
                         android:fontFamily="@font/roboto_regular"
                         android:text="@string/chance_of_rain"
                         android:textAllCaps="false"
                         android:textSize="18sp" />
 
-                    <com.broooapps.graphview.CurveGraphView
+                    <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/graphView"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp" />
-
-                    <TextView
-                        android:id="@+id/tvDesc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="8dp"
-                        android:fontFamily="@font/roboto_regular"
-                        android:text="@string/after_n_hours"
-                        android:textAllCaps="false"
-                        android:textSize="14sp" />
+                        android:layout_height="150dp"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

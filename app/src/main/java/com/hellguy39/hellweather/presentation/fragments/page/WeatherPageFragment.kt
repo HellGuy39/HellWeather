@@ -1,21 +1,26 @@
 package com.hellguy39.hellweather.presentation.fragments.page
 
-import android.content.SharedPreferences
+import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
+import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.broooapps.graphview.CurveGraphConfig
-import com.broooapps.graphview.models.GraphData
-import com.broooapps.graphview.models.PointMap
-import com.bumptech.glide.Glide
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.model.GradientColor
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherPageBinding
+import com.hellguy39.hellweather.glide.GlideApp
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
 import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
@@ -28,11 +33,11 @@ import com.hellguy39.hellweather.utils.STANDARD
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 private const val WEATHER_DATA_ARG = "wd_arg"
 
@@ -67,7 +72,7 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
         CoroutineScope(Default).launch {
             if (this@WeatherPageFragment::_weatherData.isInitialized) {
                 withContext(Main) {
-                    confGraph()
+                    //confGraph()
                     updateUI(_weatherData)
                     updateRecyclersView(_weatherData)
                     updateGraph(_weatherData)
@@ -76,52 +81,79 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
         }
     }
 
-    private fun confGraph() {
-        _binding.graphView.configure(
-            CurveGraphConfig.Builder(context)
-                .setAxisColor(R.color.white)
-                .setIntervalDisplayCount(12)
-                .setVerticalGuideline(12)
-                .setHorizontalGuideline(5)
-                .setGuidelineColor(R.color.Gray)
-                .setNoDataMsg(getString(R.string.loading))
-                .setxAxisScaleTextColor(R.color.white)
-                .setyAxisScaleTextColor(R.color.white)
-                .setAnimationDuration(2000)
-                .build())
-    }
-
     private fun updateGraph(weatherData: WeatherData) {
 
         val list: List<HourlyWeather> = weatherData.hourlyWeather
+        val values: ArrayList<Entry> = arrayListOf()
 
-        val pointMap = PointMap()
-        pointMap.addPoint(0, list[0].pop.toInt())
-        pointMap.addPoint(1, list[1].pop.toInt())
-        pointMap.addPoint(2, list[2].pop.toInt())
-        pointMap.addPoint(3, list[3].pop.toInt())
-        pointMap.addPoint(4, list[4].pop.toInt())
-        pointMap.addPoint(5, list[5].pop.toInt())
-        pointMap.addPoint(6, list[6].pop.toInt())
-        pointMap.addPoint(7, list[7].pop.toInt())
-        pointMap.addPoint(8, list[8].pop.toInt())
-        pointMap.addPoint(9, list[9].pop.toInt())
-        pointMap.addPoint(10, list[10].pop.toInt())
-        pointMap.addPoint(11, list[11].pop.toInt())
+        val theme: Resources.Theme = context?.theme!!
+        val lineColorValue = TypedValue()
 
+        theme.resolveAttribute(R.attr.colorPrimary, lineColorValue, true)
 
-        val gd = GraphData.builder(context)
-            .setPointMap(pointMap)
-            .setGraphStroke(R.color.White)
-            .animateLine(true)
-            .setGraphGradient(R.color.White, R.color.transparent)
-            .build()
+        @ColorInt val textColor = _binding.tvChance.currentTextColor
+        @ColorInt val lineColor = lineColorValue.data
 
-        CoroutineScope(Main).launch {
-            delay(250L)
-            _binding.graphView.setData(12, 100, gd)
+        values.add(Entry(0f,list[0].pop.toFloat()))
+        values.add(Entry(1f,list[1].pop.toFloat()))
+        values.add(Entry(2f,list[2].pop.toFloat()))
+        values.add(Entry(3f,list[3].pop.toFloat()))
+        values.add(Entry(4f,list[4].pop.toFloat()))
+        values.add(Entry(5f,list[5].pop.toFloat()))
+        values.add(Entry(6f,list[6].pop.toFloat()))
+        values.add(Entry(7f,list[7].pop.toFloat()))
+        values.add(Entry(8f,list[8].pop.toFloat()))
+        values.add(Entry(9f,list[9].pop.toFloat()))
+        values.add(Entry(10f,list[10].pop.toFloat()))
+        values.add(Entry(11f,list[11].pop.toFloat()))
+
+        val lineDataSet = LineDataSet(values, "Chance of rain")
+
+        lineDataSet.color = lineColor
+        lineDataSet.setCircleColor(lineColor)
+        lineDataSet.valueTextSize = 10f
+        lineDataSet.lineWidth = 2f
+        //lineDataSet.setGradientColor(Color.BLUE, Color.TRANSPARENT)
+        lineDataSet.valueTextColor = textColor
+
+        val dataSets: MutableList<ILineDataSet> = mutableListOf()
+
+        dataSets.add(lineDataSet)
+
+        val lineData = LineData(dataSets)
+
+        _binding.graphView.data = lineData
+
+        val leftAxis: YAxis = _binding.graphView.axisLeft
+        val rightAxis: YAxis = _binding.graphView.axisRight
+
+        //leftAxis.textColor = textColor
+
+        val xAxisLabel: MutableList<String> = mutableListOf()
+
+        for (n in list.indices) {
+            xAxisLabel.add(SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(list[n].dt * 1000)))
         }
 
+        _binding.graphView.xAxis.textColor = textColor
+        _binding.graphView.xAxis.valueFormatter = object : ValueFormatter() {
+            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+                return xAxisLabel[value.toInt()]
+            }
+        }
+
+
+        //leftAxis.setDrawAxisLine(false)
+        //rightAxis.setDrawAxisLine(false)
+        //leftAxis.isEnabled = false
+        leftAxis.axisMaximum = 100f
+        leftAxis.axisMinimum = 0f
+        rightAxis.isEnabled = false
+        leftAxis.textColor = textColor
+
+        _binding.graphView.legend.isEnabled = false
+        _binding.graphView.description.isEnabled = false
+        _binding.graphView.animateXY(1000, 1000)
     }
 
     private fun updateRecyclersView(weatherData: WeatherData) = CoroutineScope(Main).launch {
@@ -143,10 +175,15 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
 
         val wm = weatherData.currentWeather
 
-        Glide.with(this)
-        .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
+        GlideApp.with(_binding.ivWeather.context)
+            .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
             .centerCrop()
             .into(_binding.ivWeather)
+
+        /*Glide.with(this)
+        .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
+            .centerCrop()
+            .into(_binding.ivWeather)*/
 
         val tempDesignation = when (units) {
             STANDARD -> " K"
