@@ -26,12 +26,12 @@
             android:orientation="vertical"
             android:padding="12dp">
 
-            <Switch
-                android:id="@+id/serviceSwith"
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/serviceSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Service"
+                android:text="@string/service"
                 android:textSize="22sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_light"
-                android:text="Options"
+                android:text="@string/options"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -74,16 +74,19 @@
                 <TextView
                     android:id="@+id/tvLanguage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center|start"
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Location"
+                    android:text="@string/location"
                     android:textSize="22sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1">
 
                     <AutoCompleteTextView
@@ -104,16 +107,23 @@
                 <TextView
                     android:id="@+id/tvUpdateTime"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:layout_gravity="center"
+                    android:maxLines="2"
+                    android:autoSizeMaxTextSize="22sp"
+                    android:autoSizeMinTextSize="14sp"
+                    android:autoSizeTextType="uniform"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Update time"
+                    android:text="@string/update_time"
                     android:textSize="22sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1">
 
                     <AutoCompleteTextView

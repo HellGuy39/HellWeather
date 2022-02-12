@@ -85,7 +85,7 @@ class Converter {
             //dailyWeather[n].tempFeelsLike = obj.get("feels_like").asString
             dailyWeather[n].humidity = obj.get("humidity").asString
             //dailyWeather[n].pressure = obj.get("pressure").asString
-            dailyWeather[n].pop = obj.get("pop").asString
+            dailyWeather[n].pop = obj.get("pop").asDouble * 100
             dailyWeather[n].icon = wt.get("icon").asString
             dailyWeather[n].max = obj.get("temp").asJsonObject.get("max").asDouble.toInt().toString()
             dailyWeather[n].min = obj.get("temp").asJsonObject.get("min").asDouble.toInt().toString()

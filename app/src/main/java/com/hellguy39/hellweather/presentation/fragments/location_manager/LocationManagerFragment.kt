@@ -87,7 +87,8 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
         if (weatherDataList.isNotEmpty()) {
             binding.recyclerLocations.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                adapter = LocationsAdapter(context, list, weatherDataList ,this@LocationManagerFragment)
+                adapter = LocationsAdapter(context, list, weatherDataList, resources,
+                    this@LocationManagerFragment,viewModel.getUnits())
             }
         }
         else

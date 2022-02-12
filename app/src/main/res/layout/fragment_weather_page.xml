@@ -466,9 +466,9 @@
                             android:autoSizeTextType="uniform"
                             android:fontFamily="@font/roboto_medium"
                             android:gravity="start"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:textSize="32sp"
-                            tools:text="24.25" />
+                            tools:text="765\nмм.рт.ст" />
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
@@ -712,7 +712,7 @@
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/graphView"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"/>
+                        android:layout_height="@dimen/card_def_height"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

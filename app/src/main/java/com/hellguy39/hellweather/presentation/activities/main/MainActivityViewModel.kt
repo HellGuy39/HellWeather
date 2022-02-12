@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -40,6 +41,7 @@ class MainActivityViewModel @Inject constructor(
     private val jsonList: MutableList<JsonObject> = mutableListOf()
     private val weatherDataList: MutableList<WeatherData> = mutableListOf()
 
+    private val lang = Locale.getDefault().country
     private var _units = STANDARD
     private var _firstBoot = false
 
@@ -136,6 +138,7 @@ class MainActivityViewModel @Inject constructor(
                 userLocation.lon.toDouble(),
                 "minutely,alerts",
                 _units,
+                lang,
                 OPEN_WEATHER_API_KEY
             ).enqueue(object : Callback<JsonObject> {
 

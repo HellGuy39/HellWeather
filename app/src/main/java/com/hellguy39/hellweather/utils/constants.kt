@@ -30,3 +30,5 @@ const val REBOOT = "rbt"
 const val METRIC = "Metric"
 const val IMPERIAL = "Imperial"
 const val STANDARD = "Standard"
+
+const val MM_HG = 0.75006375541921

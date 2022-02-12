@@ -85,6 +85,10 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location) {
             }
         }
 
+        binding.btnFindMe.setOnClickListener {
+
+        }
+
         binding.fabNext.setOnClickListener {
 
             val input = binding.etCity.text.toString()

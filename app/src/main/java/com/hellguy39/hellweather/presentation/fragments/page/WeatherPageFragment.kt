@@ -26,10 +26,7 @@ import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
 import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
 import com.hellguy39.hellweather.repository.database.pojo.WeatherData
-import com.hellguy39.hellweather.utils.IMPERIAL
-import com.hellguy39.hellweather.utils.METRIC
-import com.hellguy39.hellweather.utils.PREFS_UNITS
-import com.hellguy39.hellweather.utils.STANDARD
+import com.hellguy39.hellweather.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
@@ -163,11 +160,11 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
 
         _binding.recyclerNextDays.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = NextDaysAdapter(context, listDays)
+            adapter = NextDaysAdapter(context, listDays, units, resources)
         }
         _binding.recyclerNextHours.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = NextHoursAdapter(context, listHours)
+            adapter = NextHoursAdapter(context, listHours, units, resources)
         }
     }
 
@@ -180,34 +177,49 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
             .centerCrop()
             .into(_binding.ivWeather)
 
-        /*Glide.with(this)
-        .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
-            .centerCrop()
-            .into(_binding.ivWeather)*/
+        when (units) {
+            STANDARD -> {
+                _binding.tvTextTop.text = String.format(resources.getString(R.string.top_tittle_kelvin_text), wm.temp, wm.wDescription)
+                _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_kelvin_text),wm.tempMax, wm.tempMin)
+                _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_kelvin_text),wm.tempFeelsLike)
+                _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_kelvin_text), wm.dewPoint)
 
-        val tempDesignation = when (units) {
-            STANDARD -> " K"
-            METRIC -> "°C"
-            IMPERIAL -> "°F"
-            else -> "°"
+            }
+            IMPERIAL -> {
+                _binding.tvTextTop.text = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
+                _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_degree_text),wm.tempMax, wm.tempMin)
+                _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),wm.tempFeelsLike)
+                _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_fahrenheit_text), wm.dewPoint)
+
+            }
+            METRIC -> {
+                _binding.tvTextTop.text = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
+                _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_degree_text),wm.tempMax, wm.tempMin)
+                _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),wm.tempFeelsLike)
+                _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_celsius_text), wm.dewPoint)
+
+            }
         }
 
-        _binding.tvTextTop.text = wm.temp + tempDesignation + " | " + wm.wDescription
+        val tempDesignation = when (units) {
+            STANDARD -> resources.getString(R.string.kelvin)
+            METRIC -> resources.getString(R.string.celsius)
+            IMPERIAL -> resources.getString(R.string.fahrenheit)
+            else -> resources.getString(R.string.degree)
+        }
 
         _binding.tvDot.text = tempDesignation
         _binding.tvTemp.text = wm.temp //+ "°"
-        _binding.tvMaxMinTemp.text = "Max.: ${wm.tempMax}°, min.: ${wm.tempMin}°"
+
         _binding.tvWeather.text = wm.wDescription
         _binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
         _binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))
 
-        //Feels like
-        _binding.tvTempFeelsLike.text = wm.tempFeelsLike + "°"
         _binding.tvTempFeelsDescription.text =
             if (wm.tempFeelsLike.toInt() == wm.temp.toInt()
                 || wm.tempFeelsLike.toInt() == wm.temp.toInt() - 1
                 || wm.tempFeelsLike.toInt() == wm.temp.toInt() + 1)
-                "Feels about the same"
+                resources.getString(R.string.feels_about_the_same)
             /*else if (wm.tempFeelsLike.toInt() <= wm.temp.toInt())
                 "Feels colder with the wind"*/
             else
@@ -217,15 +229,15 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
         _binding.tvUV.text = wm.uvi.toInt().toString()
         _binding.tvUVDescription.text =
             if (wm.uvi.toInt() == 0 || wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
-                "Low"
+                resources.getString(R.string.low)
             else if (wm.uvi.toInt() == 3 || wm.uvi.toInt() == 4 || wm.uvi.toInt() == 5)
-                "Medium"
+                resources.getString(R.string.medium)
             else if (wm.uvi.toInt() == 6 || wm.uvi.toInt() == 7)
-                "High"
+                resources.getString(R.string.high)
             else if (wm.uvi.toInt() == 8 || wm.uvi.toInt() == 9 || wm.uvi.toInt() == 10)
-                "Very high"
+                resources.getString(R.string.very_high)
             else
-                "Extreme"
+                resources.getString(R.string.extreme)
 
         _binding.vUVColor.backgroundTintList = if (wm.uvi.toInt() == 0 || wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
             ResourcesCompat.getColorStateList(resources, R.color.green_400, null)
@@ -240,7 +252,7 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
 
 
         //Visibility
-        _binding.tvVisibility.text = (wm.visibility / 1000).toString() + " km"
+        _binding.tvVisibility.text = String.format(resources.getString(R.string.visibility_text), (wm.visibility / 1000))//(wm.visibility / 1000).toString() + " " + resources.getString(R.string.kilometres)
         /*_binding.tvVisibilityDescription.text = if ((wm.visibility / 1000) >= 7 && (wm.visibility / 1000) <= 10)
             "Visibility reduced due to light haze"
         else if ((wm.visibility / 1000) >= 11 && (wm.visibility / 1000) <= 13)
@@ -250,15 +262,15 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
         else ""*/
 
         //Humidity
-        _binding.tvHumidity.text = wm.humidity + "%"
-        _binding.tvDewPoint.text = "Dew point now: " + wm.dewPoint + "°"
+        _binding.tvHumidity.text = String.format(resources.getString(R.string.humidity_text),wm.humidity)
+
 
         //Pressure
-        _binding.tvPressure.text = wm.pressure + " hPa"
+        _binding.tvPressure.text = String.format(resources.getString(R.string.pressure_text),(wm.pressure.toDouble() * MM_HG).toInt())//(wm.pressure.toDouble() * MM_HG).toInt().toString() + "\n" + resources.getString(R.string.mm_hg)
 
         //Wind
-        _binding.tvWind.text = wm.windSpeed + " m/s"
-        _binding.tvWindDirection.text = "Direction: " + wm.windDeg + "°"
-        _binding.tvWindGust.text = "Gust: " + wm.windGust + " m/s"
+        _binding.tvWind.text = String.format(resources.getString(R.string.wind_speed_text),wm.windSpeed)//wm.windSpeed + " " + resources.getString(R.string.meters_per_second)
+        _binding.tvWindDirection.text = String.format(resources.getString(R.string.wind_direction_text),wm.windDeg)//resources.getString(R.string.direction) + wm.windDeg + resources.getString(R.string.degree)
+        _binding.tvWindGust.text = String.format(resources.getString(R.string.wind_gust_text),wm.windGust)//resources.getString(R.string.gust) + wm.windGust + resources.getString(R.string.meters_per_second)
     }
 }

@@ -67,10 +67,17 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
 
         setupUpdTime()
         setupServiceSwitch()
+        setupServiceSwitch()
     }
 
     private fun setupServiceSwitch() {
-        _binding.serviceSwith.setOnCheckedChangeListener { compoundButton, b ->
+
+        val isEnabled = _viewModel.getServiceMode()
+
+        if (isEnabled)
+            _binding.serviceSwitch.isChecked = true
+
+        _binding.serviceSwitch.setOnCheckedChangeListener { compoundButton, b ->
             if (b) {
                 (activity as MainActivity).serviceControl(ENABLE)
             }

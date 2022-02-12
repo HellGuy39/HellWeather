@@ -23,6 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -66,6 +67,7 @@ class WeatherService : Service() {
         var pauseTime = intent?.getLongExtra("pauseTime", 90 * 10000)
         val userLocation = intent?.getParcelableExtra<UserLocation>("location")
         val converter = Converter()
+        val lang = Locale.getDefault().country
 
         val failedRequestPauseTime: Long = 15 * 10000
 
@@ -74,15 +76,18 @@ class WeatherService : Service() {
         }
 
         createNotificationsChannel()
-        val ntfService = createNotification("Loading...", "")
+        val ntfService = createNotification(resources.getString(R.string.loading), "")
 
         CoroutineScope(Dispatchers.Default).launch {
             while (isRunning) {
                 if (userLocation != null) {
-                    val weatherJson = request(mService, userLocation, units.toString())
+                    val weatherJson = request(mService, userLocation, units.toString(), lang)
                     var ntfService: Notification
                     var contentText = ""
                     var tittle = ""
+                    val max = resources.getString(R.string.max)
+                    val min = resources.getString(R.string.min)
+                    val chance_of_rain = resources.getString(R.string.chance_of_rain)
 
                     if (weatherJson.has("request")) {
                         if (weatherJson.asJsonObject.get("request").asString == "failed") {
@@ -103,12 +108,25 @@ class WeatherService : Service() {
                     } else {
                         val weatherData = converter.toWeatherObject(weatherJson)
 
-                        contentText = weatherData.currentWeather.wDescription + " | " +
-                                "Max.: ${weatherData.currentWeather.tempMax}°, " +
-                                "min.: ${weatherData.currentWeather.tempMin}°" + " | " +
-                                "Chance of rain ${weatherData.hourlyWeather[0].pop.toInt()}%"
-                        tittle =
-                            userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°"
+                        if (units == STANDARD)
+                            contentText = weatherData.currentWeather.wDescription + " | " +
+                                    "$max: ${weatherData.currentWeather.tempMax}K, " +
+                                    "$min: ${weatherData.currentWeather.tempMin}K" + " | " +
+                                    "$chance_of_rain ${weatherData.hourlyWeather[0].pop.toInt()}%"
+                        else
+                            contentText = weatherData.currentWeather.wDescription + " | " +
+                                    "$max: ${weatherData.currentWeather.tempMax}°, " +
+                                    "$min: ${weatherData.currentWeather.tempMin}°" + " | " +
+                                    "$chance_of_rain ${weatherData.hourlyWeather[0].pop.toInt()}%"
+
+                        if (units == STANDARD)
+                            tittle = userLocation.locationName + "  —  ${weatherData.currentWeather.temp}K"
+                        else if(units == METRIC)
+                            tittle = userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°C"
+                        else if(units == IMPERIAL)
+                            tittle = userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°F"
+                        else
+                            tittle = userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°"
 
                         ntfService = createNotification(tittle, contentText)
                         startForeground(1, ntfService)
@@ -169,13 +187,18 @@ class WeatherService : Service() {
 
     }
 
-    private suspend fun request(mService: ApiService, userLocation: UserLocation, units: String): JsonObject {
+    private suspend fun request(
+        mService: ApiService,
+        userLocation: UserLocation,
+        units: String, lang: String
+    ): JsonObject {
         return suspendCoroutine { continuation ->
             mService.getWeatherOneCall(
                 userLocation.lat.toDouble(),
                 userLocation.lon.toDouble(),
                 "minutely,alerts",
                 units,
+                lang,
                 OPEN_WEATHER_API_KEY
             ).enqueue(object : Callback<JsonObject> {
 

@@ -93,18 +93,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
                 FAILURE -> {
                     refreshing(DISABLE)
-                    (activity as MainActivity).setToolbarTittle("Connection lost")
+                    (activity as MainActivity).setToolbarTittle(resources.getString(R.string.connection_lost))
                 }
                 ERROR -> {
                     refreshing(DISABLE)
-                    (activity as MainActivity).setToolbarTittle("Error")
+                    (activity as MainActivity).setToolbarTittle(resources.getString(R.string.error))
                 }
                 IN_PROGRESS -> {
                     refreshing(ENABLE)
                 }
                 EMPTY_LIST -> {
                     refreshing(DISABLE)
-                    (activity as MainActivity).setToolbarTittle("No locations")
+                    (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))
                 }
                 /*EXPECTATION -> {
                     refreshing(ENABLE)
