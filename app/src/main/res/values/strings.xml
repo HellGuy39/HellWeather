@@ -18,6 +18,16 @@
     <string name="enter_location">Enter your location</string>
     <string name="location_name">Location name</string>
     <string name="find_me">Find me</string>
+    <string name="lets_start">Let\'s start</string>
+    <string name="welcome_text">We thank you for choosing our application</string>
+    <string name="access_denied">Access denied</string>
+    <string name="city_not_found">City not found</string>
+    <string name="server_not_responding">Server not responding</string>
+    <string name="not_funny">Not funny</string>
+    <string name="gps_is_disabled">GPS is disabled. Turn it on and try again</string>
+    <string name="thats_right">That\'s right?</string>
+    <string name="lat_lon_text">Lat.: %1$s, lon.: %2$s</string>
+    <string name="location_deleted">Location deleted</string>
 
     <!-- Tittles-->
     <string name="tittle_welcome">Welcome</string>

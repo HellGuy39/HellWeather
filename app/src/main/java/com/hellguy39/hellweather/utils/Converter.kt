@@ -1,15 +1,49 @@
 package com.hellguy39.hellweather.utils
 
 import com.google.gson.JsonObject
-import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
-import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import com.hellguy39.hellweather.repository.database.pojo.WeatherData
+import com.hellguy39.hellweather.repository.database.pojo.*
+import okhttp3.internal.userAgent
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class Converter {
+
+    fun checkRequest(jsonObject: JsonObject): String {
+        return if (jsonObject.has("request")) {
+            when (jsonObject.asJsonObject.get("request").asString) {
+                FAILURE -> {
+                    FAILURE
+                }
+                INCORRECT_OBJ -> {
+                    INCORRECT_OBJ
+                }
+                else -> {
+                    FAILURE
+                }
+            }
+        } else {
+            SUCCESSFUL
+        }
+    }
+
+    fun toUserLocation(jsonObject: JsonObject): UserLocation {
+        val usrLoc = UserLocation()
+
+        val coordinates = jsonObject.getAsJsonObject("coord")
+        val sys = jsonObject.getAsJsonObject("sys")
+        usrLoc.lat = coordinates.get("lat").asString
+        usrLoc.lon = coordinates.get("lon").asString
+
+        //usrLoc.requestName = input
+        usrLoc.locationName = jsonObject.get("name").asString
+        usrLoc.country = sys.get("country").asString
+        usrLoc.cod = jsonObject.get("cod").asString
+        //usrLoc.id = jObj.get("id").asInt
+        usrLoc.timezone = jsonObject.get("timezone").asInt / 3600
+
+        return usrLoc
+    }
 
     fun toWeatherObject(jsonObject: JsonObject): WeatherData {
 

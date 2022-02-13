@@ -42,13 +42,13 @@ class MainActivityViewModel @Inject constructor(
     private val weatherDataList: MutableList<WeatherData> = mutableListOf()
 
     private val lang = Locale.getDefault().country
-    private var _units = STANDARD
+    private var _units = METRIC
     private var _firstBoot = false
 
     init {
         statusLive.value = EXPECTATION
 
-        _units = defSharPrefs.getString(PREFS_UNITS, STANDARD).toString()
+        _units = defSharPrefs.getString(PREFS_UNITS, METRIC).toString()
         _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, true)
         firstBootLive.value = _firstBoot
 
@@ -91,7 +91,7 @@ class MainActivityViewModel @Inject constructor(
 
     fun loadAllLocation(list: List<UserLocation>) {
         viewModelScope.launch {
-            _units = defSharPrefs.getString(PREFS_UNITS, STANDARD).toString() //Needs to be updated here
+            _units = defSharPrefs.getString(PREFS_UNITS, METRIC).toString() //Needs to be updated here
 
             val converter = Converter()
             weatherDataList.clear()
@@ -106,14 +106,15 @@ class MainActivityViewModel @Inject constructor(
                 for (n in list.indices) {
                     val request: JsonObject = sendRequest(list[n])
 
-                    if (request.has("request")) {
-                        if (request.asJsonObject.get("request").asString == "failed") {
-                            statusLive.value = FAILURE
-                            return@launch
-                        } else if (request.asJsonObject.get("request").asString == "incorrect obj") {
-                            statusLive.value = ERROR
-                            return@launch
-                        }
+                    if (converter.checkRequest(request) == FAILURE)
+                    {
+                        statusLive.value = FAILURE
+                        return@launch
+                    }
+                    else if (converter.checkRequest(request) == ERROR)
+                    {
+                        statusLive.value = ERROR
+                        return@launch
                     }
 
                     jsonList.add(request)
@@ -149,19 +150,19 @@ class MainActivityViewModel @Inject constructor(
                         if (response.body() != null) {
                             continuation.resume(response.body() as JsonObject)
                         } else {
-                            continuation.resume(JsonObject().apply { addProperty("request", "incorrect obj") })
+                            continuation.resume(JsonObject().apply { addProperty("request", INCORRECT_OBJ) })
                         }
                     }
                     else
                     {
-                        continuation.resume(JsonObject().apply { addProperty("request", "incorrect obj") })
+                        continuation.resume(JsonObject().apply { addProperty("request", INCORRECT_OBJ) })
                         //continuation.resume(response.body() as JsonObject)
                     }
 
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    continuation.resume(JsonObject().apply { addProperty("request", "failed") })
+                    continuation.resume(JsonObject().apply { addProperty("request", FAILURE) })
                 }
 
             })

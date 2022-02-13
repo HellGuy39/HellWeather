@@ -68,7 +68,7 @@
                 android:layout_marginStart="8dp"
                 app:icon="@drawable/ic_round_my_location_24"
                 style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:text="Find me" />
+                android:text="@string/find_me" />
 
         </LinearLayout>
 

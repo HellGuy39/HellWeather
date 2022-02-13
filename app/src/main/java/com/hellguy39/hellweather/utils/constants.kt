@@ -20,6 +20,10 @@ const val ERROR = "err"
 const val IN_PROGRESS = "prg"
 const val EXPECTATION = "exp"
 const val EMPTY_LIST = "emp"
+const val INCORRECT_OBJ = "incorrect_obj"
+
+const val TYPE_CITY_NAME = "city_name"
+const val TYPE_LAT_LON = "lat_lon"
 
 //CONTROLLER
 const val DISABLE = "dis"

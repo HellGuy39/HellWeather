@@ -23,4 +23,12 @@ interface ApiService {
         @Query("units")units: String,
         @Query("appid")appId: String
     ): Call<JsonObject>
+
+    @GET("weather?")
+    fun getCurrentWeatherWithLatLon(
+        @Query("lat")lan: Double,
+        @Query("lon")lon: Double,
+        @Query("units")units: String,
+        @Query("appid")appId: String
+    ): Call<JsonObject>
 }

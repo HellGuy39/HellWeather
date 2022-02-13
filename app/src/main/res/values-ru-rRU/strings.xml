@@ -75,4 +75,14 @@
     <string name="enter_location">Введите местоположение</string>
     <string name="location_name">Местоположение</string>
     <string name="find_me">Найти меня</string>
+    <string name="lets_start">Начнём</string>
+    <string name="welcome_text">Благодарим вас за установку нашего приложения</string>
+    <string name="access_denied">Отказано в доступе</string>
+    <string name="city_not_found">Город не найден</string>
+    <string name="server_not_responding">Сервер не отвечает</string>
+    <string name="not_funny">Не смешно</string>
+    <string name="gps_is_disabled">Геолоцация выключена. Включите и попробуйте ещё раз</string>
+    <string name="thats_right">Верно?</string>
+    <string name="lat_lon_text">Шир.: %1$s, дол.: %2$s</string>
+    <string name="location_deleted">Локация удалена</string>
 </resources>

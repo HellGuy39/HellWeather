@@ -16,6 +16,9 @@ import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewMo
 import com.hellguy39.hellweather.presentation.adapter.WeatherPageAdapter
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -65,6 +68,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             when (it) {
                 SUCCESSFUL -> {
+
                     refreshing(DISABLE)
 
                     val weatherDataList = mainActivityViewModel.weatherDataListLive.value
@@ -76,20 +80,26 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     if (weatherDataList == null || weatherDataList.isEmpty())
                         return@observe
 
-                    val pagerAdapter = WeatherPageAdapter(this, weatherDataList)
-                    binding.viewPager.adapter = pagerAdapter
-                    tabLayoutMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                        tab.text = userLocations[position].locationName
+                    CoroutineScope(Dispatchers.Main).launch {
 
-                        if (findNavController().currentDestination?.id == R.id.homeFragment) {
-                            (activity as MainActivity).setToolbarTittle(
-                                SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
-                                    Date(weatherDataList[position].currentWeather.dt * 1000)
+                        val pagerAdapter = WeatherPageAdapter(this@HomeFragment, weatherDataList)
+                        binding.viewPager.adapter = pagerAdapter
+                        tabLayoutMediator = TabLayoutMediator(
+                            binding.tabLayout,
+                            binding.viewPager
+                        ) { tab, position ->
+                            tab.text = userLocations[position].locationName
+
+                            if (findNavController().currentDestination?.id == R.id.homeFragment) {
+                                (activity as MainActivity).setToolbarTittle(
+                                    SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
+                                        Date(weatherDataList[position].currentWeather.dt * 1000)
+                                    )
                                 )
-                            )
+                            }
                         }
+                        tabLayoutMediator.attach()
                     }
-                    tabLayoutMediator.attach()
                 }
                 FAILURE -> {
                     refreshing(DISABLE)

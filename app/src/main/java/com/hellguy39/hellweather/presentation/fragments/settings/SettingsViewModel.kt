@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hellguy39.hellweather.utils.METRIC
 import com.hellguy39.hellweather.utils.PREFS_UNITS
 import com.hellguy39.hellweather.utils.STANDARD
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun getSavedUnits(): String = defSharPrefs.getString(PREFS_UNITS, STANDARD).toString()
+    fun getSavedUnits(): String = defSharPrefs.getString(PREFS_UNITS, METRIC).toString()
 
 
 }

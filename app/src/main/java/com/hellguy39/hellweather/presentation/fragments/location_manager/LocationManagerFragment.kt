@@ -79,10 +79,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
     }
 
     private fun updateRecycler(list: List<UserLocation>) {
-        val weatherDataList = mainViewModel.weatherDataListLive.value
-
-        if (weatherDataList == null)
-            return
+        val weatherDataList = mainViewModel.weatherDataListLive.value ?: return
 
         if (weatherDataList.isNotEmpty()) {
             binding.recyclerLocations.apply {
@@ -103,7 +100,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
     override fun onDelete(userLocation: UserLocation) {
         viewModel.onDeleteItem(userLocation)
         mainViewModel.onRepositoryChanged()
-        fragView.shortSnackBar("Item deleted")
+        fragView.shortSnackBar(resources.getString(R.string.location_deleted))
     }
 
     override fun onEdit(userLocation: UserLocation) {

@@ -12,6 +12,9 @@ import com.hellguy39.hellweather.databinding.SettingsFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingsFragment() : Fragment(R.layout.settings_fragment) {
@@ -49,10 +52,12 @@ class SettingsFragment() : Fragment(R.layout.settings_fragment) {
     override fun onStart() {
         super.onStart()
 
-        setupThemes()
-        setupMode()
-        setupLanguages()
-        setupUnits()
+        CoroutineScope(Dispatchers.Main).launch {
+            setupThemes()
+            setupMode()
+            setupLanguages()
+            setupUnits()
+        }
     }
 
     private fun setupThemes() {

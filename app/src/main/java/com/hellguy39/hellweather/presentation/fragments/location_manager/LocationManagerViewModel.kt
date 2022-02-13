@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
 import com.hellguy39.hellweather.repository.database.LocationRepository
 import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.utils.METRIC
 import com.hellguy39.hellweather.utils.PREFS_UNITS
 import com.hellguy39.hellweather.utils.STANDARD
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,5 +27,6 @@ class LocationManagerViewModel @Inject constructor(
         repository.deleteLocation(userLocation)
     }
 
-    fun getUnits(): String = defSharedPrefs.getString(PREFS_UNITS, STANDARD).toString()
+    fun getUnits(): String = defSharedPrefs.getString(PREFS_UNITS, METRIC).toString()
+
 }

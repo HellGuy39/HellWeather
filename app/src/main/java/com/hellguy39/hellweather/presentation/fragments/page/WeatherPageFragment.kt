@@ -59,7 +59,7 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
             _weatherData = it.getSerializable(WEATHER_DATA_ARG) as WeatherData
         }
         units = PreferenceManager.getDefaultSharedPreferences(requireContext())
-            .getString(PREFS_UNITS, STANDARD).toString()
+            .getString(PREFS_UNITS, METRIC).toString()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
