@@ -1,15 +1,88 @@
 package com.hellguy39.hellweather.utils
 
 import com.google.gson.JsonObject
-import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
-import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import com.hellguy39.hellweather.repository.database.pojo.WeatherData
+import com.hellguy39.hellweather.repository.database.pojo.*
+import okhttp3.internal.userAgent
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class Converter {
+
+    fun checkRequest(jsonObject: JsonObject): String {
+        return if (jsonObject.has("request")) {
+            when (jsonObject.asJsonObject.get("request").asString) {
+                FAILURE -> {
+                    FAILURE
+                }
+                INCORRECT_OBJ -> {
+                    INCORRECT_OBJ
+                }
+                else -> {
+                    FAILURE
+                }
+            }
+        } else {
+            SUCCESSFUL
+        }
+    }
+
+    fun toCurrentWeather(jsonObject: JsonObject) : CurrentWeather {
+        val currentWeather = CurrentWeather()
+
+        val weather = jsonObject.getAsJsonArray("weather").get(0)
+        val main = jsonObject.getAsJsonObject("main")
+        val wind = jsonObject.getAsJsonObject("wind")
+        val sys = jsonObject.getAsJsonObject("sys")
+
+        currentWeather.wMain = weather.asJsonObject.get("main").asString
+        currentWeather.wDescription = weather.asJsonObject.get("description").asString.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
+        currentWeather.icon = weather.asJsonObject.get("icon").asString
+
+        currentWeather.temp = main.get("temp").asDouble.toInt().toString()
+        currentWeather.tempFeelsLike = main.get("feels_like").asDouble.toInt().toString()
+        currentWeather.pressure = main.get("pressure").asString
+        currentWeather.humidity = main.get("humidity").asString
+
+        currentWeather.windSpeed = wind.get("speed").asString
+        currentWeather.windDeg = wind.get("deg").asString
+        if (wind.get("gust")?.asDouble != null)
+            currentWeather.windGust = wind.get("gust").asDouble
+        else
+            currentWeather.windGust = 0.0
+
+        currentWeather.dt = jsonObject.get("dt").asLong
+        currentWeather.visibility = jsonObject.get("visibility").asInt
+
+        currentWeather.sunrise = sys.get("sunrise").asLong
+        currentWeather.sunset = sys.get("sunset").asLong
+
+        currentWeather.name = jsonObject.get("name").asString
+
+        return currentWeather
+    }
+
+    fun toUserLocation(jsonObject: JsonObject): UserLocation {
+        val usrLoc = UserLocation()
+
+        val coordinates = jsonObject.getAsJsonObject("coord")
+        val sys = jsonObject.getAsJsonObject("sys")
+        usrLoc.lat = coordinates.get("lat").asString
+        usrLoc.lon = coordinates.get("lon").asString
+
+        //usrLoc.requestName = input
+        usrLoc.locationName = jsonObject.get("name").asString
+        usrLoc.country = sys.get("country").asString
+        usrLoc.cod = jsonObject.get("cod").asString
+        //usrLoc.id = jObj.get("id").asInt
+        usrLoc.timezone = jsonObject.get("timezone").asInt / 3600
+
+        return usrLoc
+    }
 
     fun toWeatherObject(jsonObject: JsonObject): WeatherData {
 
@@ -85,7 +158,7 @@ class Converter {
             //dailyWeather[n].tempFeelsLike = obj.get("feels_like").asString
             dailyWeather[n].humidity = obj.get("humidity").asString
             //dailyWeather[n].pressure = obj.get("pressure").asString
-            dailyWeather[n].pop = obj.get("pop").asString
+            dailyWeather[n].pop = obj.get("pop").asDouble * 100
             dailyWeather[n].icon = wt.get("icon").asString
             dailyWeather[n].max = obj.get("temp").asJsonObject.get("max").asDouble.toInt().toString()
             dailyWeather[n].min = obj.get("temp").asJsonObject.get("min").asDouble.toInt().toString()

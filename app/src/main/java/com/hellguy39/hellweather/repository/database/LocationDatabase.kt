@@ -7,6 +7,7 @@ import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 
 @Database(
     entities = [UserLocation::class],
+    exportSchema = false,
     version = 1
 )
 

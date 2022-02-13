@@ -55,6 +55,20 @@
                 android:fontFamily="@font/roboto_regular"
                 tools:text="Codename: Haze" />
 
+            <TextView
+                android:id="@+id/textView"
+                android:textSize="18sp"
+                android:autoSizeMaxTextSize="18sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:maxLines="1"
+                android:autoLink="web"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/github_hellweather" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -115,7 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
-            android:text="HellGuy39"
+            android:text="@string/author"
             android:textSize="24sp" />
 
         <TextView
@@ -124,7 +138,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
             android:gravity="center"
-            android:text="2022"
+            android:text="@string/dev_year"
             android:textSize="20sp" />
     </LinearLayout>
 

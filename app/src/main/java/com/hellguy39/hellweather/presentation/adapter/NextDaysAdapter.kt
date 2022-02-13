@@ -1,6 +1,7 @@
 package com.hellguy39.hellweather.presentation.adapter
 
 import android.content.Context
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.databinding.DayItemBinding
 import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
+import com.hellguy39.hellweather.utils.STANDARD
 
 class NextDaysAdapter(
     private val context: Context,
-    private val dayList: MutableList<DailyWeather>
+    private val dayList: MutableList<DailyWeather>,
+    private val units: String,
+    private val resources: Resources
     ) : RecyclerView.Adapter<NextDaysAdapter.DayViewHolder> () {
 
     override fun onCreateViewHolder(
@@ -29,32 +34,31 @@ class NextDaysAdapter(
         position: Int)
     {
         val dailyWeather: DailyWeather = dayList[position]
-        holder.bind(dailyWeather, context)
+        holder.bind(dailyWeather, context, units, resources)
     }
 
     override fun getItemCount(): Int = dayList.size
 
     class DayViewHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
 
-        private var tvMaxTemp: TextView
-        private var tvMinTemp: TextView
-        private var tvHumidity: TextView
-        private var tvDay: TextView
-        private var ivIcon : ImageView
+        private val _binding = DayItemBinding.bind(v)
 
-        init {
-            tvMaxTemp = v.findViewById(R.id.tvMaxTemp)
-            tvMinTemp = v.findViewById(R.id.tvMinTemp)
-            tvHumidity = v.findViewById(R.id.tvHumidity)
-            tvDay = v.findViewById(R.id.tvDay)
-            ivIcon = v.findViewById(R.id.ivIcon)
-        }
+        fun bind(dailyWeather: DailyWeather, context: Context, units: String, resources: Resources) {
 
-        fun bind(dailyWeather: DailyWeather, context: Context) {
-            tvMaxTemp.text = dailyWeather.max + "°"
-            tvMinTemp.text = dailyWeather.min + "°"
-            tvHumidity.text = dailyWeather.humidity + "%"
-            tvDay.text = dailyWeather.dt
+            if (units == STANDARD) {
+                _binding.tvMaxTemp.text =
+                    String.format(resources.getString(R.string.item_temp_kelvin), dailyWeather.max)
+                _binding.tvMinTemp.text =
+                    String.format(resources.getString(R.string.item_temp_kelvin), dailyWeather.min)
+            } else {
+                _binding.tvMaxTemp.text =
+                    String.format(resources.getString(R.string.item_temp_degree), dailyWeather.max)
+                _binding.tvMinTemp.text =
+                    String.format(resources.getString(R.string.item_temp_degree), dailyWeather.min)
+            }
+
+            _binding.tvHumidity.text = String.format(resources.getString(R.string.pop_text), dailyWeather.pop.toInt())
+            _binding.tvDay.text = dailyWeather.dt
 
             Glide.with(context)
                 .load("https://openweathermap.org/img/wn/${dailyWeather.icon}@2x.png")
@@ -62,7 +66,7 @@ class NextDaysAdapter(
                 .placeholder(R.drawable.ic_round_image_not_supported_24)
                 .error(R.drawable.ic_outline_error_outline_24)
                 .centerCrop()
-                .into(ivIcon)
+                .into(_binding.ivIcon)
         }
 
         override fun onClick(p0: View?) {

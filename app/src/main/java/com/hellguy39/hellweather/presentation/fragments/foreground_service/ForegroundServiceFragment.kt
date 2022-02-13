@@ -18,6 +18,9 @@ import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
 import com.hellguy39.hellweather.utils.NONE
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment) {
@@ -57,20 +60,28 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
 
     override fun onStart() {
         super.onStart()
+        CoroutineScope(Dispatchers.Main).launch {
+            val userLocationList = _mainViewModel.userLocationsLive.value
 
-        val userLocationList = _mainViewModel.userLocationsLive.value
+            if (userLocationList != null)
+                setupLocation(userLocationList)
+            else
+                _binding.acLocation.isEnabled = false
 
-        if (userLocationList != null)
-            setupLocation(userLocationList)
-        else
-            _binding.acLocation.isEnabled = false
-
-        setupUpdTime()
-        setupServiceSwitch()
+            setupUpdTime()
+            setupServiceSwitch()
+            setupServiceSwitch()
+        }
     }
 
     private fun setupServiceSwitch() {
-        _binding.serviceSwith.setOnCheckedChangeListener { compoundButton, b ->
+
+        val isEnabled = _viewModel.getServiceMode()
+
+        if (isEnabled)
+            _binding.serviceSwitch.isChecked = true
+
+        _binding.serviceSwitch.setOnCheckedChangeListener { compoundButton, b ->
             if (b) {
                 (activity as MainActivity).serviceControl(ENABLE)
             }

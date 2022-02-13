@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -40,13 +41,14 @@ class MainActivityViewModel @Inject constructor(
     private val jsonList: MutableList<JsonObject> = mutableListOf()
     private val weatherDataList: MutableList<WeatherData> = mutableListOf()
 
-    private var _units = STANDARD
+    private val lang = Locale.getDefault().country
+    private var _units = METRIC
     private var _firstBoot = false
 
     init {
         statusLive.value = EXPECTATION
 
-        _units = defSharPrefs.getString(PREFS_UNITS, STANDARD).toString()
+        _units = defSharPrefs.getString(PREFS_UNITS, METRIC).toString()
         _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, true)
         firstBootLive.value = _firstBoot
 
@@ -89,7 +91,7 @@ class MainActivityViewModel @Inject constructor(
 
     fun loadAllLocation(list: List<UserLocation>) {
         viewModelScope.launch {
-            _units = defSharPrefs.getString(PREFS_UNITS, STANDARD).toString() //Needs to be updated here
+            _units = defSharPrefs.getString(PREFS_UNITS, METRIC).toString() //Needs to be updated here
 
             val converter = Converter()
             weatherDataList.clear()
@@ -104,14 +106,15 @@ class MainActivityViewModel @Inject constructor(
                 for (n in list.indices) {
                     val request: JsonObject = sendRequest(list[n])
 
-                    if (request.has("request")) {
-                        if (request.asJsonObject.get("request").asString == "failed") {
-                            statusLive.value = FAILURE
-                            return@launch
-                        } else if (request.asJsonObject.get("request").asString == "incorrect obj") {
-                            statusLive.value = ERROR
-                            return@launch
-                        }
+                    if (converter.checkRequest(request) == FAILURE)
+                    {
+                        statusLive.value = FAILURE
+                        return@launch
+                    }
+                    else if (converter.checkRequest(request) == INCORRECT_OBJ)
+                    {
+                        statusLive.value = ERROR
+                        return@launch
                     }
 
                     jsonList.add(request)
@@ -121,7 +124,7 @@ class MainActivityViewModel @Inject constructor(
                 /*for(n in jsonList.indices) {
                     weatherObjList.add(convertToWeatherObject(jsonList[n]))
                 }*/
-                Log.d("DEBUG", "SUCCESSFUL")
+                //Log.d("DEBUG", "SUCCESSFUL")
                 weatherDataListLive.value = weatherDataList
                 statusLive.value = SUCCESSFUL
             }
@@ -136,6 +139,7 @@ class MainActivityViewModel @Inject constructor(
                 userLocation.lon.toDouble(),
                 "minutely,alerts",
                 _units,
+                lang,
                 OPEN_WEATHER_API_KEY
             ).enqueue(object : Callback<JsonObject> {
 
@@ -146,19 +150,18 @@ class MainActivityViewModel @Inject constructor(
                         if (response.body() != null) {
                             continuation.resume(response.body() as JsonObject)
                         } else {
-                            continuation.resume(JsonObject().apply { addProperty("request", "incorrect obj") })
+                            continuation.resume(JsonObject().apply { addProperty("request", INCORRECT_OBJ) })
                         }
                     }
                     else
                     {
-                        continuation.resume(JsonObject().apply { addProperty("request", "incorrect obj") })
-                        //continuation.resume(response.body() as JsonObject)
+                        continuation.resume(JsonObject().apply { addProperty("request", INCORRECT_OBJ) })
                     }
 
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    continuation.resume(JsonObject().apply { addProperty("request", "failed") })
+                    continuation.resume(JsonObject().apply { addProperty("request", FAILURE) })
                 }
 
             })

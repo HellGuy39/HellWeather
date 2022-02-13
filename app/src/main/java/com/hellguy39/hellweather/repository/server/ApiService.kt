@@ -13,6 +13,7 @@ interface ApiService {
         @Query("lon")lon: Double,
         @Query("exclude")exclude: String,
         @Query("units")units: String,
+        @Query("lang")lang: String,
         @Query("appid")appId: String
     ): Call<JsonObject>
 
@@ -20,6 +21,16 @@ interface ApiService {
     fun getCurrentWeather(
         @Query("q")city: String,
         @Query("units")units: String,
+        @Query("lang")lang: String,
+        @Query("appid")appId: String
+    ): Call<JsonObject>
+
+    @GET("weather?")
+    fun getCurrentWeatherWithLatLon(
+        @Query("lat")lan: Double,
+        @Query("lon")lon: Double,
+        @Query("units")units: String,
+        @Query("lang")lang: String,
         @Query("appid")appId: String
     ): Call<JsonObject>
 }

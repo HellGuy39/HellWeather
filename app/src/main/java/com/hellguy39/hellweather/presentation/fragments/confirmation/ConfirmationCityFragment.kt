@@ -65,7 +65,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
 
     private fun updateUI(usrLoc: UserLocation) {
         binding.tvLocation.text = usrLoc.country + ", " + usrLoc.locationName
-        binding.tvCoords.text = "Lat: ${usrLoc.lat} Lon: ${usrLoc.lon}"
+        binding.tvCoords.text = String.format(resources.getString(R.string.lat_lon_text),usrLoc.lat,usrLoc.lon)
         if (usrLoc.timezone == 0)
         {
             binding.tvTimezone.text = "${usrLoc.timezone} GMT"

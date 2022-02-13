@@ -44,7 +44,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:text="General"
+                        android:text="@string/general"
                         android:textSize="18sp" />
 
                     <LinearLayout
@@ -60,7 +60,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Language"
+                            android:text="@string/language"
                             android:textSize="22sp" />
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -90,7 +90,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Units"
+                            android:text="@string/units"
                             android:textSize="22sp" />
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -133,7 +133,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:text="Customization"
+                        android:text="@string/customization"
                         android:textSize="18sp" />
 
                     <LinearLayout
@@ -149,7 +149,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Theme"
+                            android:text="@string/theme"
                             android:textSize="22sp" />
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -179,7 +179,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Mode"
+                            android:text="@string/mode"
                             android:textSize="22sp" />
 
                         <com.google.android.material.textfield.TextInputLayout

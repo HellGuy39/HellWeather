@@ -1,6 +1,10 @@
 package com.hellguy39.hellweather.repository.database.pojo
 
+import java.io.Serializable
+
 data class CurrentWeather(
+    var name: String = "N/A",
+
     var dt: Long = 0,
     var temp: String = "N/A",
     var tempFeelsLike: String = "N/A",
@@ -24,4 +28,4 @@ data class CurrentWeather(
 
     var tempMax: String = "N/A",
     var tempMin: String = "N/A"
-)
+) : Serializable

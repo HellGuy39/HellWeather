@@ -20,6 +20,10 @@ const val ERROR = "err"
 const val IN_PROGRESS = "prg"
 const val EXPECTATION = "exp"
 const val EMPTY_LIST = "emp"
+const val INCORRECT_OBJ = "incorrect_obj"
+
+const val TYPE_CITY_NAME = "city_name"
+const val TYPE_LAT_LON = "lat_lon"
 
 //CONTROLLER
 const val DISABLE = "dis"
@@ -30,3 +34,5 @@ const val REBOOT = "rbt"
 const val METRIC = "Metric"
 const val IMPERIAL = "Imperial"
 const val STANDARD = "Standard"
+
+const val MM_HG = 0.75006375541921

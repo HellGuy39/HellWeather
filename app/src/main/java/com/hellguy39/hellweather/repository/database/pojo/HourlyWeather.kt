@@ -1,5 +1,7 @@
 package com.hellguy39.hellweather.repository.database.pojo
 
+import java.io.Serializable
+
 data class HourlyWeather(
     var dt: Long = 0,
     var temp: String = "N/A",
@@ -9,4 +11,4 @@ data class HourlyWeather(
     var pop: Double = 0.0,
     var windSpeed: String = "N/A",
     var icon: String = "N/A"
-)
+) : Serializable

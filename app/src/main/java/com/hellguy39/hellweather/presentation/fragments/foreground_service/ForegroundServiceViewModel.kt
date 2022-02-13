@@ -44,4 +44,6 @@ class ForegroundServiceViewModel @Inject constructor(
 
     fun getServiceLocation(): String = defSharedPrefs.getString(PREFS_SERVICE_LOCATION, NONE).toString()
 
+    fun getServiceMode(): Boolean = defSharedPrefs.getBoolean(PREFS_SERVICE_MODE, false)
+
 }
