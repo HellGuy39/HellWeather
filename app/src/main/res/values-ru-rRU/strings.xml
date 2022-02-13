@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="loading">Загрузка...</string>
+    <string name="loading">Загрузка…</string>
     <string name="try_again">Попробуйте снова</string>
     <string name="tittle_welcome">Добро пожаловать</string>
     <string name="tittle_home">Главная</string>
@@ -85,4 +85,8 @@
     <string name="thats_right">Верно?</string>
     <string name="lat_lon_text">Шир.: %1$s, дол.: %2$s</string>
     <string name="location_deleted">Локация удалена</string>
+    <string name="searching">Поиск…</string>
+    <string name="search">Поиск</string>
+    <string name="version">Версия: %1$s</string>
+    <string name="codename">Кодовое имя: %1$s</string>
 </resources>

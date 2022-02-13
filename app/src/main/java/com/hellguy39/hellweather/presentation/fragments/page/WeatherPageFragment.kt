@@ -4,7 +4,9 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -62,9 +64,13 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
             .getString(PREFS_UNITS, METRIC).toString()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentWeatherPageBinding.bind(view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentWeatherPageBinding.bind(view!!)
 
         CoroutineScope(Default).launch {
             if (this@WeatherPageFragment::_weatherData.isInitialized) {
@@ -76,6 +82,13 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
                 }
             }
         }
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     private fun updateGraph(weatherData: WeatherData) {

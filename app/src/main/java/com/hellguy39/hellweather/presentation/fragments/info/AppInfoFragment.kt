@@ -37,8 +37,8 @@ class AppInfoFragment : Fragment() {
         binding.tvUpdateTittle.text = hazeTittle
         binding.tvUpdateText.text = hazeText
         binding.tvPostText.text = postText
-        binding.tvCodename.text = "Codename: ${hazeTittle}"
-        binding.tvVersion.text = "Version: ${BuildConfig.VERSION_NAME}"
+        binding.tvCodename.text = String.format(resources.getString(R.string.codename), hazeTittle)
+        binding.tvVersion.text =  String.format(resources.getString(R.string.version), BuildConfig.VERSION_NAME)
 
     }
 }

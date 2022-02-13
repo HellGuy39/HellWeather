@@ -28,6 +28,8 @@
     <string name="thats_right">That\'s right?</string>
     <string name="lat_lon_text">Lat.: %1$s, lon.: %2$s</string>
     <string name="location_deleted">Location deleted</string>
+    <string name="searching">Searching…</string>
+    <string name="search">Search</string>
 
     <!-- Tittles-->
     <string name="tittle_welcome">Welcome</string>
@@ -145,5 +147,12 @@
 
     <string name="max">Max.</string>
     <string name="min">min.</string>
+
+    <!-- Info -->
+    <string name="version">Version: %1$s</string>
+    <string name="codename">Codename: %1$s</string>
+    <string name="github_hellweather" translatable="false">https://github.com/HellGuy39/HellWeather</string>
+    <string name="author" translatable="false">HellGuy39</string>
+    <string name="dev_year" translatable="false">2022</string>
 
 </resources>

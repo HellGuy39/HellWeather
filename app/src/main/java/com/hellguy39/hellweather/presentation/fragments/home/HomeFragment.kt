@@ -51,6 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
+        //binding.viewPager.visibility = View.INVISIBLE
     }
 
     override fun onStart() {
@@ -99,27 +100,46 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             }
                         }
                         tabLayoutMediator.attach()
+                        //animateViewPager()
                     }
                 }
                 FAILURE -> {
                     refreshing(DISABLE)
-                    (activity as MainActivity).setToolbarTittle(resources.getString(R.string.connection_lost))
+
+                    if (findNavController().currentDestination?.id == R.id.homeFragment)
+                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.connection_lost))
                 }
                 ERROR -> {
                     refreshing(DISABLE)
-                    (activity as MainActivity).setToolbarTittle(resources.getString(R.string.error))
+
+                    if (findNavController().currentDestination?.id == R.id.homeFragment)
+                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.error))
                 }
                 IN_PROGRESS -> {
                     refreshing(ENABLE)
                 }
                 EMPTY_LIST -> {
                     refreshing(DISABLE)
-                    (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))
+
+                    if (findNavController().currentDestination?.id == R.id.homeFragment)
+                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))
                 }
                 /*EXPECTATION -> {
                     refreshing(ENABLE)
                 }*/
             }
+        }
+    }
+
+    private fun animateViewPager() {
+        binding.viewPager.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+
+            animate()
+                .alpha(1f)
+                .setDuration(300)
+                .setListener(null)
         }
     }
 

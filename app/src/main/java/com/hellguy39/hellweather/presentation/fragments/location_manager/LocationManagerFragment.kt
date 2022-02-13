@@ -58,7 +58,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment), Lo
         binding = LocationManagerFragmentBinding.bind(view)
 
         mainViewModel.userLocationsLive.observe(activity as MainActivity) {
-            if (it.isNotEmpty())
+            //if (it.isNotEmpty())
                 updateRecycler(it)
         }
 

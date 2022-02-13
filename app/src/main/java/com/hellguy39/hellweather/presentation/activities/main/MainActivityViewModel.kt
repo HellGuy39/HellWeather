@@ -111,7 +111,7 @@ class MainActivityViewModel @Inject constructor(
                         statusLive.value = FAILURE
                         return@launch
                     }
-                    else if (converter.checkRequest(request) == ERROR)
+                    else if (converter.checkRequest(request) == INCORRECT_OBJ)
                     {
                         statusLive.value = ERROR
                         return@launch
@@ -124,7 +124,7 @@ class MainActivityViewModel @Inject constructor(
                 /*for(n in jsonList.indices) {
                     weatherObjList.add(convertToWeatherObject(jsonList[n]))
                 }*/
-                Log.d("DEBUG", "SUCCESSFUL")
+                //Log.d("DEBUG", "SUCCESSFUL")
                 weatherDataListLive.value = weatherDataList
                 statusLive.value = SUCCESSFUL
             }
@@ -156,7 +156,6 @@ class MainActivityViewModel @Inject constructor(
                     else
                     {
                         continuation.resume(JsonObject().apply { addProperty("request", INCORRECT_OBJ) })
-                        //continuation.resume(response.body() as JsonObject)
                     }
 
                 }

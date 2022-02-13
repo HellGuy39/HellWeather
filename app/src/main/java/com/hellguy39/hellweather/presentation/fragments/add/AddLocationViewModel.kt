@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -24,6 +25,7 @@ class AddLocationViewModel @Inject constructor(
     private val mService: ApiService
 ) : ViewModel() {
 
+    private val lang = Locale.getDefault().country
     val userLocationLive = MutableLiveData<UserLocation?>()
     val statusLive = MutableLiveData<String>()
 
@@ -80,6 +82,7 @@ class AddLocationViewModel @Inject constructor(
                 lat,
                 lon,
                 METRIC,
+                lang,
                 OPEN_WEATHER_API_KEY
             ).enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
@@ -105,7 +108,11 @@ class AddLocationViewModel @Inject constructor(
 
     private suspend fun sendRequestWithCity(input: String) : JsonObject {
         return suspendCoroutine { continuation ->
-            mService.getCurrentWeather(input, METRIC, OPEN_WEATHER_API_KEY)
+            mService.getCurrentWeather(
+                input,
+                METRIC,
+                lang,
+                OPEN_WEATHER_API_KEY)
                 .enqueue(object : Callback<JsonObject> {
 
                     override fun onResponse(
