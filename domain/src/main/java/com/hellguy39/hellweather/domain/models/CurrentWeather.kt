@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.repository.database.pojo
+package com.hellguy39.hellweather.domain.models
 
 import java.io.Serializable
 

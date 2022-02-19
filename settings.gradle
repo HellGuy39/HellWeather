@@ -9,3 +9,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "HellWeather"
 include ':app'
+include ':data'
+include ':domain'

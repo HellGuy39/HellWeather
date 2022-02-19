@@ -13,8 +13,8 @@ import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.google.gson.JsonObject
 import com.hellguy39.hellweather.R
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-import com.hellguy39.hellweather.repository.server.ApiService
+import com.hellguy39.hellweather.data.enteties.UserLocation
+import com.hellguy39.hellweather.data.api.ApiService
 import com.hellguy39.hellweather.utils.*
 import com.hellguy39.hellweather.utils.Converter
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +36,7 @@ class WeatherService : Service() {
         fun startService(context: Context, userLocation: UserLocation) {
             val service = Intent(context, WeatherService::class.java)
             val units = PreferenceManager.getDefaultSharedPreferences(context).getString(
-                PREFS_UNITS, STANDARD)
+                PREFS_UNITS, METRIC)
             val pauseTime = PreferenceManager.getDefaultSharedPreferences(context).getInt(
                 PREFS_SERVICE_UPD_TIME, 3 * 60)
 
@@ -78,7 +78,7 @@ class WeatherService : Service() {
         createNotificationsChannel()
         val ntfService = createNotification(resources.getString(R.string.loading), "")
 
-        CoroutineScope(Dispatchers.Default).launch {
+        /*CoroutineScope(Dispatchers.Default).launch {
             while (isRunning) {
                 if (userLocation != null) {
                     val weatherJson = request(mService, userLocation, units.toString(), lang)
@@ -141,7 +141,7 @@ class WeatherService : Service() {
                     delay(pauseTime!!)
                 }
             }
-        }
+        }*/
 
         startForeground(1, ntfService)
 
@@ -187,7 +187,7 @@ class WeatherService : Service() {
 
     }
 
-    private suspend fun request(
+    /*private suspend fun request(
         mService: ApiService,
         userLocation: UserLocation,
         units: String, lang: String
@@ -222,7 +222,7 @@ class WeatherService : Service() {
 
             })
         }
-    }
+    }*/
 
     private fun provideApiService(): ApiService {
         return retrofitClient().create(ApiService::class.java)

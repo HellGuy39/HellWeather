@@ -64,7 +64,7 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="userLocation"
-            app:argType="com.hellguy39.hellweather.repository.database.pojo.UserLocation" />
+            app:argType="com.hellguy39.hellweather.data.enteties.UserLocation" />
         <action
             android:id="@+id/action_confirmationCityFragment_to_locationManagerFragment"
             app:destination="@id/locationManagerFragment"

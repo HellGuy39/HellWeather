@@ -2,19 +2,14 @@ package com.hellguy39.hellweather.presentation.adapter
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.HourItemBinding
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
-import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
+import com.hellguy39.hellweather.domain.models.HourlyWeather
 import com.hellguy39.hellweather.utils.STANDARD
 import java.text.SimpleDateFormat
 import java.util.*

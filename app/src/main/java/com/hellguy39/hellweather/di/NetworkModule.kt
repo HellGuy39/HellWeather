@@ -1,6 +1,7 @@
 package com.hellguy39.hellweather.di
 
-import com.hellguy39.hellweather.repository.server.ApiService
+import com.hellguy39.hellweather.data.api.ApiRepository
+import com.hellguy39.hellweather.data.api.ApiService
 import com.hellguy39.hellweather.utils.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -28,4 +29,14 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideApiRepository(apiService: ApiService): ApiRepository {
+        return ApiRepository(apiService)
+    }
+    /*@Provides
+    @Singleton
+    fun provideApiHelper(apiHelper: ApiHelperImpl): ApiHelper = apiHelper
+*/
 }

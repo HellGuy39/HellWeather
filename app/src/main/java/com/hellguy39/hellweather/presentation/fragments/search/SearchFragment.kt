@@ -3,24 +3,18 @@ package com.hellguy39.hellweather.presentation.fragments.search
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.tabs.TabLayoutMediator
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.SearchFragmentBinding
 import com.hellguy39.hellweather.glide.GlideApp
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.presentation.adapter.WeatherPageAdapter
-import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
+import com.hellguy39.hellweather.domain.models.CurrentWeather
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 

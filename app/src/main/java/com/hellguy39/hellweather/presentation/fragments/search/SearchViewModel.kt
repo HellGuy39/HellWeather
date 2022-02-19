@@ -6,11 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
-import com.hellguy39.hellweather.repository.database.pojo.CurrentWeather
-import com.hellguy39.hellweather.repository.database.pojo.WeatherData
-import com.hellguy39.hellweather.repository.server.ApiService
+import com.hellguy39.hellweather.data.api.ApiService
+import com.hellguy39.hellweather.domain.models.CurrentWeather
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,7 +33,7 @@ class SearchViewModel @Inject constructor(
     fun getUnits(): String = defSharedPrefs.getString(PREFS_UNITS, METRIC).toString()
 
     fun getCurrentWeather(cityName: String) {
-        viewModelScope.launch {
+        /*viewModelScope.launch(Dispatchers.IO) {
             statusLive.value = IN_PROGRESS
             val request = sendRequest(cityName)
             val converter = Converter()
@@ -52,10 +52,10 @@ class SearchViewModel @Inject constructor(
             val currentWeather = converter.toCurrentWeather(request)
             currentWeatherLive.value = currentWeather
             statusLive.value = SUCCESSFUL
-        }
+        }*/
     }
 
-    private suspend fun sendRequest(cityName: String): JsonObject {
+    /*private suspend fun sendRequest(cityName: String): JsonObject {
         val units: String = defSharedPrefs.getString(PREFS_UNITS, METRIC).toString()
         return suspendCoroutine { continuation ->
             mService.getCurrentWeather(
@@ -86,6 +86,6 @@ class SearchViewModel @Inject constructor(
 
             })
         }
-    }
+    }*/
 
 }

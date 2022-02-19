@@ -2,25 +2,19 @@ package com.hellguy39.hellweather.presentation.fragments.location_manager
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.transition.Hold
-import com.google.android.material.transition.MaterialContainerTransform
-import com.google.android.material.transition.MaterialElevationScale
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationManagerFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
 import com.hellguy39.hellweather.presentation.adapter.LocationsWithoutWeatherAdapter
-import com.hellguy39.hellweather.presentation.fragments.add.AddLocationFragment
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
 import com.hellguy39.hellweather.utils.shortSnackBar

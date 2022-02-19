@@ -1,9 +1,9 @@
 package com.hellguy39.hellweather.presentation.activities.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -18,7 +18,7 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 import com.hellguy39.hellweather.presentation.services.WeatherService
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +27,9 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var viewModel: MainActivityViewModel
+
+    private val viewModel: MainActivityViewModel by viewModels()
+
     private lateinit var binding: MainActivityBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         binding = MainActivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+        //viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         toolBarMenu = binding.topAppBar.menu
 

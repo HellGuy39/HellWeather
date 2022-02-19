@@ -1,7 +1,6 @@
 package com.hellguy39.hellweather.presentation.fragments.page
 
 import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -19,15 +18,14 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.github.mikephil.charting.model.GradientColor
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherPageBinding
 import com.hellguy39.hellweather.glide.GlideApp
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
 import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
-import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import com.hellguy39.hellweather.repository.database.pojo.WeatherData
+import com.hellguy39.hellweather.domain.models.DailyWeather
+import com.hellguy39.hellweather.domain.models.HourlyWeather
+import com.hellguy39.hellweather.domain.models.WeatherData
 import com.hellguy39.hellweather.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
@@ -40,7 +38,7 @@ import java.util.*
 
 private const val WEATHER_DATA_ARG = "wd_arg"
 
-class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
+class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
 
     companion object {
         @JvmStatic
@@ -84,11 +82,6 @@ class WeatherPageFragment() : Fragment(R.layout.fragment_weather_page) {
         }
 
         return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     private fun updateGraph(weatherData: WeatherData) {

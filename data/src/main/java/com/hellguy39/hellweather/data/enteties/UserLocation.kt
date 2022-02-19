@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.repository.database.pojo
+package com.hellguy39.hellweather.data.enteties
 
 import android.os.Parcelable
 import androidx.room.Entity

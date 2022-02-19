@@ -1,10 +1,6 @@
-package com.hellguy39.hellweather.repository.database
+package com.hellguy39.hellweather.data.repositories
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.data.enteties.UserLocation
 import kotlinx.coroutines.flow.Flow
 
 interface LocationRepository {

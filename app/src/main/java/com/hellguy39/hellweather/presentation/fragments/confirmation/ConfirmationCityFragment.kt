@@ -1,23 +1,18 @@
 package com.hellguy39.hellweather.presentation.fragments.confirmation
 
-import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.databinding.ConfirmationCityFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
-import com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerFragment
-import com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerFragmentDirections
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
 import com.hellguy39.hellweather.utils.DISABLE
 import com.hellguy39.hellweather.utils.ENABLE
 import dagger.hilt.android.AndroidEntryPoint

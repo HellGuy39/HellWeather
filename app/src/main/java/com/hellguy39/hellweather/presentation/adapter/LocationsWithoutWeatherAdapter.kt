@@ -8,10 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationItemBinding
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-import com.hellguy39.hellweather.repository.database.pojo.WeatherData
-import java.text.SimpleDateFormat
-import java.util.*
+import com.hellguy39.hellweather.data.enteties.UserLocation
 
 class LocationsWithoutWeatherAdapter(
     private val context: Context,

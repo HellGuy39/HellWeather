@@ -1,8 +1,11 @@
 package com.hellguy39.hellweather.utils
 
 import com.google.gson.JsonObject
-import com.hellguy39.hellweather.repository.database.pojo.*
-import okhttp3.internal.userAgent
+import com.hellguy39.hellweather.data.enteties.UserLocation
+import com.hellguy39.hellweather.domain.models.CurrentWeather
+import com.hellguy39.hellweather.domain.models.DailyWeather
+import com.hellguy39.hellweather.domain.models.HourlyWeather
+import com.hellguy39.hellweather.domain.models.WeatherData
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

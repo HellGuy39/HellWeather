@@ -15,7 +15,7 @@ android {
         minSdk 26
         targetSdk 31
         versionCode 1
-        versionName "1.0 Beta preview 2"
+        versionName "1.0 Beta preview 3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,6 +43,10 @@ android {
 }
 
 dependencies {
+
+    implementation project(path: ':domain')
+    implementation project(path: ':data')
+
     //Kotlin
     //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"

@@ -1,14 +1,12 @@
 package com.hellguy39.hellweather.presentation.fragments.add
 
 import android.Manifest
-import android.app.Instrumentation
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +20,9 @@ import com.google.android.gms.location.*
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentAddLocationBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -181,7 +176,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
 
 
     private fun navigate(userLocation: UserLocation) = fragView.findNavController()
-        .navigate(AddLocationFragmentDirections.actionAddCityFragmentToConfirmationCityFragment(userLocation))
+        .navigate(/*R.id.action_addCityFragment_to_confirmationCityFragment*/AddLocationFragmentDirections.actionAddCityFragmentToConfirmationCityFragment(userLocation))
 
     private fun findMe() {
         if (ActivityCompat.checkSelfPermission(activity as MainActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||

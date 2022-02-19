@@ -1,7 +1,7 @@
-package com.hellguy39.hellweather.repository.database.dao
+package com.hellguy39.hellweather.data.db
 
 import androidx.room.*
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.data.enteties.UserLocation
 import kotlinx.coroutines.flow.Flow
 
 @Dao

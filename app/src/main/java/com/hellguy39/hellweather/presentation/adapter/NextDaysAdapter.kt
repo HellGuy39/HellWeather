@@ -5,13 +5,11 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.DayItemBinding
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
+import com.hellguy39.hellweather.domain.models.DailyWeather
 import com.hellguy39.hellweather.utils.STANDARD
 
 class NextDaysAdapter(

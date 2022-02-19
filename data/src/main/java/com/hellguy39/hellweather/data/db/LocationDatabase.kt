@@ -1,9 +1,8 @@
-package com.hellguy39.hellweather.repository.database
+package com.hellguy39.hellweather.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.hellguy39.hellweather.repository.database.dao.LocationDao
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.data.enteties.UserLocation
 
 @Database(
     entities = [UserLocation::class],

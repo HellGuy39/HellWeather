@@ -1,7 +1,7 @@
-package com.hellguy39.hellweather.repository.database
+package com.hellguy39.hellweather.data.repositories
 
-import com.hellguy39.hellweather.repository.database.dao.LocationDao
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.data.db.LocationDao
+import com.hellguy39.hellweather.data.enteties.UserLocation
 import kotlinx.coroutines.flow.Flow
 
 class LocationRepositoryImpl(

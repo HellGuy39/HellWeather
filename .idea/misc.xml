@@ -37,6 +37,7 @@
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/foreground_service_fragment.xml" value="0.259375" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_add_city.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_add_location.xml" value="0.264" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_add_new_item_page.xml" value="0.259375" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_app_info.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_blank.xml" value="0.259375" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_home.xml" value="0.4" />
@@ -60,7 +61,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

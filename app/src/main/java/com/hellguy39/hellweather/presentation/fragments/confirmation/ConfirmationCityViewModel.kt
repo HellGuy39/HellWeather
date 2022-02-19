@@ -3,8 +3,8 @@ package com.hellguy39.hellweather.presentation.fragments.confirmation
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hellguy39.hellweather.repository.database.LocationRepository
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
+import com.hellguy39.hellweather.data.repositories.LocationRepository
+import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.utils.PREFS_FIRST_BOOT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

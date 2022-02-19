@@ -1,11 +1,5 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
-import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-
 // Removed for better times
 
 /*

@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationItemBinding
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-import com.hellguy39.hellweather.repository.database.pojo.WeatherData
+import com.hellguy39.hellweather.data.enteties.UserLocation
+import com.hellguy39.hellweather.domain.models.WeatherData
 import com.hellguy39.hellweather.utils.IMPERIAL
 import com.hellguy39.hellweather.utils.METRIC
 import com.hellguy39.hellweather.utils.STANDARD
