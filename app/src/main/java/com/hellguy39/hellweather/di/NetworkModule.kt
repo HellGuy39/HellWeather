@@ -1,6 +1,6 @@
 package com.hellguy39.hellweather.di
 
-import com.hellguy39.hellweather.data.api.ApiRepository
+import com.hellguy39.hellweather.data.repositories.ApiRepository
 import com.hellguy39.hellweather.data.api.ApiService
 import com.hellguy39.hellweather.utils.BASE_URL
 import dagger.Module

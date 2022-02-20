@@ -1,121 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.motion.widget.MotionLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.fragments.page.WeatherPageFragment"
     android:id="@+id/rootMotionLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/fragment_home_scene"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="48dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineMotion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tvTextTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="16sp"
+        android:autoSizeMaxTextSize="32sp"
+        android:maxLines="1"
+        android:fontFamily="@font/roboto_light"
+        android:gravity="center"
+        android:text=""
+        android:textSize="32sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/guideline7"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="9° | Light snow" />
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapseToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            app:expandedTitleTextColor="@color/transparent"
-            app:title=""
-            app:titleCollapseMode="fade"
-            app:collapsedTitleTextAppearance="@style/collapsed_toolbar_tittle"
-            app:expandedTitleTextAppearance="@style/collapsed_toolbar_tittle"
-            app:expandedTitleGravity="center"
-            app:collapsedTitleGravity="center">
+    <TextView
+        android:id="@+id/tvWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="48dp"
+        android:autoSizeMinTextSize="12dp"
+        android:autoSizeTextType="uniform"
+        android:fontFamily="@font/roboto_light"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="42sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTemp"
+        tools:text="Clear" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
+    <TextView
+        android:id="@+id/tvMaxMinTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_light"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWeather"
+        tools:text="Max.: 26°, min.: 9°" />
 
-                <ImageView
-                    android:id="@+id/ivWeather"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone" />
+    <TextView
+        android:id="@+id/tvTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_light"
+        android:gravity="center"
+        android:text=""
+        android:textSize="128sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline7"
+        tools:text="9" />
 
-                <TextView
-                    android:id="@+id/tvDot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_light"
-                    android:gravity="center"
-                    android:text=""
-                    android:textSize="64sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvWeather"
-                    app:layout_constraintStart_toEndOf="@+id/tvTemp"
-                    app:layout_constraintTop_toTopOf="@+id/tvTemp"
-                    app:layout_constraintVertical_bias="0.25"
-                    tools:text="°" />
+    <TextView
+        android:id="@+id/tvDot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_light"
+        android:gravity="center"
+        android:text=""
+        app:layout_constraintVertical_bias="0.25"
+        android:textSize="64sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvTemp"
+        app:layout_constraintStart_toEndOf="@+id/tvTemp"
+        app:layout_constraintTop_toTopOf="@id/tvTemp"
+        tools:text="°" />
 
-                <TextView
-                    android:id="@+id/tvMaxMinTemp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_light"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvWeather"
-                    tools:text="Max.: 26°, min.: 9°" />
 
-                <TextView
-                    android:id="@+id/tvWeather"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoSizeMaxTextSize="48dp"
-                    android:autoSizeMinTextSize="12dp"
-                    android:autoSizeTextType="uniform"
-                    android:fontFamily="@font/roboto_light"
-                    android:gravity="center"
-                    android:maxLines="2"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textSize="42sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvMaxMinTemp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTemp"
-                    tools:text="Clear" />
-
-                <TextView
-                    android:id="@+id/tvTemp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_light"
-                    android:gravity="center"
-                    android:text=""
-                    android:textSize="128sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvWeather"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="9" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+    <ImageView
+        android:id="@+id/ivWeather"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedSV"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineMotion">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,16 +137,16 @@
                 android:id="@+id/hourItemsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="6dp"
                 app:cardCornerRadius="@dimen/card_default_corner"
-                app:cardElevation="@dimen/card_default_elevation"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:cardElevation="@dimen/card_default_elevation"
                 app:strokeWidth="@dimen/card_default_stroke_width">
 
                 <LinearLayout
@@ -177,9 +187,9 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="6dp"
                     android:layout_marginEnd="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_default_corner"
@@ -223,8 +233,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginStart="6dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginStart="6dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="6dp"
                     android:layout_weight="1"
@@ -277,8 +287,8 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="6dp"
                     android:layout_marginEnd="6dp"
+                    android:layout_marginTop="6dp"
                     android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_default_corner"
@@ -333,13 +343,13 @@
                                 android:id="@+id/tvUVDescription"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
                                 android:layout_marginStart="8dp"
                                 android:autoSizeMaxTextSize="24sp"
                                 android:autoSizeMinTextSize="8sp"
                                 android:autoSizeTextType="uniform"
                                 android:fontFamily="@font/roboto_regular"
                                 android:gravity="start"
+                                android:layout_gravity="center"
                                 android:maxLines="1"
                                 android:textSize="24sp"
                                 tools:text="Moderate" />
@@ -353,11 +363,11 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="6dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="6dp"
-                    android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_default_corner"
                     app:cardElevation="@dimen/card_default_elevation"
                     app:strokeWidth="@dimen/card_default_stroke_width">
@@ -420,12 +430,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="@dimen/card_default_corner"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="6dp"
                     android:layout_marginBottom="6dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="@dimen/card_default_corner"
                     app:cardElevation="@dimen/card_default_elevation"
                     app:strokeWidth="@dimen/card_default_stroke_width">
 
@@ -466,11 +476,11 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
                     app:cardCornerRadius="@dimen/card_default_corner"
                     app:cardElevation="@dimen/card_default_elevation"
                     app:strokeWidth="@dimen/card_default_stroke_width">
@@ -553,11 +563,11 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:layout_marginTop="6dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="6dp"
                     android:layout_marginBottom="6dp"
-                    android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_default_corner"
                     app:cardElevation="@dimen/card_default_elevation"
                     app:strokeWidth="@dimen/card_default_stroke_width">
@@ -612,12 +622,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/card_def_height"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_default_corner"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="6dp"
                     app:cardElevation="@dimen/card_default_elevation"
                     app:strokeWidth="@dimen/card_default_stroke_width">
 
@@ -673,11 +683,11 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                app:cardCornerRadius="@dimen/card_default_corner"
                 android:layout_marginTop="6dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="6dp"
-                app:cardCornerRadius="@dimen/card_default_corner"
                 app:cardElevation="@dimen/card_default_elevation"
                 app:strokeWidth="@dimen/card_default_stroke_width">
 
@@ -702,7 +712,7 @@
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/graphView"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/card_def_height" />
+                        android:layout_height="@dimen/card_def_height"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -711,16 +721,16 @@
                 android:id="@+id/dailyCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                app:cardCornerRadius="@dimen/card_default_corner"
                 android:layout_marginTop="6dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="@dimen/card_default_corner"
-                app:cardElevation="@dimen/card_default_elevation"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:cardElevation="@dimen/card_default_elevation"
                 app:strokeWidth="@dimen/card_default_stroke_width">
 
                 <LinearLayout
@@ -753,7 +763,7 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
 
 
 

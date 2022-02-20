@@ -185,21 +185,21 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
 
         when (units) {
             STANDARD -> {
-                _binding.tvTextTop.text = String.format(resources.getString(R.string.top_tittle_kelvin_text), wm.temp, wm.wDescription)
+                _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_kelvin_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_kelvin_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_kelvin_text),wm.tempFeelsLike)
                 _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_kelvin_text), wm.dewPoint)
 
             }
             IMPERIAL -> {
-                _binding.tvTextTop.text = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
+                _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_degree_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),wm.tempFeelsLike)
                 _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_fahrenheit_text), wm.dewPoint)
 
             }
             METRIC -> {
-                _binding.tvTextTop.text = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
+                _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_degree_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),wm.tempFeelsLike)
                 _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_celsius_text), wm.dewPoint)

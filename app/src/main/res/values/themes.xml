@@ -52,4 +52,10 @@
         <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
 
+    <style name="collapsed_toolbar_tittle" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">32sp</item>
+        <item name="fontFamily">@font/roboto_light</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
 </resources>

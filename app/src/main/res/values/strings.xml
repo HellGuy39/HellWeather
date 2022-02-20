@@ -31,6 +31,7 @@
     <string name="searching">Searching…</string>
     <string name="search">Search</string>
     <string name="add_new_location">Add new location</string>
+    <string name="failed_to_find_device_location">Failed to find device location</string>
 
     <!-- Tittles-->
     <string name="tittle_welcome">Welcome</string>

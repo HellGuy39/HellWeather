@@ -5,14 +5,17 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Looper
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -34,10 +37,14 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private var checkPermission: ActivityResultLauncher<Array<String>>? = null
+    private val animationHelper = AnimationHelper()
+
+    private var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[AddLocationViewModel::class.java]
+
         locationRequest = createLocationRequest()
 
         locationCallback = object : LocationCallback() {
@@ -52,7 +59,6 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
                     checkLocation(TYPE_LAT_LON,"",latitude,longitude)
 
                     removeLocationUpdates()
-                    //Log.d("DEBUG", "Lat:${latitude} % Lon:${longitude}")//viewModel.sendRequestWithLatLon(latitude, longitude)
                 }
             }
         }
@@ -66,7 +72,6 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
         (activity as MainActivity).updateToolbarMenu(DISABLE)
         (activity as MainActivity).drawerControl(DISABLE)
-
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -88,54 +93,76 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
                     fragView.shortSnackBar(resources.getString(R.string.access_denied))
                 }
             }
-            /*if (it[Manifest.permission.ACCESS_COARSE_LOCATION] == true ||
-                    it[Manifest.permission.ACCESS_FINE_LOCATION] == true)
-            {
-                findMe()
-            }
-            else
-            {
-                fragView.shortSnackBar(resources.getString(R.string.access_denied))
-            }*/
         }
 
         fragView = view
         binding = FragmentAddLocationBinding.bind(view)
 
-        viewModel.userLocationLive.observe(viewLifecycleOwner) {
-            if (it != null )
+        binding.btnFindMe.setOnClickListener(this)
+        binding.fabNext.setOnClickListener(this)
+        animationHelper.exFabBottomOut(binding.fabNext) //Need to init animation
+
+        binding.etCity.doOnTextChanged { text, start, before, count ->
+            if (count > 0) {
+                if (binding.fabNext.visibility == View.GONE)
+                {
+                    animationHelper.exFabBottomIn(binding.fabNext)
+                }
+            }
+            else
             {
-                navigate(it)
-                viewModel.clearData()
+                if (binding.fabNext.visibility == View.VISIBLE)
+                {
+                    animationHelper.exFabBottomOut(binding.fabNext)
+                }
             }
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        setObservers()
+    }
+
+    private fun setObservers() {
         viewModel.statusLive.observe(viewLifecycleOwner) {
-            loadController(DISABLE)
             when (it) {
                 SUCCESSFUL -> {
-                    //navigate(viewModel.userLocationLive.value!!)
-                    //viewModel.clearData() //strange solution
+                    loadController(DISABLE)
+                    val userLocation = viewModel.userLocationLive.value
+
+                    if (userLocation != null) {
+                        navigate(userLocation)
+                        viewModel.clearData()
+                    }
                 }
                 EMPTY_BODY -> {
+                    loadController(DISABLE)
                     fragView.shortSnackBar(resources.getString(R.string.city_not_found))
                 }
                 ERROR -> {
+                    loadController(DISABLE)
                     fragView.shortSnackBar(resources.getString(R.string.city_not_found))
                 }
                 FAILURE -> {
+                    loadController(DISABLE)
                     fragView.shortSnackBar(resources.getString(R.string.server_not_responding))
                 }
             }
         }
 
-        binding.btnFindMe.setOnClickListener(this)
-        binding.fabNext.setOnClickListener(this)
     }
 
     private fun checkLocation(type: String, cityName: String = "", lat: Double = 0.0, lon: Double = 0.0) {
         loadController(ENABLE)
-        viewModel.requestController(type,cityName,lat,lon)
+
+        if (type == TYPE_CITY_NAME)
+            viewModel.requestWithCityName(cityName)
+
+        if (type == TYPE_LAT_LON)
+            viewModel.requestWithCoordinates(lat, lon)
     }
 
     private fun removeLocationUpdates() {
@@ -151,12 +178,16 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
     private fun loadController(action: String) {
             when (action) {
                 ENABLE -> {
+                    isLoading = true
+
                     binding.etCity.isEnabled = false
                     binding.fabNext.isEnabled = false
                     binding.btnFindMe.isEnabled = false
                     binding.progressLinear.visibility = View.VISIBLE
                 }
                 DISABLE -> {
+                    isLoading = false
+
                     binding.etCity.isEnabled = true
                     binding.fabNext.isEnabled = true
                     binding.btnFindMe.isEnabled = true
@@ -176,7 +207,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
 
 
     private fun navigate(userLocation: UserLocation) = fragView.findNavController()
-        .navigate(/*R.id.action_addCityFragment_to_confirmationCityFragment*/AddLocationFragmentDirections.actionAddCityFragmentToConfirmationCityFragment(userLocation))
+        .navigate(AddLocationFragmentDirections.actionAddCityFragmentToConfirmationCityFragment(userLocation))
 
     private fun findMe() {
         if (ActivityCompat.checkSelfPermission(activity as MainActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
@@ -185,9 +216,9 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
             if(isGPSEnabled())
             {
                 loadController(ENABLE)
-
                 LocationServices.getFusedLocationProviderClient(requireActivity())
                     .requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper())
+                setRequestTimer()
             }
             else
             {
@@ -197,6 +228,24 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
         } else {
             checkPermission?.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION))
         }
+    }
+
+    private fun setRequestTimer() {
+        val timer = object: CountDownTimer(10 * 1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+
+            }
+
+            override fun onFinish() {
+                if (isLoading) {
+                    LocationServices.getFusedLocationProviderClient(requireActivity())
+                        .removeLocationUpdates(locationCallback)
+                    fragView.shortSnackBar(resources.getString(R.string.failed_to_find_device_location))
+                    loadController(DISABLE)
+                }
+            }
+        }
+        timer.start()
     }
 
     override fun onClick(p0: View?) {

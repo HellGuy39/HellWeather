@@ -7,9 +7,18 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.data.api.ApiService
+import com.hellguy39.hellweather.data.repositories.ApiRepository
+import com.hellguy39.hellweather.domain.models.CurrentByCityRequest
+import com.hellguy39.hellweather.domain.models.CurrentByCoordinatesRequest
+import com.hellguy39.hellweather.domain.usecase.current.GetCurrentWeatherByCityUseCase
+import com.hellguy39.hellweather.domain.usecase.current.GetCurrentWeatherByCoordinatesUseCase
+import com.hellguy39.hellweather.domain.usecase.current.GetUserLocationByCityUseCase
+import com.hellguy39.hellweather.domain.usecase.current.GetUserLocationByCoordinatesUseCase
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +29,8 @@ import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class AddLocationViewModel @Inject constructor(
-    private val mService: ApiService
+    private val getUserLocationByCityUseCase: GetUserLocationByCityUseCase,
+    private val getUserLocationByCoordinatesUseCase: GetUserLocationByCoordinatesUseCase
 ) : ViewModel() {
 
     private val lang = Locale.getDefault().country
@@ -31,47 +41,64 @@ class AddLocationViewModel @Inject constructor(
         userLocationLive.value = null
     }
 
-    fun requestController(type: String, cityName: String = "", lat: Double = 0.0, lon: Double = 0.0) {
-        viewModelScope.launch {
-            if (statusLive.value != IN_PROGRESS)
-            {
-                statusLive.value = IN_PROGRESS
+    fun requestWithCityName(cityName: String) {
+        if (statusLive.value == IN_PROGRESS)
+            return
+        else
+            statusLive.value = IN_PROGRESS
 
-                when (type) {
-                    TYPE_CITY_NAME -> {
-                        /*val request = sendRequestWithCity(cityName)
-                        val converter = Converter()
+        viewModelScope.launch(Dispatchers.IO) {
 
-                        if (converter.checkRequest(request) == FAILURE) {
-                            statusLive.value = FAILURE
-                        } else if (converter.checkRequest(request) == INCORRECT_OBJ) {
-                            statusLive.value = ERROR
-                        }
+            val model = CurrentByCityRequest(
+                cityName,
+                METRIC,
+                lang,
+                OPEN_WEATHER_API_KEY
+            )
 
-                        userLocationLive.value = converter.toUserLocation(request)
-                        statusLive.value = SUCCESSFUL*/
+            val response = getUserLocationByCityUseCase.execute(model)
 
-                    }
-                    TYPE_LAT_LON -> {
-                        /*val request = sendRequestWithLatLon(lat, lon)
-                        val converter = Converter()
-
-                        if (converter.checkRequest(request) == FAILURE) {
-                            statusLive.value = FAILURE
-                        } else if (converter.checkRequest(request) == INCORRECT_OBJ) {
-                            statusLive.value = ERROR
-                        }
-
-                        userLocationLive.value = converter.toUserLocation(request)
-                        statusLive.value = SUCCESSFUL
-*/
-                    }
-                    else -> {
-                        statusLive.value = FAILURE
-                    }
+            withContext(Dispatchers.Main) {
+                if (response.requestResult == ERROR) {
+                    statusLive.value = ERROR
+                    return@withContext
                 }
+
+                userLocationLive.value = response
+                statusLive.value = SUCCESSFUL
             }
         }
     }
+
+    fun requestWithCoordinates(lat: Double, lon: Double) {
+        if (statusLive.value == IN_PROGRESS)
+            return
+        else
+            statusLive.value = IN_PROGRESS
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val model = CurrentByCoordinatesRequest(
+                lat,
+                lon,
+                METRIC,
+                lang,
+                OPEN_WEATHER_API_KEY
+            )
+
+            val response = getUserLocationByCoordinatesUseCase.execute(model)
+
+
+            if (response.requestResult == ERROR) {
+                statusLive.value = ERROR
+            }
+            else
+            {
+                userLocationLive.value = response
+                statusLive.value = SUCCESSFUL
+            }
+        }
+    }
+
 
 }

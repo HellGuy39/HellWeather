@@ -1,13 +1,15 @@
-package com.hellguy39.hellweather.domain
+package com.hellguy39.hellweather.domain.usecase.one_call
 
-import com.hellguy39.hellweather.data.api.ApiRepository
+import com.hellguy39.hellweather.data.repositories.ApiRepository
+import com.hellguy39.hellweather.domain.models.OneCallRequest
 import com.hellguy39.hellweather.domain.models.WeatherData
 import com.hellguy39.hellweather.utils.Converter
 import com.hellguy39.hellweather.utils.ERROR
 import com.hellguy39.hellweather.utils.SUCCESSFUL
+import javax.inject.Inject
 
-class GetOneCallWeatherUseCase {
-    suspend fun execute(apiRepository: ApiRepository, model: OneCallResponse) : WeatherData {
+class GetOneCallWeatherUseCase @Inject constructor(private val apiRepository: ApiRepository) {
+    suspend fun execute(model: OneCallRequest) : WeatherData {
         val weatherData = WeatherData()
 
         val response = apiRepository.getWeatherOneCall(

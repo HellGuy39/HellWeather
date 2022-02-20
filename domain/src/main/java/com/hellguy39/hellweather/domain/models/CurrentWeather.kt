@@ -27,5 +27,8 @@ data class CurrentWeather(
     var icon: String = "N/A",
 
     var tempMax: String = "N/A",
-    var tempMin: String = "N/A"
+    var tempMin: String = "N/A",
+
+    var requestResult: String = "N/A",
+    var errorBody: String = "N/A"
 ) : Serializable
