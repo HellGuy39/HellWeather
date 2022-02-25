@@ -2,26 +2,42 @@ package com.hellguy39.hellweather.data.repositories
 
 import com.hellguy39.hellweather.data.db.LocationDao
 import com.hellguy39.hellweather.data.enteties.UserLocation
+import com.hellguy39.hellweather.data.utils.ModelConverter
+import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.repository.LocationRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 class LocationRepositoryImpl(
     private val dao: LocationDao
 ): LocationRepository {
 
-    override suspend fun insertLocation(userLocation: UserLocation) {
-        dao.insertLocation(userLocation)
+    override suspend fun insertLocation(userLocationParam: UserLocationParam) {
+        dao.insertLocation(ModelConverter.toEntity(userLocationParam))
     }
 
-    override suspend fun deleteLocation(userLocation: UserLocation) {
-        dao.deleteLocation(userLocation)
+    override suspend fun deleteLocation(userLocationParam: UserLocationParam) {
+        dao.deleteLocation(ModelConverter.toEntity(userLocationParam))
     }
 
-    override suspend fun getLocationById(id: Int): UserLocation? {
-        return dao.getLocationById(id)
+    override suspend fun getLocationById(id: Int): UserLocationParam {
+        val userLocation = dao.getLocationById(id)
+        if (userLocation != null)
+            return ModelConverter.toParam(userLocation)
+        else
+            return UserLocationParam()
     }
 
-    override fun getLocations(): Flow<List<UserLocation>> {
-        return dao.getLocations()
+    override suspend fun getLocations(): List<UserLocationParam> {
+
+        val list = dao.getLocations().first()
+        val listParam = mutableListOf<UserLocationParam>()
+
+        for (n in list.indices) {
+            listParam.add(ModelConverter.toParam(list[n]))
+        }
+
+        return listParam
     }
 
 }

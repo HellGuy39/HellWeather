@@ -59,7 +59,7 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
 
     override fun onStart() {
         super.onStart()
-        CoroutineScope(Dispatchers.Main).launch {
+        /*CoroutineScope(Dispatchers.Main).launch {
             val userLocationList = _mainViewModel.userLocationsLive.value
 
             if (userLocationList != null)
@@ -70,7 +70,7 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
             setupUpdTime()
             setupServiceSwitch()
             setupServiceSwitch()
-        }
+        }*/
     }
 
     private fun setupServiceSwitch() {

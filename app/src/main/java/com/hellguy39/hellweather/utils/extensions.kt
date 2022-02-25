@@ -1,7 +1,9 @@
 package com.hellguy39.hellweather.utils
 
+import android.content.Context
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
+import com.hellguy39.hellweather.domain.utils.Converter
 
 internal fun View.shortSnackBar(message: String, action: (Snackbar.() -> Unit)? = null) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
@@ -24,3 +26,4 @@ internal fun View.indefiniteSnackBar(message: String, action: (Snackbar.() -> Un
 internal fun Snackbar.action(message: String, action: (View) -> Unit) {
     this.setAction(message, action)
 }
+

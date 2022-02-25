@@ -91,4 +91,5 @@
     <string name="codename">Кодовое имя: %1$s</string>
     <string name="add_new_location">Добавить новое место</string>
     <string name="failed_to_find_device_location">Не удалось найти местоположение устройства</string>
+    <string name="delete">Удалить</string>
 </resources>

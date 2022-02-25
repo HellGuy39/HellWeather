@@ -1,19 +1,20 @@
 package com.hellguy39.hellweather.domain.usecase.current
 
-import com.hellguy39.hellweather.data.repositories.ApiRepository
-import com.hellguy39.hellweather.domain.models.CurrentByCityRequest
+/*
+import com.hellguy39.hellweather.data.repositories.ApiRepositoryImpl
+import com.hellguy39.hellweather.domain.request_models.CurrentByCityRequest
 import com.hellguy39.hellweather.domain.models.CurrentWeather
-import com.hellguy39.hellweather.utils.Converter
+import com.hellguy39.hellweather.domain.utils.Converter
 import com.hellguy39.hellweather.utils.ERROR
 import com.hellguy39.hellweather.utils.SUCCESSFUL
 import javax.inject.Inject
 
-class GetCurrentWeatherByCityUseCase @Inject constructor(private val apiRepository: ApiRepository) {
+class GetCurrentWeatherByCityUseCase @Inject constructor(private val apiRepositoryImpl: ApiRepositoryImpl) {
     suspend fun execute(model: CurrentByCityRequest): CurrentWeather {
         var currentWeather = CurrentWeather()
-        val converter = Converter()
+        val converter = Converter
 
-        val response = apiRepository.getCurrentWeather(
+        val response = apiRepositoryImpl.getCurrentWeather(
             model.cityName,
             model.units,
             model.lang,
@@ -40,4 +41,4 @@ class GetCurrentWeatherByCityUseCase @Inject constructor(private val apiReposito
 
         return currentWeather
     }
-}
+}*/

@@ -24,6 +24,7 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentAddLocationBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.data.enteties.UserLocation
+import com.hellguy39.hellweather.domain.models.UserLocationParam
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -131,10 +132,10 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
             when (it) {
                 SUCCESSFUL -> {
                     loadController(DISABLE)
-                    val userLocation = viewModel.userLocationLive.value
+                    val userLocationParam = viewModel.userLocationLive.value
 
-                    if (userLocation != null) {
-                        navigate(userLocation)
+                    if (userLocationParam != null) {
+                        navigate(userLocationParam)
                         viewModel.clearData()
                     }
                 }
@@ -206,8 +207,8 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
     private fun checkTextField(input: String) : Boolean = !TextUtils.isEmpty(input)
 
 
-    private fun navigate(userLocation: UserLocation) = fragView.findNavController()
-        .navigate(AddLocationFragmentDirections.actionAddCityFragmentToConfirmationCityFragment(userLocation))
+    private fun navigate(userLocationParam: UserLocationParam) = fragView.findNavController()
+        .navigate(AddLocationFragmentDirections.actionAddCityFragmentToConfirmationCityFragment(userLocationParam))
 
     private fun findMe() {
         if (ActivityCompat.checkSelfPermission(activity as MainActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||

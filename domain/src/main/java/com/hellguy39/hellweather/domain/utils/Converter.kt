@@ -1,16 +1,15 @@
-package com.hellguy39.hellweather.utils
+package com.hellguy39.hellweather.domain.utils
 
 import com.google.gson.JsonObject
-import com.hellguy39.hellweather.data.enteties.UserLocation
-import com.hellguy39.hellweather.domain.models.CurrentWeather
-import com.hellguy39.hellweather.domain.models.DailyWeather
-import com.hellguy39.hellweather.domain.models.HourlyWeather
-import com.hellguy39.hellweather.domain.models.WeatherData
+import com.hellguy39.hellweather.domain.models.*
+import com.hellguy39.hellweather.utils.FAILURE
+import com.hellguy39.hellweather.utils.INCORRECT_OBJ
+import com.hellguy39.hellweather.utils.SUCCESSFUL
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Converter {
+object Converter {
 
     fun checkRequest(jsonObject: JsonObject): String {
         return if (jsonObject.has("request")) {
@@ -69,13 +68,13 @@ class Converter {
         return currentWeather
     }
 
-    fun toUserLocation(jsonObject: JsonObject): UserLocation {
-        val usrLoc = UserLocation()
+    fun toUserLocationParam(jsonObject: JsonObject): UserLocationParam {
+        val usrLoc = UserLocationParam()
 
         val coordinates = jsonObject.getAsJsonObject("coord")
         val sys = jsonObject.getAsJsonObject("sys")
-        usrLoc.lat = coordinates.get("lat").asString
-        usrLoc.lon = coordinates.get("lon").asString
+        usrLoc.lat = coordinates.get("lat").asDouble
+        usrLoc.lon = coordinates.get("lon").asDouble
 
         //usrLoc.requestName = input
         usrLoc.locationName = jsonObject.get("name").asString

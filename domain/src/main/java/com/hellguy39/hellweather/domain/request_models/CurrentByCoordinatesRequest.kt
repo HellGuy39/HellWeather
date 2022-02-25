@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.domain.models
+package com.hellguy39.hellweather.domain.request_models
 
 data class CurrentByCoordinatesRequest(
     var lat: Double = 0.0,

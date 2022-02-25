@@ -13,12 +13,10 @@ import com.hellguy39.hellweather.databinding.SearchFragmentBinding
 import com.hellguy39.hellweather.glide.GlideApp
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.domain.models.CurrentWeather
-import com.hellguy39.hellweather.domain.usecase.prefs.GetUnitsUseCase
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchFragment: Fragment(R.layout.search_fragment) {

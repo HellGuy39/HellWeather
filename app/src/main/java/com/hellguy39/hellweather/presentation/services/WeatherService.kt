@@ -11,21 +11,14 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
-import com.google.gson.JsonObject
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.data.api.ApiService
 import com.hellguy39.hellweather.utils.*
-import com.hellguy39.hellweather.utils.Converter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.hellguy39.hellweather.domain.utils.Converter
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class WeatherService : Service() {
 
@@ -66,7 +59,7 @@ class WeatherService : Service() {
         val units = intent?.getStringExtra("units")
         var pauseTime = intent?.getLongExtra("pauseTime", 90 * 10000)
         val userLocation = intent?.getParcelableExtra<UserLocation>("location")
-        val converter = Converter()
+        val converter = Converter
         val lang = Locale.getDefault().country
 
         val failedRequestPauseTime: Long = 15 * 10000

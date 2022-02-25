@@ -8,10 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Entity
 @Parcelize
 data class UserLocation(
-    var lat: String = "N/A",
-    var lon: String = "N/A",
-    var requestResult: String = "N/A",
-    var errorBody: String = "N/A",
+    var lat: Double = 0.0,
+    var lon: Double = 0.0,
     var locationName: String = "N/A",
     var country: String = "N/A",
     var cod: String = "N/A",

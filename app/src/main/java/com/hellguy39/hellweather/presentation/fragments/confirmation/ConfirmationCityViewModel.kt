@@ -3,8 +3,10 @@ package com.hellguy39.hellweather.presentation.fragments.confirmation
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hellguy39.hellweather.data.repositories.LocationRepository
+import com.hellguy39.hellweather.domain.repository.LocationRepository
 import com.hellguy39.hellweather.data.enteties.UserLocation
+import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.usecase.local.AddUserLocationUseCase
 import com.hellguy39.hellweather.utils.PREFS_FIRST_BOOT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,13 +14,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConfirmationCityViewModel @Inject constructor(
-    private val repository: LocationRepository,
+    private val addUserLocationUseCase: AddUserLocationUseCase,
     private val defSharedPrefs: SharedPreferences
 ) : ViewModel() {
 
-    fun saveToRoom(userLocation: UserLocation) {
+    fun saveToRoom(userLocation: UserLocationParam) {
         viewModelScope.launch {
-            repository.insertLocation(userLocation)
+            addUserLocationUseCase.invoke(userLocation)
         }
     }
 

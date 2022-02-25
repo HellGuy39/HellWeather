@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.databinding.ConfirmationCityFragmentBinding
+import com.hellguy39.hellweather.domain.models.UserLocationParam
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.utils.DISABLE
@@ -23,7 +24,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     private lateinit var viewModel: ConfirmationCityViewModel
     private lateinit var mainViewModel: MainActivityViewModel
     private lateinit var binding: ConfirmationCityFragmentBinding
-    private lateinit var userLocation: UserLocation
+    private lateinit var userLocationParam: UserLocationParam
     private val args: ConfirmationCityFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,14 +52,14 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         super.onViewCreated(view, savedInstanceState)
         binding = ConfirmationCityFragmentBinding.bind(view)
 
-        userLocation = args.userLocation
-        updateUI(userLocation)
+        userLocationParam = args.userLocationParam
+        updateUI(userLocationParam)
         binding.fabFalse.setOnClickListener(this)
         binding.fabTrue.setOnClickListener(this)
 
     }
 
-    private fun updateUI(usrLoc: UserLocation) {
+    private fun updateUI(usrLoc: UserLocationParam) {
         binding.tvLocation.text = usrLoc.country + ", " + usrLoc.locationName
         binding.tvCoords.text = String.format(resources.getString(R.string.lat_lon_text),usrLoc.lat,usrLoc.lon)
         if (usrLoc.timezone == 0)
@@ -79,7 +80,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.fabTrue -> {
-                viewModel.saveToRoom(userLocation)
+                viewModel.saveToRoom(userLocationParam)
                 mainViewModel.onRepositoryChanged()
                 (activity as MainActivity).drawerControl(ENABLE)
 

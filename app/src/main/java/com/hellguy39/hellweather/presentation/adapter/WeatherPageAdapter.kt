@@ -1,5 +1,7 @@
 package com.hellguy39.hellweather.presentation.adapter
 
+import android.view.View
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.hellguy39.hellweather.presentation.fragments.page.WeatherPageFragment

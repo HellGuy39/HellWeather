@@ -19,6 +19,7 @@ import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 import com.hellguy39.hellweather.presentation.services.WeatherService
 import com.hellguy39.hellweather.data.enteties.UserLocation
+import com.hellguy39.hellweather.domain.models.UserLocationParam
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         }
     }
 
-    private fun updateData(list: List<UserLocation>) {
+    private fun updateData(list: List<UserLocationParam>) {
 
         if (viewModel.statusLive.value != IN_PROGRESS) {
             viewModel.statusLive.value = IN_PROGRESS
@@ -142,7 +143,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
                         userLocationPos = n
                 }
 
-                WeatherService.startService(this, list[userLocationPos])
+                //WeatherService.startService(this, list[userLocationPos])
             }
         }
         else if (action == REBOOT) {

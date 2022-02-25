@@ -1,20 +1,19 @@
 package com.hellguy39.hellweather.domain.usecase.current
 
 import com.hellguy39.hellweather.data.enteties.UserLocation
-import com.hellguy39.hellweather.data.repositories.ApiRepository
-import com.hellguy39.hellweather.domain.models.CurrentByCoordinatesRequest
-import com.hellguy39.hellweather.domain.models.CurrentWeather
-import com.hellguy39.hellweather.utils.Converter
+import com.hellguy39.hellweather.data.repositories.ApiRepositoryImpl
+import com.hellguy39.hellweather.domain.request_models.CurrentByCoordinatesRequest
 import com.hellguy39.hellweather.utils.ERROR
 import com.hellguy39.hellweather.utils.SUCCESSFUL
 import javax.inject.Inject
 
-class GetUserLocationByCoordinatesUseCase @Inject constructor(private val apiRepository: ApiRepository) {
+/*
+class GetUserLocationByCoordinatesUseCase @Inject constructor(private val apiRepositoryImpl: ApiRepositoryImpl) {
     suspend fun execute(model: CurrentByCoordinatesRequest): UserLocation {
         var userLocation = UserLocation()
         val converter = Converter()
 
-        val response = apiRepository.getCurrentWeatherWithLatLon(
+        val response = apiRepositoryImpl.getCurrentWeatherWithLatLon(
             model.lat,
             model.lon,
             model.units,
@@ -43,4 +42,4 @@ class GetUserLocationByCoordinatesUseCase @Inject constructor(private val apiRep
 
         return userLocation
     }
-}
+}*/

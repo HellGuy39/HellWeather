@@ -28,6 +28,7 @@ import com.hellguy39.hellweather.domain.models.HourlyWeather
 import com.hellguy39.hellweather.domain.models.WeatherData
 import com.hellguy39.hellweather.utils.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -70,14 +71,11 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentWeatherPageBinding.bind(view!!)
 
-        CoroutineScope(Default).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             if (this@WeatherPageFragment::_weatherData.isInitialized) {
-                withContext(Main) {
-                    //confGraph()
-                    updateUI(_weatherData)
-                    updateRecyclersView(_weatherData)
-                    updateGraph(_weatherData)
-                }
+                updateUI(_weatherData)
+                updateRecyclersView(_weatherData)
+                updateGraph(_weatherData)
             }
         }
 

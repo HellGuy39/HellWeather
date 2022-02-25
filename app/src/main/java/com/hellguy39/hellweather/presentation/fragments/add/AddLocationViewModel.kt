@@ -1,40 +1,26 @@
 package com.hellguy39.hellweather.presentation.fragments.add
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonObject
-import com.hellguy39.hellweather.data.enteties.UserLocation
-import com.hellguy39.hellweather.data.api.ApiService
-import com.hellguy39.hellweather.data.repositories.ApiRepository
-import com.hellguy39.hellweather.domain.models.CurrentByCityRequest
-import com.hellguy39.hellweather.domain.models.CurrentByCoordinatesRequest
-import com.hellguy39.hellweather.domain.usecase.current.GetCurrentWeatherByCityUseCase
-import com.hellguy39.hellweather.domain.usecase.current.GetCurrentWeatherByCoordinatesUseCase
-import com.hellguy39.hellweather.domain.usecase.current.GetUserLocationByCityUseCase
-import com.hellguy39.hellweather.domain.usecase.current.GetUserLocationByCoordinatesUseCase
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.usecase.requests.location.GetLocationByCityNameUseCase
+import com.hellguy39.hellweather.domain.usecase.requests.location.GetLocationByCoordsUseCase
+import com.hellguy39.hellweather.utils.ERROR
+import com.hellguy39.hellweather.utils.IN_PROGRESS
+import com.hellguy39.hellweather.utils.SUCCESSFUL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.*
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class AddLocationViewModel @Inject constructor(
-    private val getUserLocationByCityUseCase: GetUserLocationByCityUseCase,
-    private val getUserLocationByCoordinatesUseCase: GetUserLocationByCoordinatesUseCase
+    private val getLocationByCoordsUseCase: GetLocationByCoordsUseCase,
+    private val getLocationByCityNameUseCase: GetLocationByCityNameUseCase
 ) : ViewModel() {
 
-    private val lang = Locale.getDefault().country
-    val userLocationLive = MutableLiveData<UserLocation?>()
+    val userLocationLive = MutableLiveData<UserLocationParam?>()
     val statusLive = MutableLiveData<String>()
 
     fun clearData() {
@@ -49,23 +35,16 @@ class AddLocationViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val model = CurrentByCityRequest(
-                cityName,
-                METRIC,
-                lang,
-                OPEN_WEATHER_API_KEY
-            )
+            val response = getLocationByCityNameUseCase(cityName = cityName)
 
-            val response = getUserLocationByCityUseCase.execute(model)
 
-            withContext(Dispatchers.Main) {
-                if (response.requestResult == ERROR) {
-                    statusLive.value = ERROR
-                    return@withContext
-                }
-
-                userLocationLive.value = response
+            if (response.data != null) {
+                userLocationLive.value = response.data
                 statusLive.value = SUCCESSFUL
+            }
+            else
+            {
+                statusLive.value = ERROR
             }
         }
     }
@@ -78,27 +57,17 @@ class AddLocationViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val model = CurrentByCoordinatesRequest(
-                lat,
-                lon,
-                METRIC,
-                lang,
-                OPEN_WEATHER_API_KEY
-            )
-
-            val response = getUserLocationByCoordinatesUseCase.execute(model)
+            val response = getLocationByCoordsUseCase.invoke(lat =  lat, lon = lon)
 
 
-            if (response.requestResult == ERROR) {
-                statusLive.value = ERROR
+            if (response.data != null) {
+                userLocationLive.value = response.data
+                statusLive.value = SUCCESSFUL
             }
             else
             {
-                userLocationLive.value = response
-                statusLive.value = SUCCESSFUL
+                statusLive.value = ERROR
             }
         }
     }
-
-
 }
