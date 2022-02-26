@@ -6,32 +6,11 @@ import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
 import com.hellguy39.hellweather.domain.models.weather.DailyWeather
 import com.hellguy39.hellweather.domain.models.weather.HourlyWeather
 import com.hellguy39.hellweather.domain.models.weather.WeatherData
-import com.hellguy39.hellweather.utils.FAILURE
-import com.hellguy39.hellweather.utils.INCORRECT_OBJ
-import com.hellguy39.hellweather.utils.SUCCESSFUL
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 object Converter {
-
-    fun checkRequest(jsonObject: JsonObject): String {
-        return if (jsonObject.has("request")) {
-            when (jsonObject.asJsonObject.get("request").asString) {
-                FAILURE -> {
-                    FAILURE
-                }
-                INCORRECT_OBJ -> {
-                    INCORRECT_OBJ
-                }
-                else -> {
-                    FAILURE
-                }
-            }
-        } else {
-            SUCCESSFUL
-        }
-    }
 
     fun toCurrentWeather(jsonObject: JsonObject) : CurrentWeather {
         val currentWeather = CurrentWeather()
@@ -122,10 +101,10 @@ object Converter {
 
             val wt = current.getAsJsonArray("weather").get(0).asJsonObject
             it.wMain = wt.get("main").asString
-            it.wDescription = wt.get("description").asString.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(
+            it.wDescription = wt.get("description").asString.replaceFirstChar { char ->
+                if (char.isLowerCase()) char.titlecase(
                     Locale.getDefault()
-                ) else it.toString()
+                ) else char.toString()
             }
             it.icon = wt.get("icon").asString
 

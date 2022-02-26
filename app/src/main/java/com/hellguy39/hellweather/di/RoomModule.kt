@@ -8,6 +8,7 @@ import com.hellguy39.hellweather.data.repositories.LocationRepositoryImpl
 import com.hellguy39.hellweather.domain.usecase.local.AddUserLocationUseCase
 import com.hellguy39.hellweather.domain.usecase.local.DeleteUserLocationUseCase
 import com.hellguy39.hellweather.domain.usecase.local.GetUserLocationListUseCase
+import com.hellguy39.hellweather.domain.usecase.local.UserLocationUseCases
 import com.hellguy39.hellweather.domain.usecase.prefs.service.ServiceUseCases
 import dagger.Module
 import dagger.Provides
@@ -37,19 +38,11 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideGetUserLocationsListUseCase(locationRepositoryImpl: LocationRepository): GetUserLocationListUseCase {
-        return GetUserLocationListUseCase(locationRepositoryImpl)
-    }
-
-    @Provides
-    @Singleton
-    fun provideAddUserLocationUseCase(locationRepositoryImpl: LocationRepository): AddUserLocationUseCase {
-        return AddUserLocationUseCase(locationRepositoryImpl)
-    }
-
-    @Provides
-    @Singleton
-    fun provideDeleteUserLocationUseCase(locationRepositoryImpl: LocationRepository): DeleteUserLocationUseCase {
-        return DeleteUserLocationUseCase(locationRepositoryImpl)
+    fun provideUserLocationUseCases(locationRepositoryImpl: LocationRepository): UserLocationUseCases {
+        return UserLocationUseCases(
+            addUserLocationUseCase = AddUserLocationUseCase(locationRepositoryImpl),
+            deleteUserLocationUseCase = DeleteUserLocationUseCase(locationRepositoryImpl),
+            getUserLocationListUseCase = GetUserLocationListUseCase(locationRepositoryImpl)
+        )
     }
 }

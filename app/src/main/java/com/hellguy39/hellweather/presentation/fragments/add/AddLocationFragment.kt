@@ -55,7 +55,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
                     val latitude: Double = p0.locations[index].latitude
                     val longitude: Double = p0.locations[index].longitude
 
-                    checkLocation(TYPE_LAT_LON,"",latitude,longitude)
+                    checkLocation(Type.Coordinates,"",latitude,longitude)
 
                     removeLocationUpdates()
                 }
@@ -69,8 +69,8 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
         savedInstanceState: Bundle?
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
-        (activity as MainActivity).updateToolbarMenu(DISABLE)
-        (activity as MainActivity).drawerControl(DISABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
+        (activity as MainActivity).drawerControl(Selector.Disable)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -101,7 +101,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
         binding.fabNext.setOnClickListener(this)
         animationHelper.exFabBottomOut(binding.fabNext) //Need to init animation
 
-        binding.etCity.doOnTextChanged { text, start, before, count ->
+        binding.etCity.doOnTextChanged { _, _, _, count ->
             if (count > 0) {
                 if (binding.fabNext.visibility == View.GONE)
                 {
@@ -128,8 +128,8 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
     private fun setObservers() {
         viewModel.statusLive.observe(viewLifecycleOwner) {
             when (it) {
-                SUCCESSFUL -> {
-                    loadController(DISABLE)
+                State.Successful -> {
+                    loadController(Selector.Disable)
                     val userLocationParam = viewModel.userLocationLive.value
 
                     if (userLocationParam != null) {
@@ -137,30 +137,22 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
                         viewModel.clearData()
                     }
                 }
-                EMPTY_BODY -> {
-                    loadController(DISABLE)
-                    fragView.shortSnackBar(resources.getString(R.string.city_not_found))
-                }
-                ERROR -> {
-                    loadController(DISABLE)
-                    fragView.shortSnackBar(resources.getString(R.string.city_not_found))
-                }
-                FAILURE -> {
-                    loadController(DISABLE)
-                    fragView.shortSnackBar(resources.getString(R.string.server_not_responding))
+                State.Error -> {
+                    loadController(Selector.Disable)
+                    fragView.shortSnackBar(viewModel.errorMessage.value!!)
                 }
             }
         }
 
     }
 
-    private fun checkLocation(type: String, cityName: String = "", lat: Double = 0.0, lon: Double = 0.0) {
-        loadController(ENABLE)
+    private fun checkLocation(type: Enum<Type>, cityName: String = "", lat: Double = 0.0, lon: Double = 0.0) {
+        loadController(Selector.Enable)
 
-        if (type == TYPE_CITY_NAME)
+        if (type == Type.CityName)
             viewModel.requestWithCityName(cityName)
 
-        if (type == TYPE_LAT_LON)
+        if (type == Type.Coordinates)
             viewModel.requestWithCoordinates(lat, lon)
     }
 
@@ -174,9 +166,9 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
-    private fun loadController(action: String) {
+    private fun loadController(action: Enum<Selector>) {
             when (action) {
-                ENABLE -> {
+                Selector.Enable -> {
                     isLoading = true
 
                     binding.etCity.isEnabled = false
@@ -184,7 +176,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
                     binding.btnFindMe.isEnabled = false
                     binding.progressLinear.visibility = View.VISIBLE
                 }
-                DISABLE -> {
+                Selector.Disable -> {
                     isLoading = false
 
                     binding.etCity.isEnabled = true
@@ -214,7 +206,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
 
             if(isGPSEnabled())
             {
-                loadController(ENABLE)
+                loadController(Selector.Enable)
                 LocationServices.getFusedLocationProviderClient(requireActivity())
                     .requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper())
                 setRequestTimer()
@@ -240,7 +232,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
                     LocationServices.getFusedLocationProviderClient(requireActivity())
                         .removeLocationUpdates(locationCallback)
                     fragView.shortSnackBar(resources.getString(R.string.failed_to_find_device_location))
-                    loadController(DISABLE)
+                    loadController(Selector.Disable)
                 }
             }
         }
@@ -258,7 +250,7 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
 
                 if (checkTextField(input))
                 {
-                    checkLocation(TYPE_CITY_NAME, input)
+                    checkLocation(Type.CityName, input)
                 }
                 else
                 {

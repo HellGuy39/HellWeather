@@ -15,11 +15,8 @@ import com.hellguy39.hellweather.databinding.LocationManagerFragmentBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
-import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
-import com.hellguy39.hellweather.utils.DISABLE
-import com.hellguy39.hellweather.utils.ENABLE
-import com.hellguy39.hellweather.utils.SwipeGesture
+import com.hellguy39.hellweather.utils.Selector
 import com.hellguy39.hellweather.utils.shortSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,8 +40,8 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
         savedInstanceState: Bundle?
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
-        (activity as MainActivity).updateToolbarMenu(DISABLE)
-        (activity as MainActivity).drawerControl(ENABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
+        (activity as MainActivity).drawerControl(Selector.Enable)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -68,7 +65,6 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
     private fun setObservers() {
         mainViewModel.userLocationsLive.observe(activity as MainActivity) {
-            //if (it.isNotEmpty())
             updateRecycler(it)
         }
 
@@ -85,9 +81,14 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
     private fun updateRecycler(list: List<UserLocationParam>) {
         val weatherDataList = mainViewModel.weatherDataListLive.value ?: return
 
-        val _adapter = LocationsAdapter(requireContext(), list, weatherDataList, resources,viewModel.getUnits())
+        val adapter = LocationsAdapter(
+            locationList = list,
+            weatherDataList = weatherDataList,
+            resources = resources,
+            units = viewModel.getUnits()
+        )
 
-        binding.recyclerLocations.adapter = _adapter
+        binding.recyclerLocations.adapter = adapter
 
         val swipeGesture = object : SwipeGesture(requireContext(), resources) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

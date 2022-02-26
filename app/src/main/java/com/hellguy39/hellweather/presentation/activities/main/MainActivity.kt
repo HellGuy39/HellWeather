@@ -10,7 +10,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import androidx.preference.PreferenceManager
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.hellguy39.hellweather.R
@@ -18,14 +17,23 @@ import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 import com.hellguy39.hellweather.presentation.services.WeatherService
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.usecase.prefs.service.ServiceUseCases
+import com.hellguy39.hellweather.domain.utils.Prefs
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
+    @Inject
+    lateinit var serviceUseCases: ServiceUseCases
+
     //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
-    private lateinit var drawerLayout: DrawerLayout
+    //private lateinit var drawerLayout: DrawerLayout
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -35,26 +43,21 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
     private lateinit var navHostFragment: NavHostFragment
     private  var toolBarMenu: Menu? = null
 
-    private var _firstBoot = false
-    private var _serviceMode = false
+    private var firstBoot = false
+    private var serviceMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        //viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         toolBarMenu = binding.topAppBar.menu
 
-        _firstBoot = intent.getBooleanExtra(PREFS_FIRST_BOOT, false)
-        _serviceMode = intent.getBooleanExtra(PREFS_SERVICE_MODE, false)
+        firstBoot = intent.getBooleanExtra(Prefs.FirstBoot.name, false)
+        serviceMode = intent.getBooleanExtra(Prefs.ServiceMode.name, false)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-
-        /*toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
-        binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()*/
 
         binding.topAppBar.setNavigationOnClickListener {
             openDrawer()
@@ -64,9 +67,21 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
         binding.navigationView.setCheckedItem(R.id.homeFragment)
         NavigationUI.setupWithNavController(binding.navigationView, navController)
-        /*setSupportActionBar(binding.topAppBar)
-        NavigationUI.setupActionBarWithNavController(this, navController, binding.drawerLayout)*/
 
+        setupMaterialShapeToDrawer()
+
+        if (firstBoot) {
+            drawerControl(Selector.Disable)
+
+            if(isOnHomeFragment()) {
+                navController.navigate(HomeFragmentDirections.actionHomeFragmentToWelcomeFragment())
+            }
+        }
+
+        setObservers()
+    }
+
+    private fun setupMaterialShapeToDrawer() {
         val navViewBackground:MaterialShapeDrawable = binding.navigationView.background as MaterialShapeDrawable
         navViewBackground.shapeAppearanceModel = navViewBackground.shapeAppearanceModel
             .toBuilder()
@@ -74,20 +89,13 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
             .setBottomRightCorner(CornerFamily.ROUNDED, resources.getDimensionPixelSize(R.dimen.drawer_corner).toFloat())
             .build()
 
-        if (_firstBoot)
-        {
-            drawerControl(DISABLE)
+    }
 
-            if(navController.currentDestination?.id == R.id.homeFragment)
-            {
-                navController.navigate(HomeFragmentDirections.actionHomeFragmentToWelcomeFragment())
-            }
-        }
-
+    private fun setObservers() {
         viewModel.userLocationsLive.observe(this) {
-            if (viewModel.statusLive.value != IN_PROGRESS) {
+            if (!viewModel.isInProgress()) {
                 if (it.isNullOrEmpty()) {
-                    viewModel.statusLive.value = EMPTY_LIST
+                    viewModel.statusLive.value = State.Empty
                     return@observe
                 }
 
@@ -108,56 +116,58 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
     private fun updateData(list: List<UserLocationParam>) {
 
-        if (viewModel.statusLive.value != IN_PROGRESS) {
-            viewModel.statusLive.value = IN_PROGRESS
+        if (!viewModel.isInProgress()) {
+            viewModel.statusLive.value = State.Progress
 
             if (list.isNotEmpty()) {
-                viewModel.loadAllLocation(list)
-                if (_serviceMode) {
-                    serviceControl(REBOOT)
+                viewModel.fetchWeather(list)
+                if (serviceMode) {
+                    serviceControl(Selector.Reboot)
                 }
             }
             else
             {
-                viewModel.statusLive.value = EMPTY_LIST
+                viewModel.statusLive.value = State.Empty
             }
         }
     }
 
-    fun serviceControl(action: String) {
-        if (action == ENABLE) {
-            val list = viewModel.userLocationsLive.value
-            if (!list.isNullOrEmpty()) {
+    fun serviceControl(action: Enum<Selector>) {
+        when(action) {
+            Selector.Enable -> {
+                val list = viewModel.userLocationsLive.value
 
-                val locationStr = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString(PREFS_SERVICE_LOCATION, NONE)
+                if (!list.isNullOrEmpty()) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val locationStr = serviceUseCases.getServiceLocationUseCase.invoke()
 
-                var userLocationPos = 0
+                            var userLocationPos = 0
 
-                for (n in list.indices) {
-                    if (locationStr == list[n].locationName)
-                        userLocationPos = n
+                            for (n in list.indices) {
+                                if (locationStr == list[n].locationName)
+                                    userLocationPos = n
+                            }
+
+                            WeatherService.startService(this@MainActivity, list[userLocationPos])
+                        }
+                    }
                 }
-
-                WeatherService.startService(this, list[userLocationPos])
-            }
-        }
-        else if (action == REBOOT) {
-            if (!WeatherService.isRunning()) {
-                serviceControl(ENABLE)
-            }
-        }
-        else {
-            if (WeatherService.isRunning()) {
-                WeatherService.stopService(this)
-            }
+                Selector.Disable -> {
+                    if (!WeatherService.isRunning()) {
+                        serviceControl(Selector.Disable)
+                    }
+                }
+                Selector.Reboot -> {
+                    if (WeatherService.isRunning()) {
+                        WeatherService.stopService(this)
+                    }
+                }
         }
     }
 
     fun setToolbarTittle(s: String) {
         binding.topAppBar.title = s
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
@@ -166,15 +176,15 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    fun drawerControl(action: String) {
+    fun drawerControl(action: Enum<Selector>) {
         when(action) {
-            ENABLE -> {
+            Selector.Enable -> {
                 binding.topAppBar.setNavigationOnClickListener {
                     openDrawer()
                 }
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
-            DISABLE -> {
+            Selector.Disable -> {
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 binding.topAppBar.setNavigationOnClickListener {
                     //Nothing
@@ -182,14 +192,10 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
             }
         }
     }
-
-    fun openDrawer() = binding.drawerLayout.open()
-    fun closeDrawer() = binding.drawerLayout.close()
-
     override fun onBackPressed() {
         if (binding.drawerLayout.isOpen)
         {
-            binding.drawerLayout.close()
+            closeDrawer()
         }
         else
         {
@@ -197,12 +203,12 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         }
     }
 
-    fun updateToolbarMenu(action: String) {
+    fun updateToolbarMenu(action: Enum<Selector>) {
         if (toolBarMenu != null) {
-            if (action == ENABLE) {
-                toolBarMenu!!.findItem(R.id.update).isVisible = true
-            } else {
-                toolBarMenu!!.findItem(R.id.update).isVisible = false
+
+            when(action) {
+                Selector.Enable -> toolBarMenu!!.findItem(R.id.update).isVisible = true
+                Selector.Disable -> toolBarMenu!!.findItem(R.id.update).isVisible = false
             }
         }
     }
@@ -210,9 +216,9 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         when (p0?.itemId) {
             R.id.update -> {
-                if (navController.currentDestination?.id == R.id.homeFragment) {
-                    //(navHostFragment.childFragmentManager.fragments[0] as HomeFragment).onRefresh()
+                if (isOnHomeFragment()) {
                     val list = viewModel.userLocationsLive.value
+
                     if (list != null)
                         updateData(list)
                 }
@@ -221,6 +227,11 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         return true
     }
 
+    private fun openDrawer() = binding.drawerLayout.open()
+
+    private fun closeDrawer() = binding.drawerLayout.close()
+
+    private fun isOnHomeFragment(): Boolean = navController.currentDestination?.id == R.id.homeFragment
 
 }
 

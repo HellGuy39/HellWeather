@@ -1,6 +1,5 @@
 package com.hellguy39.hellweather.presentation.adapter
 
-import android.content.Context
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,11 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationItemBinding
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.models.weather.WeatherData
-import com.hellguy39.hellweather.utils.IMPERIAL
-import com.hellguy39.hellweather.utils.METRIC
-import com.hellguy39.hellweather.utils.STANDARD
+import com.hellguy39.hellweather.domain.utils.Unit
 import java.text.SimpleDateFormat
 import java.util.*
 
 class LocationsAdapter(
-    private val context: Context,
     private val locationList: List<UserLocationParam>,
     private val weatherDataList: List<WeatherData>,
     private val resources: Resources,
@@ -37,7 +33,13 @@ class LocationsAdapter(
         position: Int)
     {
         if (weatherDataList.isNotEmpty())
-            holder.bindWithWeather(locationList, weatherDataList, position, units, context, resources)
+            holder.bindWithWeather(
+                locationList = locationList,
+                weatherDataList = weatherDataList,
+                position = position,
+                units = units,
+                resources = resources
+            )
     }
 
     override fun getItemCount(): Int = locationList.size
@@ -51,7 +53,6 @@ class LocationsAdapter(
             weatherDataList: List<WeatherData>,
             position: Int,
             units: String,
-            context: Context,
             resources: Resources
         ) {
 
@@ -60,20 +61,19 @@ class LocationsAdapter(
             _binding.tvLocationName.text = locationList[position].locationName
             _binding.tvWeatherDescription.text = weatherItem.currentWeather.wDescription
 
-            if (units == STANDARD)
-            {
-                _binding.tvTemp.text = String.format(resources.getString(R.string.temp_kelvin), weatherItem.currentWeather.temp)
-                _binding.tvTempMinMax.text = String.format(resources.getString(R.string.max_min_kelvin_text), weatherItem.currentWeather.tempMax, weatherItem.currentWeather.tempMin)
-            }
-            else if (units == METRIC)
-            {
-                _binding.tvTemp.text = String.format(resources.getString(R.string.temp_celsius), weatherItem.currentWeather.temp)
-                _binding.tvTempMinMax.text = String.format(resources.getString(R.string.max_min_degree_text), weatherItem.currentWeather.tempMax, weatherItem.currentWeather.tempMin)
-            }
-            else if (units == IMPERIAL)
-            {
-                _binding.tvTemp.text = String.format(resources.getString(R.string.temp_fahrenheit), weatherItem.currentWeather.temp)
-                _binding.tvTempMinMax.text = String.format(resources.getString(R.string.max_min_degree_text), weatherItem.currentWeather.tempMax, weatherItem.currentWeather.tempMin)
+            when (units) {
+                Unit.Standard.name -> {
+                    _binding.tvTemp.text = String.format(resources.getString(R.string.temp_kelvin), weatherItem.currentWeather.temp)
+                    _binding.tvTempMinMax.text = String.format(resources.getString(R.string.max_min_kelvin_text), weatherItem.currentWeather.tempMax, weatherItem.currentWeather.tempMin)
+                }
+                Unit.Metric.name -> {
+                    _binding.tvTemp.text = String.format(resources.getString(R.string.temp_celsius), weatherItem.currentWeather.temp)
+                    _binding.tvTempMinMax.text = String.format(resources.getString(R.string.max_min_degree_text), weatherItem.currentWeather.tempMax, weatherItem.currentWeather.tempMin)
+                }
+                Unit.Imperial.name -> {
+                    _binding.tvTemp.text = String.format(resources.getString(R.string.temp_fahrenheit), weatherItem.currentWeather.temp)
+                    _binding.tvTempMinMax.text = String.format(resources.getString(R.string.max_min_degree_text), weatherItem.currentWeather.tempMax, weatherItem.currentWeather.tempMin)
+                }
             }
 
             _binding.tvTime.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(weatherItem.currentWeather.dt * 1000))

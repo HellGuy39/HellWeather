@@ -13,6 +13,8 @@ import com.hellguy39.hellweather.databinding.SearchFragmentBinding
 import com.hellguy39.hellweather.glide.GlideApp
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
+import com.hellguy39.hellweather.domain.utils.MM_HG
+import com.hellguy39.hellweather.domain.utils.Unit
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -37,7 +39,7 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
         savedInstanceState: Bundle?
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_search))
-        (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -64,10 +66,8 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
     override fun onStart() {
         super.onStart()
         _viewModel.currentWeatherLive.observe(viewLifecycleOwner) {
-            if (findNavController().currentDestination?.id == R.id.searchFragment)
-            {
-                if (it != null)
-                {
+            if (isOnSearchFragment()) {
+                if (it != null) {
                     refreshing(false)
                     updateUI(it)
                 }
@@ -75,17 +75,12 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
         }
         _viewModel.statusLive.observe(viewLifecycleOwner) {
             when (it) {
-                FAILURE -> {
+                State.Error -> {
                     refreshing(false)
-                    if (findNavController().currentDestination?.id == R.id.searchFragment)
-                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.connection_lost))
-                }
-                ERROR -> {
-                    refreshing(false)
-                    if (findNavController().currentDestination?.id == R.id.searchFragment)
+                    if (isOnSearchFragment())
                         (activity as MainActivity).setToolbarTittle(resources.getString(R.string.error))
                 }
-                IN_PROGRESS -> {
+                State.Progress -> {
                     refreshing(true)
                 }
             }
@@ -94,7 +89,7 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
 
     private fun updateUI(currentWeather: CurrentWeather) {
 
-        if (findNavController().currentDestination?.id == R.id.searchFragment) {
+        if (isOnSearchFragment()) {
             (activity as MainActivity).setToolbarTittle(
                 SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
                     currentWeather.dt * 1000)
@@ -109,9 +104,9 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
         val units = _viewModel.getUnits()
 
         val tempDesignation = when (units) {
-            STANDARD -> resources.getString(R.string.kelvin)
-            METRIC -> resources.getString(R.string.celsius)
-            IMPERIAL -> resources.getString(R.string.fahrenheit)
+            Unit.Standard.name -> resources.getString(R.string.kelvin)
+            Unit.Metric.name -> resources.getString(R.string.celsius)
+            Unit.Imperial.name -> resources.getString(R.string.fahrenheit)
             else -> resources.getString(R.string.degree)
         }
 
@@ -134,7 +129,7 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
         _binding.tvWindDirection.text = String.format(resources.getString(R.string.wind_direction_text),currentWeather.windDeg)
         _binding.tvWindGust.text = String.format(resources.getString(R.string.wind_gust_text),currentWeather.windGust)
 
-        if (units == STANDARD)
+        if (units == Unit.Standard.name)
             _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_kelvin_text),currentWeather.tempFeelsLike)
         else
             _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),currentWeather.tempFeelsLike)
@@ -177,6 +172,9 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
                 .setListener(null)
         }
     }
+
+    private fun isOnSearchFragment(): Boolean =
+        findNavController().currentDestination?.id == R.id.searchFragment
 
     private fun checkInput(s : String) : Boolean = TextUtils.isEmpty(s)
 }

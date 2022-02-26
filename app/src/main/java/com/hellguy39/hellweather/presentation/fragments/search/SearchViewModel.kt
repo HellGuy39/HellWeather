@@ -5,35 +5,34 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hellguy39.hellweather.domain.models.request.CurrentByCityRequest
 import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
-import com.hellguy39.hellweather.domain.usecase.prefs.units.GetUnitsUseCase
-import com.hellguy39.hellweather.domain.usecase.requests.weather.GetCurrentWeatherByCityNameUseCase
-import com.hellguy39.hellweather.utils.ERROR
-import com.hellguy39.hellweather.utils.IN_PROGRESS
-import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
-import com.hellguy39.hellweather.utils.SUCCESSFUL
+import com.hellguy39.hellweather.domain.usecase.prefs.lang.LangUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
+import com.hellguy39.hellweather.domain.usecase.requests.weather.WeatherRequestUseCases
+import com.hellguy39.hellweather.domain.utils.OPEN_WEATHER_API_KEY
+import com.hellguy39.hellweather.utils.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val getUnitsUseCase: GetUnitsUseCase,
-    private val getCurrentWeatherByCityNameUseCase: GetCurrentWeatherByCityNameUseCase
+    private val unitsUseCase: UnitsUseCases,
+    private val requestUseCases: WeatherRequestUseCases,
+    langUseCases: LangUseCases
 ): ViewModel() {
 
-    private val lang = Locale.getDefault().country
+    private val lang = langUseCases.getLangUseCase.invoke()
     val currentWeatherLive = MutableLiveData<CurrentWeather>()
-    val statusLive = MutableLiveData<String>()
+    val statusLive = MutableLiveData<Enum<State>>()
 
     fun getCurrentWeather(cityName: String) {
 
-        if (statusLive.value == IN_PROGRESS)
+        if (isInProgress())
             return
         else
-            statusLive.value = IN_PROGRESS
+            statusLive.value = State.Progress
 
         viewModelScope.launch(Dispatchers.IO) {
             val model = CurrentByCityRequest(
@@ -43,14 +42,14 @@ class SearchViewModel @Inject constructor(
                 appId = OPEN_WEATHER_API_KEY
             )
 
-            val response = getCurrentWeatherByCityNameUseCase.invoke(model)
+            val response = requestUseCases.getCurrentWeatherByCityNameUseCase.invoke(model)
 
             withContext(Dispatchers.Main) {
                 if (response.data != null) {
                     currentWeatherLive.value = response.data!!
-                    statusLive.value = SUCCESSFUL
+                    statusLive.value = State.Successful
                 } else {
-                    statusLive.value = ERROR
+                    statusLive.value = State.Error
                 }
             }
 
@@ -58,7 +57,9 @@ class SearchViewModel @Inject constructor(
     }
 
     fun getUnits(): String {
-        return getUnitsUseCase.invoke()
+        return unitsUseCase.getUnitsUseCase.invoke()
     }
+
+    private fun isInProgress(): Boolean = statusLive.value == State.Progress
 
 }

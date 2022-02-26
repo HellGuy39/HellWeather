@@ -8,9 +8,8 @@ import android.view.ViewGroup
 import com.hellguy39.hellweather.BuildConfig
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentAppInfoBinding
-import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.utils.DISABLE
+import com.hellguy39.hellweather.utils.Selector
 
 class AppInfoFragment : Fragment() {
 
@@ -24,7 +23,7 @@ class AppInfoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_info))
 
         return inflater.inflate(R.layout.fragment_app_info, container, false)

@@ -1,32 +1,42 @@
 package com.hellguy39.hellweather.domain.usecase.requests.weather
 
+import com.google.gson.JsonObject
 import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
 import com.hellguy39.hellweather.domain.repository.ApiRepository
 import com.hellguy39.hellweather.domain.models.request.CurrentByCoordinatesRequest
+import com.hellguy39.hellweather.domain.models.weather.WeatherData
 import com.hellguy39.hellweather.domain.resource.Resource
 import com.hellguy39.hellweather.domain.utils.converter
+import retrofit2.Response
+import java.lang.Exception
 
 class GetCurrentWeatherByCoordsUseCase(private val apiRepositoryImpl: ApiRepository) {
     suspend operator fun invoke(model: CurrentByCoordinatesRequest): Resource<CurrentWeather> {
 
-        val response = apiRepositoryImpl.getCurrentWeatherWithLatLon(
-            lat = model.lat,
-            lon = model.lon,
-            units = model.units,
-            lang = model.lang,
-            appId = model.appId
-        )
+        val response: Response<JsonObject>
 
-        if (response.isSuccessful) {
+        try {
+            response = apiRepositoryImpl.getCurrentWeatherWithLatLon(
+                lat = model.lat,
+                lon = model.lon,
+                units = model.units,
+                lang = model.lang,
+                appId = model.appId
+            )
+        } catch (e: Exception) {
+            return Resource.Error(message = "No internet connection")
+        }
+
+        return if (response.isSuccessful) {
             val jsonObject = response.body()
 
             if (jsonObject != null) {
-                return Resource.Success(converter().toCurrentWeather(jsonObject))
+                Resource.Success(data = converter().toCurrentWeather(jsonObject))
             } else {
-                return Resource.Error("Response body is null")
+                Resource.Error(message = "Response body is null")
             }
         } else {
-            return Resource.Error(response.errorBody().toString())
+            Resource.Error(message = response.errorBody().toString())
         }
     }
 }

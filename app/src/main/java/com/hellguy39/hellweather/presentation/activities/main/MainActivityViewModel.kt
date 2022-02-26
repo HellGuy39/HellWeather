@@ -1,17 +1,19 @@
 package com.hellguy39.hellweather.presentation.activities.main
 
-import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
-import com.hellguy39.hellweather.domain.models.weather.WeatherData
 import com.hellguy39.hellweather.domain.models.request.OneCallRequest
-import com.hellguy39.hellweather.domain.usecase.local.GetUserLocationListUseCase
-import com.hellguy39.hellweather.domain.usecase.requests.weather.GetOneCallWeatherUseCase
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.domain.models.weather.WeatherData
+import com.hellguy39.hellweather.domain.usecase.local.UserLocationUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.FirstBootValueUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
+import com.hellguy39.hellweather.domain.usecase.requests.weather.WeatherRequestUseCases
+import com.hellguy39.hellweather.domain.utils.OPEN_WEATHER_API_KEY
+import com.hellguy39.hellweather.utils.State
+import com.hellguy39.hellweather.domain.utils.Unit
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,68 +22,72 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val defSharPrefs: SharedPreferences,
-    private val getUserLocationListUseCase: GetUserLocationListUseCase,
-    private val getOneCallWeatherUseCase: GetOneCallWeatherUseCase
+    private val userLocationUseCases: UserLocationUseCases,
+    private val unitsUseCases: UnitsUseCases,
+    private val firstBootValueUseCases: FirstBootValueUseCases,
+    private val weatherRequestUseCases: WeatherRequestUseCases
 ): ViewModel() {
 
     val userLocationsLive = MutableLiveData<List<UserLocationParam>>()
     val weatherDataListLive = MutableLiveData<List<WeatherData>>()
-    val statusLive = MutableLiveData<String>()
+    val statusLive = MutableLiveData<Enum<State>>()
+    val errorMessage = MutableLiveData<String>()
     val firstBootLive = MutableLiveData<Boolean>()
 
     private val weatherDataList: MutableList<WeatherData> = mutableListOf()
 
     private val lang = Locale.getDefault().country
-    private var _units = METRIC
-    private var _firstBoot = false
+    private var units = Unit.Metric.toString()
+    private var firstBoot = false
 
     init {
-        statusLive.value = EXPECTATION
+        statusLive.value = State.Expectation
 
-        _units = defSharPrefs.getString(PREFS_UNITS, METRIC).toString()
-        _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, true)
-        firstBootLive.value = _firstBoot
+        units = unitsUseCases.getUnitsUseCase.invoke()
+        firstBoot = firstBootValueUseCases.getFirstBootValueUseCase.invoke()
 
-        viewModelScope.launch {
-            if (!_firstBoot) {
-                val list = getUserLocationListUseCase.invoke()
+        firstBootLive.value = firstBoot
 
-                if (list.data != null) {
-                    userLocationsLive.value = list.data!!
-                } else {
+        viewModelScope.launch(Dispatchers.IO) {
 
+            if (!firstBoot) {
+                val list = userLocationUseCases.getUserLocationListUseCase.invoke()
+
+                withContext(Dispatchers.Main) {
+                    if (list.data != null) {
+                        userLocationsLive.value = list.data!!
+                    } else {
+                        statusLive.value = State.Empty
+                    }
                 }
             }
         }
     }
 
     fun getUserLocationsList(): List<UserLocationParam> {
-        if (userLocationsLive.value != null) {
-            return userLocationsLive.value!!
-        }
-        else
-        {
-            return listOf()
+        return if (userLocationsLive.value != null) {
+            userLocationsLive.value!!
+        } else {
+            listOf()
         }
     }
 
     fun onRepositoryChanged() {
-        _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, false)
-        firstBootLive.value = _firstBoot
 
-        if (statusLive.value != IN_PROGRESS) {
-            statusLive.value = IN_PROGRESS
-            weatherDataList.clear()
+        updateFirstBootValue()
 
-            weatherDataListLive.value = weatherDataList
+        if (!isInProgress()) {
+            statusLive.value = State.Progress
+
+            clearWeatherDataList()
+
             userLocationsLive.value = listOf()
 
             viewModelScope.launch(Dispatchers.IO) {
-                val list = getUserLocationListUseCase.invoke()
+                val list = userLocationUseCases.getUserLocationListUseCase.invoke()
 
                 if (list.data != null) {
-                    loadAllLocation(list.data!!)
+                    fetchWeather(list.data!!)
                 }
 
                 withContext(Dispatchers.Main) {
@@ -89,7 +95,7 @@ class MainActivityViewModel @Inject constructor(
                     if (list.data != null) {
                         userLocationsLive.value = list.data!!
                     } else {
-                        statusLive.value = EMPTY_LIST
+                        statusLive.value = State.Empty
                     }
 
                 }
@@ -97,7 +103,7 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun loadAllLocation(list: List<UserLocationParam>) {
+    fun fetchWeather(list: List<UserLocationParam>) {
 
         viewModelScope.launch(Dispatchers.Main) {
             clearWeatherDataList()
@@ -105,7 +111,7 @@ class MainActivityViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            _units = defSharPrefs.getString(PREFS_UNITS, METRIC).toString() //Needs to be updated here
+            units = unitsUseCases.getUnitsUseCase.invoke() //Needs to be updated here
 
             if (list.isNotEmpty()) {
                 for (n in list.indices) {
@@ -114,12 +120,12 @@ class MainActivityViewModel @Inject constructor(
                         list[n].lat,
                         list[n].lat,
                         "minutely,alerts",
-                        _units,
+                        units,
                         lang,
                         OPEN_WEATHER_API_KEY
                     )
 
-                    val request = getOneCallWeatherUseCase.invoke(model)
+                    val request = weatherRequestUseCases.getOneCallWeatherUseCase.invoke(model)
 
                     if (request.data != null)
                     {
@@ -128,7 +134,8 @@ class MainActivityViewModel @Inject constructor(
                     else
                     {
                         withContext(Dispatchers.Main) {
-                            statusLive.value = ERROR
+                            errorMessage.value = request.message!!
+                            statusLive.value = State.Error
                         }
                         return@launch
                     }
@@ -136,7 +143,7 @@ class MainActivityViewModel @Inject constructor(
 
                 withContext(Dispatchers.Main) {
                     weatherDataListLive.value = weatherDataList
-                    statusLive.value = SUCCESSFUL
+                    statusLive.value = State.Successful
                 }
             }
         }
@@ -146,5 +153,16 @@ class MainActivityViewModel @Inject constructor(
         weatherDataList.clear()
         weatherDataListLive.value = weatherDataList
     }
+
+    private fun updateFirstBootValue() {
+        viewModelScope.launch(Dispatchers.IO) {
+            firstBoot = firstBootValueUseCases.getFirstBootValueUseCase.invoke()
+            withContext(Dispatchers.Main) {
+                firstBootLive.value = firstBoot
+            }
+        }
+    }
+
+    fun isInProgress(): Boolean = statusLive.value == State.Progress
 
 }

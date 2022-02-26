@@ -13,8 +13,7 @@ import com.hellguy39.hellweather.databinding.ConfirmationCityFragmentBinding
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
-import com.hellguy39.hellweather.utils.DISABLE
-import com.hellguy39.hellweather.utils.ENABLE
+import com.hellguy39.hellweather.utils.Selector
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,8 +37,8 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         savedInstanceState: Bundle?
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
-        (activity as MainActivity).updateToolbarMenu(DISABLE)
-        (activity as MainActivity).drawerControl(DISABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
+        (activity as MainActivity).drawerControl(Selector.Disable)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -59,19 +58,32 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     }
 
     private fun updateUI(usrLoc: UserLocationParam) {
-        binding.tvLocation.text = usrLoc.country + ", " + usrLoc.locationName
+        binding.tvLocation.text = String.format(
+            resources.getString(R.string.country_and_location_name),
+            usrLoc.country,
+            usrLoc.locationName
+        )
+
         binding.tvCoords.text = String.format(resources.getString(R.string.lat_lon_text),usrLoc.lat,usrLoc.lon)
-        if (usrLoc.timezone == 0)
-        {
-            binding.tvTimezone.text = "${usrLoc.timezone} GMT"
-        }
-        else if (usrLoc.timezone > 0)
-        {
-            binding.tvTimezone.text = "+${usrLoc.timezone} GMT"
-        }
-        else
-        {
-            binding.tvTimezone.text = "${usrLoc.timezone} GMT"
+        when {
+            usrLoc.timezone == 0 -> {
+                binding.tvTimezone.text = String.format(
+                    resources.getString(R.string.gmt),
+                    usrLoc.timezone
+                )
+            }
+            usrLoc.timezone > 0 -> {
+                binding.tvTimezone.text = String.format(
+                    resources.getString(R.string.plus_gmt),
+                    usrLoc.timezone
+                )
+            }
+            else -> {
+                binding.tvTimezone.text = String.format(
+                    resources.getString(R.string.gmt),
+                    usrLoc.timezone
+                )
+            }
         }
 
     }
@@ -81,7 +93,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
             R.id.fabTrue -> {
                 viewModel.saveToDatabase(userLocationParam)
                 mainViewModel.onRepositoryChanged()
-                (activity as MainActivity).drawerControl(ENABLE)
+                (activity as MainActivity).drawerControl(Selector.Enable)
 
                 if (viewModel.isFirstBoot()) {
                     viewModel.disableFirstBoot()

@@ -13,9 +13,7 @@ import com.hellguy39.hellweather.databinding.ForegroundServiceFragmentBinding
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
-import com.hellguy39.hellweather.utils.DISABLE
-import com.hellguy39.hellweather.utils.ENABLE
-import com.hellguy39.hellweather.utils.NONE
+import com.hellguy39.hellweather.utils.Selector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +34,7 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
     private lateinit var _mainViewModel: MainActivityViewModel
     private lateinit var _binding: ForegroundServiceFragmentBinding
 
-    private var selectedLoc: String = NONE
+    private var selectedLoc: String? = null
     private var selectedTime: Int = 3 * 60
     private var serviceMode: Boolean = false
 
@@ -51,7 +49,7 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
         savedInstanceState: Bundle?
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_foreground_service))
-        (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
 
         return inflater.inflate(R.layout.foreground_service_fragment, container, false)
     }
@@ -93,11 +91,11 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
 
         _binding.serviceSwitch.setOnCheckedChangeListener { _, b ->
             if (b) {
-                (activity as MainActivity).serviceControl(ENABLE)
+                (activity as MainActivity).serviceControl(Selector.Enable)
             }
             else
             {
-                (activity as MainActivity).serviceControl(DISABLE)
+                (activity as MainActivity).serviceControl(Selector.Disable)
             }
             _viewModel.saveServiceMode(b)
         }
@@ -113,7 +111,7 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
 
         for (n in list.indices) {
 
-            if (selectedLoc != NONE && list[n].locationName == selectedLoc)
+            if (selectedLoc != null && list[n].locationName == selectedLoc)
                 selectedListPos = n
 
             locationNameList.add(list[n].locationName)

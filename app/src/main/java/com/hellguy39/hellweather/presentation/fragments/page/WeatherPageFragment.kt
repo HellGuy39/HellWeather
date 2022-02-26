@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.YAxis
@@ -20,45 +19,48 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherPageCollapseBinding
-import com.hellguy39.hellweather.glide.GlideApp
-import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
-import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
 import com.hellguy39.hellweather.domain.models.weather.DailyWeather
 import com.hellguy39.hellweather.domain.models.weather.HourlyWeather
 import com.hellguy39.hellweather.domain.models.weather.WeatherData
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.domain.utils.MM_HG
+import com.hellguy39.hellweather.domain.utils.Unit
+import com.hellguy39.hellweather.glide.GlideApp
+import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
+import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 private const val WEATHER_DATA_ARG = "wd_arg"
+private const val UNITS_ARG = "units_arg"
 
+@AndroidEntryPoint
 class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
 
     companion object {
         @JvmStatic
-        fun newInstance(weatherData: WeatherData) = WeatherPageFragment().apply {
+        fun newInstance(weatherData: WeatherData, units: String) = WeatherPageFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(WEATHER_DATA_ARG,weatherData)
+                putString(UNITS_ARG, units)
             }
         }
     }
 
     private lateinit var _binding: FragmentWeatherPageCollapseBinding
-    private lateinit var _weatherData: WeatherData
+    private lateinit var weatherData: WeatherData
     private lateinit var units: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            _weatherData = it.getSerializable(WEATHER_DATA_ARG) as WeatherData
+            weatherData = it.getSerializable(WEATHER_DATA_ARG) as WeatherData
+            units = it.getString(UNITS_ARG) as String
         }
-        units = PreferenceManager.getDefaultSharedPreferences(requireContext())
-            .getString(PREFS_UNITS, METRIC).toString()
     }
 
     override fun onCreateView(
@@ -70,10 +72,10 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         _binding = FragmentWeatherPageCollapseBinding.bind(view!!)
 
         CoroutineScope(Dispatchers.Main).launch {
-            if (this@WeatherPageFragment::_weatherData.isInitialized) {
-                updateUI(_weatherData)
-                updateRecyclersView(_weatherData)
-                updateGraph(_weatherData)
+            if (this@WeatherPageFragment::weatherData.isInitialized) {
+                updateUI(weatherData)
+                updateRecyclersView(weatherData)
+                updateGraph(weatherData)
             }
         }
 
@@ -141,10 +143,6 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
             }
         }
 
-
-        //leftAxis.setDrawAxisLine(false)
-        //rightAxis.setDrawAxisLine(false)
-        //leftAxis.isEnabled = false
         leftAxis.axisMaximum = 100f
         leftAxis.axisMinimum = 0f
         rightAxis.isEnabled = false
@@ -155,7 +153,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         _binding.graphView.animateXY(1000, 1000)
     }
 
-    private fun updateRecyclersView(weatherData: WeatherData) = CoroutineScope(Main).launch {
+    private fun updateRecyclersView(weatherData: WeatherData) = CoroutineScope(Dispatchers.Main).launch {
 
         val listDays: MutableList<DailyWeather> = weatherData.dailyWeather
         val listHours: MutableList<HourlyWeather> = weatherData.hourlyWeather
@@ -180,21 +178,21 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
             .into(_binding.ivWeather)
 
         when (units) {
-            STANDARD -> {
+            Unit.Standard.name -> {
                 _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_kelvin_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_kelvin_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_kelvin_text),wm.tempFeelsLike)
                 _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_kelvin_text), wm.dewPoint)
 
             }
-            IMPERIAL -> {
+            Unit.Imperial.name -> {
                 _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_degree_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),wm.tempFeelsLike)
                 _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_fahrenheit_text), wm.dewPoint)
 
             }
-            METRIC -> {
+            Unit.Metric.name -> {
                 _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_degree_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),wm.tempFeelsLike)
@@ -204,9 +202,9 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         }
 
         val tempDesignation = when (units) {
-            STANDARD -> resources.getString(R.string.kelvin)
-            METRIC -> resources.getString(R.string.celsius)
-            IMPERIAL -> resources.getString(R.string.fahrenheit)
+            Unit.Standard.name -> resources.getString(R.string.kelvin)
+            Unit.Metric.name -> resources.getString(R.string.celsius)
+            Unit.Imperial.name -> resources.getString(R.string.fahrenheit)
             else -> resources.getString(R.string.degree)
         }
 

@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.utils
+package com.hellguy39.hellweather.presentation.fragments.location_manager
 
 import android.content.Context
 import android.content.res.Resources

@@ -5,14 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.fragments.page.WeatherPageFragment"
     android:id="@+id/rootMotionLayout"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapseToolbar"

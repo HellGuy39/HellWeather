@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.DayItemBinding
 import com.hellguy39.hellweather.domain.models.weather.DailyWeather
-import com.hellguy39.hellweather.utils.STANDARD
+import com.hellguy39.hellweather.domain.utils.Unit
 
 class NextDaysAdapter(
     private val context: Context,
@@ -22,13 +22,13 @@ class NextDaysAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): NextDaysAdapter.DayViewHolder {
+    ): DayViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.day_item, parent, false)
         return DayViewHolder(itemView)
     }
 
     override fun onBindViewHolder(
-        holder: NextDaysAdapter.DayViewHolder,
+        holder: DayViewHolder,
         position: Int)
     {
         val dailyWeather: DailyWeather = dayList[position]
@@ -43,7 +43,7 @@ class NextDaysAdapter(
 
         fun bind(dailyWeather: DailyWeather, context: Context, units: String, resources: Resources) {
 
-            if (units == STANDARD) {
+            if (units == Unit.Standard.name) {
                 _binding.tvMaxTemp.text =
                     String.format(resources.getString(R.string.item_temp_kelvin), dailyWeather.max)
                 _binding.tvMinTemp.text =
@@ -60,7 +60,6 @@ class NextDaysAdapter(
 
             Glide.with(context)
                 .load("https://openweathermap.org/img/wn/${dailyWeather.icon}@2x.png")
-                //.dontAnimate()
                 .placeholder(R.drawable.ic_round_image_not_supported_24)
                 .error(R.drawable.ic_outline_error_outline_24)
                 .centerCrop()

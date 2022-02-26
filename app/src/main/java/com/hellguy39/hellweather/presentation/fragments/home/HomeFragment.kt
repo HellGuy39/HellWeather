@@ -1,7 +1,6 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +10,25 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
+import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.presentation.adapter.WeatherPageAdapter
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.utils.Selector
+import com.hellguy39.hellweather.utils.State
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
+
+    @Inject
+    lateinit var unitsUseCases: UnitsUseCases
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
@@ -42,7 +48,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         savedInstanceState: Bundle?
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.loading))
-        (activity as MainActivity).updateToolbarMenu(ENABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Enable)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -51,13 +57,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
-        //binding.viewPager.visibility = View.INVISIBLE
     }
 
     override fun onStart() {
         super.onStart()
         if(mainActivityViewModel.firstBootLive.value == false) {
-            refreshing(ENABLE)
+            refreshing(Selector.Enable)
             setStatusObserver()
         }
     }
@@ -68,9 +73,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 return@observe
 
             when (it) {
-                SUCCESSFUL -> {
+                State.Successful -> {
 
-                    refreshing(DISABLE)
+                    refreshing(Selector.Disable)
 
                     val weatherDataList = mainActivityViewModel.weatherDataListLive.value
                     val userLocations = mainActivityViewModel.userLocationsLive.value
@@ -83,15 +88,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                     CoroutineScope(Dispatchers.Main).launch {
 
-                        val pagerAdapter = WeatherPageAdapter(this@HomeFragment, weatherDataList)
+                        val pagerAdapter = WeatherPageAdapter(
+                            frag = this@HomeFragment,
+                            weatherDataList = weatherDataList,
+                            units = unitsUseCases.getUnitsUseCase.invoke()
+                        )
+
                         binding.viewPager.adapter = pagerAdapter
+
                         tabLayoutMediator = TabLayoutMediator(
                             binding.tabLayout,
                             binding.viewPager
                         ) { tab, position ->
                             tab.text = userLocations[position].locationName
 
-                            if (findNavController().currentDestination?.id == R.id.homeFragment) {
+                            if (isOnHomeFragment()) {
                                 (activity as MainActivity).setToolbarTittle(
                                     SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
                                         Date(weatherDataList[position].currentWeather.dt * 1000)
@@ -103,35 +114,29 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         //animateViewPager()
                     }
                 }
-                FAILURE -> {
-                    refreshing(DISABLE)
 
-                    if (findNavController().currentDestination?.id == R.id.homeFragment)
-                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.connection_lost))
-                }
-                ERROR -> {
-                    refreshing(DISABLE)
+                State.Error -> {
+                    refreshing(Selector.Disable)
+                    val errorMessage = mainActivityViewModel.errorMessage.value
 
-                    if (findNavController().currentDestination?.id == R.id.homeFragment)
-                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.error))
+                    if (isOnHomeFragment())
+                        (activity as MainActivity).setToolbarTittle(errorMessage!!)
                 }
-                IN_PROGRESS -> {
-                    refreshing(ENABLE)
+                State.Progress -> {
+                    refreshing(Selector.Enable)
                 }
-                EMPTY_LIST -> {
-                    refreshing(DISABLE)
 
-                    if (findNavController().currentDestination?.id == R.id.homeFragment)
+                State.Empty -> {
+                    refreshing(Selector.Disable)
+
+                    if (isOnHomeFragment())
                         (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))
                 }
-                /*EXPECTATION -> {
-                    refreshing(ENABLE)
-                }*/
             }
         }
     }
 
-    private fun animateViewPager() {
+    /*private fun animateViewPager() {
         binding.viewPager.apply {
             alpha = 0f
             visibility = View.VISIBLE
@@ -141,7 +146,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 .setDuration(300)
                 .setListener(null)
         }
-    }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -150,15 +155,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 tabLayoutMediator.detach()
             }
         }
-        //mainActivityViewModel.statusLive.removeObservers(activity as MainActivity)
     }
 
 
-    private fun refreshing(action: String) {
-        if (findNavController().currentDestination?.id != R.id.homeFragment)
+    private fun refreshing(action: Enum<Selector>) {
+        if (!isOnHomeFragment())
             return
 
-        if (action == ENABLE) {
+        if (action == Selector.Enable) {
             binding.progressIndicator.visibility = View.VISIBLE
             (activity as MainActivity).setToolbarTittle(getString(R.string.loading))
         }
@@ -167,4 +171,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.progressIndicator.visibility = View.INVISIBLE
         }
     }
+
+    private fun isOnHomeFragment(): Boolean = findNavController().currentDestination?.id == R.id.homeFragment
 }

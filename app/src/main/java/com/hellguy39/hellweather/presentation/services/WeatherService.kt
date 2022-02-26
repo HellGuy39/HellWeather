@@ -14,9 +14,11 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.models.request.OneCallRequest
 import com.hellguy39.hellweather.domain.usecase.prefs.service.ServiceUseCases
-import com.hellguy39.hellweather.domain.usecase.prefs.units.GetUnitsUseCase
-import com.hellguy39.hellweather.domain.usecase.requests.weather.GetOneCallWeatherUseCase
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
+import com.hellguy39.hellweather.domain.usecase.requests.weather.WeatherRequestUseCases
+import com.hellguy39.hellweather.domain.utils.OPEN_WEATHER_API_KEY
+import com.hellguy39.hellweather.domain.utils.SERVICE_CHANNEL_ID
+import com.hellguy39.hellweather.domain.utils.Unit
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,10 +34,10 @@ class WeatherService : Service() {
     lateinit var useCases: ServiceUseCases
 
     @Inject
-    lateinit var getOneCallWeatherUseCase: GetOneCallWeatherUseCase
+    lateinit var requestUseCases: WeatherRequestUseCases
 
     @Inject
-    lateinit var getUnitsUseCase: GetUnitsUseCase
+    lateinit var unitsUseCases: UnitsUseCases
 
     companion object {
 
@@ -43,13 +45,6 @@ class WeatherService : Service() {
 
         fun startService(context: Context, userLocationParam: UserLocationParam) {
             val service = Intent(context, WeatherService::class.java)
-            /*val units = PreferenceManager.getDefaultSharedPreferences(context).getString(
-                PREFS_UNITS, METRIC)
-            val pauseTime = PreferenceManager.getDefaultSharedPreferences(context).getInt(
-                PREFS_SERVICE_UPD_TIME, 3 * 60)
-*/
-            /*service.putExtra("units", units)
-            service.putExtra("pauseTime", pauseTime)*/
             service.putExtra("location", userLocationParam)
             ContextCompat.startForegroundService(context, service)
         }
@@ -66,13 +61,13 @@ class WeatherService : Service() {
 
         isRunning = true
 
-        var units = METRIC
+        var units = Unit.Metric.name
         var pauseTime = 60 * 3
         var userLocation = UserLocationParam()
         val lang = Locale.getDefault().country
 
         CoroutineScope(Dispatchers.IO).launch {
-            units = getUnitsUseCase.invoke()//intent?.getStringExtra("units")
+            units = unitsUseCases.getUnitsUseCase.invoke()//intent?.getStringExtra("units")
             pauseTime = useCases.getServiceUpdateTimeUseCase.invoke()//intent?.getLongExtra("pauseTime", 90 * 10000)
             userLocation = intent?.getSerializableExtra("location") as UserLocationParam
             pauseTime *= 10000
@@ -95,7 +90,7 @@ class WeatherService : Service() {
                     appId = OPEN_WEATHER_API_KEY
                 )
 
-                val response = getOneCallWeatherUseCase.invoke(model)
+                val response = requestUseCases.getOneCallWeatherUseCase.invoke(model)
 
                 var notification: Notification
                 var contentText: String
@@ -116,7 +111,7 @@ class WeatherService : Service() {
 
                     val weatherData = response.data!!
 
-                    contentText = if (units == STANDARD)
+                    contentText = if (units == Unit.Standard.name)
                         weatherData.currentWeather.wDescription + " | " +
                                 "$max: ${weatherData.currentWeather.tempMax}K, " +
                                 "$min: ${weatherData.currentWeather.tempMin}K" + " | " +
@@ -128,9 +123,9 @@ class WeatherService : Service() {
                                 "$chanceOfRainText ${weatherData.hourlyWeather[0].pop.toInt()}%"
 
                     tittle = when (units) {
-                        STANDARD -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}K"
-                        METRIC -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°C"
-                        IMPERIAL -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°F"
+                        Unit.Standard.name -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}K"
+                        Unit.Metric.name -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°C"
+                        Unit.Imperial.name -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°F"
                         else -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°"
                     }
 
