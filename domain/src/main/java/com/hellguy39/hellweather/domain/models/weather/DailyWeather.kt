@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.domain.models
+package com.hellguy39.hellweather.domain.models.weather
 
 import java.io.Serializable
 

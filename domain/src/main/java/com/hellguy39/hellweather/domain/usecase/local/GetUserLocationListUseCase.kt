@@ -1,9 +1,8 @@
 package com.hellguy39.hellweather.domain.usecase.local
 
-import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.repository.LocationRepository
 import com.hellguy39.hellweather.domain.resource.Resource
-import kotlinx.coroutines.flow.first
 
 class GetUserLocationListUseCase(private val locationRepository: LocationRepository) {
 

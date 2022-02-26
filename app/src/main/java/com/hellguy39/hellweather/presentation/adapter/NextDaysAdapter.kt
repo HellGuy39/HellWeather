@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.DayItemBinding
-import com.hellguy39.hellweather.domain.models.DailyWeather
+import com.hellguy39.hellweather.domain.models.weather.DailyWeather
 import com.hellguy39.hellweather.utils.STANDARD
 
 class NextDaysAdapter(

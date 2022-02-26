@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hellguy39.hellweather.domain.repository.LocationRepository
 import com.hellguy39.hellweather.data.enteties.UserLocation
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.usecase.local.DeleteUserLocationUseCase
 import com.hellguy39.hellweather.domain.usecase.prefs.units.GetUnitsUseCase
 import com.hellguy39.hellweather.utils.METRIC
 import com.hellguy39.hellweather.utils.PREFS_UNITS
@@ -13,30 +15,23 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class LocationManagerViewModel @Inject constructor(
-    private val getUnitsUseCase: GetUnitsUseCase
+    private val getUnitsUseCase: GetUnitsUseCase,
+    private val deleteUserLocationUseCase: DeleteUserLocationUseCase
 ): ViewModel() {
 
-    private val units = MutableLiveData<String>()
-
-    init {
+    fun onDeleteItem(userLocationParam: UserLocationParam) = viewModelScope.launch {
         viewModelScope.launch(Dispatchers.IO) {
-            units.value = getUnitsUseCase.invoke()
+            deleteUserLocationUseCase(userLocationParam)
         }
     }
 
-    fun onDeleteItem(userLocation: UserLocation) = viewModelScope.launch {
-        //repository.deleteLocation(userLocation)
-    }
-
     fun getUnits(): String {
-        if (units.value != null)
-            return units.value!!
-        else
-            return METRIC
+        return getUnitsUseCase.invoke()
     }
 
 }

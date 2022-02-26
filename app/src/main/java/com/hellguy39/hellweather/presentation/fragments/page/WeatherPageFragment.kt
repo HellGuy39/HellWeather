@@ -19,27 +19,25 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.hellguy39.hellweather.R
-import com.hellguy39.hellweather.databinding.FragmentWeatherPageBinding
+import com.hellguy39.hellweather.databinding.FragmentWeatherPageCollapseBinding
 import com.hellguy39.hellweather.glide.GlideApp
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
 import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
-import com.hellguy39.hellweather.domain.models.DailyWeather
-import com.hellguy39.hellweather.domain.models.HourlyWeather
-import com.hellguy39.hellweather.domain.models.WeatherData
+import com.hellguy39.hellweather.domain.models.weather.DailyWeather
+import com.hellguy39.hellweather.domain.models.weather.HourlyWeather
+import com.hellguy39.hellweather.domain.models.weather.WeatherData
 import com.hellguy39.hellweather.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 private const val WEATHER_DATA_ARG = "wd_arg"
 
-class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
+class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
 
     companion object {
         @JvmStatic
@@ -50,7 +48,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
         }
     }
 
-    private lateinit var _binding: FragmentWeatherPageBinding
+    private lateinit var _binding: FragmentWeatherPageCollapseBinding
     private lateinit var _weatherData: WeatherData
     private lateinit var units: String
 
@@ -69,7 +67,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
         savedInstanceState: Bundle?
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        _binding = FragmentWeatherPageBinding.bind(view!!)
+        _binding = FragmentWeatherPageCollapseBinding.bind(view!!)
 
         CoroutineScope(Dispatchers.Main).launch {
             if (this@WeatherPageFragment::_weatherData.isInitialized) {

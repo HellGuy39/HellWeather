@@ -4,13 +4,14 @@ import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hellguy39.hellweather.domain.models.UserLocationParam
-import com.hellguy39.hellweather.domain.models.WeatherData
-import com.hellguy39.hellweather.domain.request_models.OneCallRequest
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.models.weather.WeatherData
+import com.hellguy39.hellweather.domain.models.request.OneCallRequest
 import com.hellguy39.hellweather.domain.usecase.local.GetUserLocationListUseCase
 import com.hellguy39.hellweather.domain.usecase.requests.weather.GetOneCallWeatherUseCase
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -98,8 +99,9 @@ class MainActivityViewModel @Inject constructor(
 
     fun loadAllLocation(list: List<UserLocationParam>) {
 
-        weatherDataList.clear()
-        weatherDataListLive.value = weatherDataList
+        viewModelScope.launch(Dispatchers.Main) {
+            clearWeatherDataList()
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -137,8 +139,12 @@ class MainActivityViewModel @Inject constructor(
                     statusLive.value = SUCCESSFUL
                 }
             }
-
         }
+    }
+
+    private fun clearWeatherDataList() {
+        weatherDataList.clear()
+        weatherDataListLive.value = weatherDataList
     }
 
 }

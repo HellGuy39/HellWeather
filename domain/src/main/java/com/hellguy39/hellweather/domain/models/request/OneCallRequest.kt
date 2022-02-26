@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.domain.request_models
+package com.hellguy39.hellweather.domain.models.request
 
 data class OneCallRequest(
     var lat: Double = 0.0,

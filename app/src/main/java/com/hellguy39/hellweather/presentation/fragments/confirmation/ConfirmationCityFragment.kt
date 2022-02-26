@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.hellguy39.hellweather.R
-import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.databinding.ConfirmationCityFragmentBinding
-import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.utils.DISABLE
@@ -80,7 +79,7 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.fabTrue -> {
-                viewModel.saveToRoom(userLocationParam)
+                viewModel.saveToDatabase(userLocationParam)
                 mainViewModel.onRepositoryChanged()
                 (activity as MainActivity).drawerControl(ENABLE)
 

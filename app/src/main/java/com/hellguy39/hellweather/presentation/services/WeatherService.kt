@@ -10,32 +10,47 @@ import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.R
-import com.hellguy39.hellweather.data.enteties.UserLocation
-import com.hellguy39.hellweather.data.api.ApiService
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.models.request.OneCallRequest
+import com.hellguy39.hellweather.domain.usecase.prefs.service.ServiceUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.units.GetUnitsUseCase
+import com.hellguy39.hellweather.domain.usecase.requests.weather.GetOneCallWeatherUseCase
 import com.hellguy39.hellweather.utils.*
-import com.hellguy39.hellweather.domain.utils.Converter
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class WeatherService : Service() {
+
+    @Inject
+    lateinit var useCases: ServiceUseCases
+
+    @Inject
+    lateinit var getOneCallWeatherUseCase: GetOneCallWeatherUseCase
+
+    @Inject
+    lateinit var getUnitsUseCase: GetUnitsUseCase
 
     companion object {
 
         private var isRunning = false
 
-        fun startService(context: Context, userLocation: UserLocation) {
+        fun startService(context: Context, userLocationParam: UserLocationParam) {
             val service = Intent(context, WeatherService::class.java)
-            val units = PreferenceManager.getDefaultSharedPreferences(context).getString(
+            /*val units = PreferenceManager.getDefaultSharedPreferences(context).getString(
                 PREFS_UNITS, METRIC)
             val pauseTime = PreferenceManager.getDefaultSharedPreferences(context).getInt(
                 PREFS_SERVICE_UPD_TIME, 3 * 60)
-
-            service.putExtra("units", units)
-            service.putExtra("pauseTime", pauseTime)
-            service.putExtra("location", userLocation)
+*/
+            /*service.putExtra("units", units)
+            service.putExtra("pauseTime", pauseTime)*/
+            service.putExtra("location", userLocationParam)
             ContextCompat.startForegroundService(context, service)
         }
 
@@ -47,102 +62,88 @@ class WeatherService : Service() {
         fun isRunning(): Boolean = isRunning
     }
 
-    override fun onCreate() {
-        super.onCreate()
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        //return super.onStartCommand(intent, flags, startId)
 
         isRunning = true
-        val mService = provideApiService()
-        val units = intent?.getStringExtra("units")
-        var pauseTime = intent?.getLongExtra("pauseTime", 90 * 10000)
-        val userLocation = intent?.getParcelableExtra<UserLocation>("location")
-        val converter = Converter
+
+        var units = METRIC
+        var pauseTime = 60 * 3
+        var userLocation = UserLocationParam()
         val lang = Locale.getDefault().country
 
-        val failedRequestPauseTime: Long = 15 * 10000
-
-        if (pauseTime != null) {
+        CoroutineScope(Dispatchers.IO).launch {
+            units = getUnitsUseCase.invoke()//intent?.getStringExtra("units")
+            pauseTime = useCases.getServiceUpdateTimeUseCase.invoke()//intent?.getLongExtra("pauseTime", 90 * 10000)
+            userLocation = intent?.getSerializableExtra("location") as UserLocationParam
             pauseTime *= 10000
         }
+
+        val failedRequestPauseTime: Long = 15 * 1000
+
 
         createNotificationsChannel()
         val ntfService = createNotification(resources.getString(R.string.loading), "")
 
-        /*CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default).launch {
             while (isRunning) {
-                if (userLocation != null) {
-                    val weatherJson = request(mService, userLocation, units.toString(), lang)
-                    var ntfService: Notification
-                    var contentText = ""
-                    var tittle = ""
-                    val max = resources.getString(R.string.max)
-                    val min = resources.getString(R.string.min)
-                    val chance_of_rain = resources.getString(R.string.chance_of_rain)
 
-                    if (weatherJson.has("request")) {
-                        if (weatherJson.asJsonObject.get("request").asString == "failed") {
-                            tittle = "Server connection lost"
-                            contentText = "We will try again later"
-                        } else if (weatherJson.asJsonObject.get("request").asString == "incorrect obj") {
-                            tittle = "Error"
-                            contentText = "Incorrect server response"
-                        } else {
-                            tittle = "Something went wrong..."
-                            contentText = ""
-                        }
+                val model = OneCallRequest(
+                    lat = userLocation.lat,
+                    lon = userLocation.lon,
+                    units = units,
+                    lang = lang,
+                    appId = OPEN_WEATHER_API_KEY
+                )
 
-                        ntfService = createNotification(tittle, contentText)
-                        startForeground(1, ntfService)
-                        delay(failedRequestPauseTime)
+                val response = getOneCallWeatherUseCase.invoke(model)
 
-                    } else {
-                        val weatherData = converter.toWeatherObject(weatherJson)
+                var notification: Notification
+                var contentText: String
+                var tittle: String
+                val max = resources.getString(R.string.max)
+                val min = resources.getString(R.string.min)
+                val chanceOfRainText = resources.getString(R.string.chance_of_rain)
 
-                        if (units == STANDARD)
-                            contentText = weatherData.currentWeather.wDescription + " | " +
-                                    "$max: ${weatherData.currentWeather.tempMax}K, " +
-                                    "$min: ${weatherData.currentWeather.tempMin}K" + " | " +
-                                    "$chance_of_rain ${weatherData.hourlyWeather[0].pop.toInt()}%"
-                        else
-                            contentText = weatherData.currentWeather.wDescription + " | " +
-                                    "$max: ${weatherData.currentWeather.tempMax}°, " +
-                                    "$min: ${weatherData.currentWeather.tempMin}°" + " | " +
-                                    "$chance_of_rain ${weatherData.hourlyWeather[0].pop.toInt()}%"
+                if (response.data == null) {
+                    tittle = response.message as String
+                    contentText = ""
 
-                        if (units == STANDARD)
-                            tittle = userLocation.locationName + "  —  ${weatherData.currentWeather.temp}K"
-                        else if(units == METRIC)
-                            tittle = userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°C"
-                        else if(units == IMPERIAL)
-                            tittle = userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°F"
-                        else
-                            tittle = userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°"
+                    notification = createNotification(tittle, contentText)
+                    startForeground(1, notification)
+                    delay(failedRequestPauseTime)
 
-                        ntfService = createNotification(tittle, contentText)
-                        startForeground(1, ntfService)
-                        delay(pauseTime!!)
+                } else {
 
+                    val weatherData = response.data!!
+
+                    contentText = if (units == STANDARD)
+                        weatherData.currentWeather.wDescription + " | " +
+                                "$max: ${weatherData.currentWeather.tempMax}K, " +
+                                "$min: ${weatherData.currentWeather.tempMin}K" + " | " +
+                                "$chanceOfRainText ${weatherData.hourlyWeather[0].pop.toInt()}%"
+                    else
+                        weatherData.currentWeather.wDescription + " | " +
+                                "$max: ${weatherData.currentWeather.tempMax}°, " +
+                                "$min: ${weatherData.currentWeather.tempMin}°" + " | " +
+                                "$chanceOfRainText ${weatherData.hourlyWeather[0].pop.toInt()}%"
+
+                    tittle = when (units) {
+                        STANDARD -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}K"
+                        METRIC -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°C"
+                        IMPERIAL -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°F"
+                        else -> userLocation.locationName + "  —  ${weatherData.currentWeather.temp}°"
                     }
-                }
-                else
-                {
-                    val ntfService = createNotification("Error", "Location can't be load")
-                    startForeground(1, ntfService)
-                    delay(pauseTime!!)
+
+                    notification = createNotification(tittle, contentText)
+                    startForeground(1, notification)
+                    delay(pauseTime.toLong())
                 }
             }
-        }*/
+        }
 
         startForeground(1, ntfService)
 
         return START_STICKY
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -178,54 +179,6 @@ class WeatherService : Service() {
         val manager: NotificationManager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(ntfFrgServ)
 
-    }
-
-    /*private suspend fun request(
-        mService: ApiService,
-        userLocation: UserLocation,
-        units: String, lang: String
-    ): JsonObject {
-        return suspendCoroutine { continuation ->
-            mService.getWeatherOneCall(
-                userLocation.lat.toDouble(),
-                userLocation.lon.toDouble(),
-                "minutely,alerts",
-                units,
-                lang,
-                OPEN_WEATHER_API_KEY
-            ).enqueue(object : Callback<JsonObject> {
-
-                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-
-                    if (response.isSuccessful) {
-                        if (response.body() != null) {
-                            continuation.resume(response.body() as JsonObject)
-                        } else {
-                            continuation.resume(JsonObject().apply { addProperty("request", "incorrect obj") })
-                        }
-                    } else {
-                        continuation.resume(JsonObject().apply { addProperty("request", "incorrect obj") })
-                    }
-
-                }
-
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    continuation.resume(JsonObject().apply { addProperty("request", "failed") })
-                }
-
-            })
-        }
-    }*/
-
-    private fun provideApiService(): ApiService {
-        return retrofitClient().create(ApiService::class.java)
-    }
-
-    private fun retrofitClient(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
     }
 
 }

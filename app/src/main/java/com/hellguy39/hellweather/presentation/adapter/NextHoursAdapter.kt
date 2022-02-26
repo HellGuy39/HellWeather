@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.HourItemBinding
-import com.hellguy39.hellweather.domain.models.HourlyWeather
+import com.hellguy39.hellweather.domain.models.weather.HourlyWeather
 import com.hellguy39.hellweather.utils.STANDARD
 import java.text.SimpleDateFormat
 import java.util.*

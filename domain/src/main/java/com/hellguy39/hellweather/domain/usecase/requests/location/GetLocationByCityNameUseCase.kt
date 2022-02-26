@@ -1,6 +1,6 @@
 package com.hellguy39.hellweather.domain.usecase.requests.location
 
-import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.repository.ApiRepository
 import com.hellguy39.hellweather.domain.resource.Resource
 import com.hellguy39.hellweather.domain.utils.converter

@@ -1,12 +1,5 @@
 package com.hellguy39.hellweather.domain.usecase.current
 
-import com.hellguy39.hellweather.data.enteties.UserLocation
-import com.hellguy39.hellweather.data.repositories.ApiRepositoryImpl
-import com.hellguy39.hellweather.domain.request_models.CurrentByCoordinatesRequest
-import com.hellguy39.hellweather.utils.ERROR
-import com.hellguy39.hellweather.utils.SUCCESSFUL
-import javax.inject.Inject
-
 /*
 class GetUserLocationByCoordinatesUseCase @Inject constructor(private val apiRepositoryImpl: ApiRepositoryImpl) {
     suspend fun execute(model: CurrentByCoordinatesRequest): UserLocation {

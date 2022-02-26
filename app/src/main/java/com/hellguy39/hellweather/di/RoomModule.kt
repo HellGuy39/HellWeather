@@ -6,7 +6,9 @@ import com.hellguy39.hellweather.data.db.LocationDatabase
 import com.hellguy39.hellweather.domain.repository.LocationRepository
 import com.hellguy39.hellweather.data.repositories.LocationRepositoryImpl
 import com.hellguy39.hellweather.domain.usecase.local.AddUserLocationUseCase
+import com.hellguy39.hellweather.domain.usecase.local.DeleteUserLocationUseCase
 import com.hellguy39.hellweather.domain.usecase.local.GetUserLocationListUseCase
+import com.hellguy39.hellweather.domain.usecase.prefs.service.ServiceUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,4 +47,9 @@ object RoomModule {
         return AddUserLocationUseCase(locationRepositoryImpl)
     }
 
+    @Provides
+    @Singleton
+    fun provideDeleteUserLocationUseCase(locationRepositoryImpl: LocationRepository): DeleteUserLocationUseCase {
+        return DeleteUserLocationUseCase(locationRepositoryImpl)
+    }
 }

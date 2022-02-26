@@ -1,7 +1,11 @@
 package com.hellguy39.hellweather.domain.utils
 
 import com.google.gson.JsonObject
-import com.hellguy39.hellweather.domain.models.*
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
+import com.hellguy39.hellweather.domain.models.weather.DailyWeather
+import com.hellguy39.hellweather.domain.models.weather.HourlyWeather
+import com.hellguy39.hellweather.domain.models.weather.WeatherData
 import com.hellguy39.hellweather.utils.FAILURE
 import com.hellguy39.hellweather.utils.INCORRECT_OBJ
 import com.hellguy39.hellweather.utils.SUCCESSFUL

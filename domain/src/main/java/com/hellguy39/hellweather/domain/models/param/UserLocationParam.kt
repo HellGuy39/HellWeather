@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.domain.models
+package com.hellguy39.hellweather.domain.models.param
 
 import java.io.Serializable
 
@@ -9,5 +9,5 @@ data class UserLocationParam(
     var country: String = "N/A",
     var cod: String = "N/A",
     var timezone: Int = 0,
-    var id: Int = 0
+    var id: Int? = null
 ) : Serializable

@@ -2,8 +2,8 @@ package com.hellguy39.hellweather.domain.usecase.current
 
 /*
 import com.hellguy39.hellweather.data.repositories.ApiRepositoryImpl
-import com.hellguy39.hellweather.domain.request_models.CurrentByCityRequest
-import com.hellguy39.hellweather.domain.models.CurrentWeather
+import com.hellguy39.hellweather.domain.models.request.CurrentByCityRequest
+import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
 import com.hellguy39.hellweather.domain.utils.Converter
 import com.hellguy39.hellweather.utils.ERROR
 import com.hellguy39.hellweather.utils.SUCCESSFUL

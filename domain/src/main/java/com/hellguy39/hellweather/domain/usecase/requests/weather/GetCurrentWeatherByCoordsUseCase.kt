@@ -1,8 +1,8 @@
 package com.hellguy39.hellweather.domain.usecase.requests.weather
 
-import com.hellguy39.hellweather.domain.models.CurrentWeather
+import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
 import com.hellguy39.hellweather.domain.repository.ApiRepository
-import com.hellguy39.hellweather.domain.request_models.CurrentByCoordinatesRequest
+import com.hellguy39.hellweather.domain.models.request.CurrentByCoordinatesRequest
 import com.hellguy39.hellweather.domain.resource.Resource
 import com.hellguy39.hellweather.domain.utils.converter
 

@@ -3,14 +3,18 @@ package com.hellguy39.hellweather.presentation.fragments.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hellguy39.hellweather.domain.models.CurrentWeather
-import com.hellguy39.hellweather.domain.request_models.CurrentByCityRequest
+import com.hellguy39.hellweather.domain.models.request.CurrentByCityRequest
+import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
 import com.hellguy39.hellweather.domain.usecase.prefs.units.GetUnitsUseCase
 import com.hellguy39.hellweather.domain.usecase.requests.weather.GetCurrentWeatherByCityNameUseCase
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.utils.ERROR
+import com.hellguy39.hellweather.utils.IN_PROGRESS
+import com.hellguy39.hellweather.utils.OPEN_WEATHER_API_KEY
+import com.hellguy39.hellweather.utils.SUCCESSFUL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
@@ -23,13 +27,6 @@ class SearchViewModel @Inject constructor(
     private val lang = Locale.getDefault().country
     val currentWeatherLive = MutableLiveData<CurrentWeather>()
     val statusLive = MutableLiveData<String>()
-    private val units = MutableLiveData<String>()
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            units.value = getUnitsUseCase.invoke()
-        }
-    }
 
     fun getCurrentWeather(cityName: String) {
 
@@ -48,21 +45,20 @@ class SearchViewModel @Inject constructor(
 
             val response = getCurrentWeatherByCityNameUseCase.invoke(model)
 
-            if (response.data != null) {
-                currentWeatherLive.value = response.data!!
-                statusLive.value = SUCCESSFUL
-            } else {
-                statusLive.value = ERROR
+            withContext(Dispatchers.Main) {
+                if (response.data != null) {
+                    currentWeatherLive.value = response.data!!
+                    statusLive.value = SUCCESSFUL
+                } else {
+                    statusLive.value = ERROR
+                }
             }
 
         }
     }
 
     fun getUnits(): String {
-        if (units.value != null)
-            return units.value!!
-        else
-            return METRIC
+        return getUnitsUseCase.invoke()
     }
 
 }

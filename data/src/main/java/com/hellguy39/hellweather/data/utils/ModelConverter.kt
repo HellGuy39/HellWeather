@@ -1,7 +1,7 @@
 package com.hellguy39.hellweather.data.utils
 
 import com.hellguy39.hellweather.data.enteties.UserLocation
-import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 
 object ModelConverter {
     fun toEntity(param: UserLocationParam): UserLocation {
@@ -11,7 +11,8 @@ object ModelConverter {
             locationName = param.locationName,
             country = param.country,
             cod = param.cod,
-            timezone = param.timezone
+            timezone = param.timezone,
+            id = param.id
         )
     }
     fun toParam(ul: UserLocation): UserLocationParam {

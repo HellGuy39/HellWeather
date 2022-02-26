@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -18,8 +17,7 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 import com.hellguy39.hellweather.presentation.services.WeatherService
-import com.hellguy39.hellweather.data.enteties.UserLocation
-import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -96,13 +94,11 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
                 val weatherDataList = viewModel.weatherDataListLive.value
 
                 if (weatherDataList == null) {
-                    //Log.d("DEBUG", "HERE 1")
                     updateData(it)
                 }
 
                 if (weatherDataList != null) {
                     if (weatherDataList.isEmpty()) {
-                        //Log.d("DEBUG", "HERE 2")
                         updateData(it)
                     }
                 }
@@ -143,7 +139,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
                         userLocationPos = n
                 }
 
-                //WeatherService.startService(this, list[userLocationPos])
+                WeatherService.startService(this, list[userLocationPos])
             }
         }
         else if (action == REBOOT) {

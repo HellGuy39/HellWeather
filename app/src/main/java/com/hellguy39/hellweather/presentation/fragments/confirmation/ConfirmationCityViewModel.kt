@@ -3,9 +3,7 @@ package com.hellguy39.hellweather.presentation.fragments.confirmation
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hellguy39.hellweather.domain.repository.LocationRepository
-import com.hellguy39.hellweather.data.enteties.UserLocation
-import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.usecase.local.AddUserLocationUseCase
 import com.hellguy39.hellweather.utils.PREFS_FIRST_BOOT
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +16,7 @@ class ConfirmationCityViewModel @Inject constructor(
     private val defSharedPrefs: SharedPreferences
 ) : ViewModel() {
 
-    fun saveToRoom(userLocation: UserLocationParam) {
+    fun saveToDatabase(userLocation: UserLocationParam) {
         viewModelScope.launch {
             addUserLocationUseCase.invoke(userLocation)
         }

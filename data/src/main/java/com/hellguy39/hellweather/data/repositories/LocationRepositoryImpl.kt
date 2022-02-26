@@ -1,11 +1,9 @@
 package com.hellguy39.hellweather.data.repositories
 
 import com.hellguy39.hellweather.data.db.LocationDao
-import com.hellguy39.hellweather.data.enteties.UserLocation
 import com.hellguy39.hellweather.data.utils.ModelConverter
-import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.repository.LocationRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 class LocationRepositoryImpl(

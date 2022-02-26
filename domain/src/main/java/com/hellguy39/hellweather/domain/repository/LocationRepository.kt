@@ -1,6 +1,6 @@
 package com.hellguy39.hellweather.domain.repository
 
-import com.hellguy39.hellweather.domain.models.UserLocationParam
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 
 interface LocationRepository {
 
