@@ -1,32 +1,29 @@
 package com.hellguy39.hellweather.presentation.fragments.location_manager
 
-import android.content.SharedPreferences
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
-import com.hellguy39.hellweather.repository.database.LocationRepository
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-import com.hellguy39.hellweather.utils.METRIC
-import com.hellguy39.hellweather.utils.PREFS_UNITS
-import com.hellguy39.hellweather.utils.STANDARD
-import dagger.hilt.android.AndroidEntryPoint
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.usecase.local.UserLocationUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LocationManagerViewModel @Inject constructor(
-    private val repository: LocationRepository,
-    private val defSharedPrefs: SharedPreferences
+    private val unitsUseCase: UnitsUseCases,
+    private val userLocationUseCases: UserLocationUseCases
 ): ViewModel() {
 
-    fun onDeleteItem(userLocation: UserLocation) = viewModelScope.launch {
-        repository.deleteLocation(userLocation)
+    fun onDeleteItem(userLocationParam: UserLocationParam) = viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            userLocationUseCases.deleteUserLocationUseCase(userLocationParam)
+        }
     }
 
-    fun getUnits(): String = defSharedPrefs.getString(PREFS_UNITS, METRIC).toString()
+    fun getUnits(): String {
+        return unitsUseCase.getUnitsUseCase.invoke()
+    }
 
 }

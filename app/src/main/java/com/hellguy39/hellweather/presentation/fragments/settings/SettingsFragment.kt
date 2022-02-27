@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.SettingsFragmentBinding
+import com.hellguy39.hellweather.domain.utils.Unit
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,13 +18,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SettingsFragment() : Fragment(R.layout.settings_fragment) {
+class SettingsFragment : Fragment(R.layout.settings_fragment) {
 
     private lateinit var _viewModel: SettingsViewModel
     private lateinit var _binding: SettingsFragmentBinding
 
     private val languageList = listOf("System","Russian", "English", "Deutsch", "Francais")
-    private val unitsList = listOf(STANDARD, METRIC, IMPERIAL)
+    private val unitsList = listOf(Unit.Standard.name, Unit.Metric.name, Unit.Imperial.name)
     private val themeList = listOf("HellStyle")
     private val modeList = listOf("Auto")
 
@@ -38,7 +39,7 @@ class SettingsFragment() : Fragment(R.layout.settings_fragment) {
         savedInstanceState: Bundle?
     ): View? {
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_settings))
-        (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -88,17 +89,19 @@ class SettingsFragment() : Fragment(R.layout.settings_fragment) {
         val adapterUnits = ArrayAdapter(requireContext(), R.layout.list_item, unitsList)
         _binding.acUnits.setAdapter(adapterUnits)
 
-        val currentOption = _viewModel.getSavedUnits()
-
-        if (currentOption == STANDARD) {
-            _binding.acUnits.setText(_binding.acUnits.adapter.getItem(0).toString(), false)
-        } else if (currentOption == METRIC) {
-            _binding.acUnits.setText(_binding.acUnits.adapter.getItem(1).toString(), false)
-        } else if (currentOption == IMPERIAL) {
-            _binding.acUnits.setText(_binding.acUnits.adapter.getItem(2).toString(), false)
+        when (_viewModel.getSavedUnits()) {
+            Unit.Standard.name -> {
+                _binding.acUnits.setText(_binding.acUnits.adapter.getItem(0).toString(), false)
+            }
+            Unit.Metric.name -> {
+                _binding.acUnits.setText(_binding.acUnits.adapter.getItem(1).toString(), false)
+            }
+            Unit.Imperial.name -> {
+                _binding.acUnits.setText(_binding.acUnits.adapter.getItem(2).toString(), false)
+            }
         }
 
-        _binding.acUnits.setOnItemClickListener { adapterView, view, i, l ->
+        _binding.acUnits.setOnItemClickListener { _, _, i, _ ->
             //_binding.acUnits.setText(_binding.acUnits.adapter.getItem(i).toString(), false)
             _viewModel.saveUnits(_binding.acUnits.adapter.getItem(i).toString())
         }

@@ -1,7 +1,15 @@
 package com.hellguy39.hellweather.di
 
-import com.hellguy39.hellweather.repository.server.ApiService
-import com.hellguy39.hellweather.utils.BASE_URL
+import com.hellguy39.hellweather.data.repositories.ApiRepositoryImpl
+import com.hellguy39.hellweather.data.api.ApiService
+import com.hellguy39.hellweather.domain.usecase.requests.location.GetLocationByCityNameUseCase
+import com.hellguy39.hellweather.domain.usecase.requests.location.GetLocationByCoordsUseCase
+import com.hellguy39.hellweather.domain.usecase.requests.location.LocationRequestUseCases
+import com.hellguy39.hellweather.domain.usecase.requests.weather.GetCurrentWeatherByCityNameUseCase
+import com.hellguy39.hellweather.domain.usecase.requests.weather.GetCurrentWeatherByCoordsUseCase
+import com.hellguy39.hellweather.domain.usecase.requests.weather.GetOneCallWeatherUseCase
+import com.hellguy39.hellweather.domain.usecase.requests.weather.WeatherRequestUseCases
+import com.hellguy39.hellweather.domain.utils.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,4 +36,30 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideApiRepository(apiService: ApiService): ApiRepositoryImpl {
+        return ApiRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationRequestUseCases(apiRepositoryImpl: ApiRepositoryImpl): LocationRequestUseCases {
+        return LocationRequestUseCases(
+            getLocationByCityNameUseCase = GetLocationByCityNameUseCase(apiRepositoryImpl),
+            getLocationByCoordsUseCase = GetLocationByCoordsUseCase(apiRepositoryImpl)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideRequestUseCases(apiRepositoryImpl: ApiRepositoryImpl): WeatherRequestUseCases {
+        return WeatherRequestUseCases(
+            getOneCallWeatherUseCase = GetOneCallWeatherUseCase(apiRepositoryImpl),
+            getCurrentWeatherByCityNameUseCase = GetCurrentWeatherByCityNameUseCase(apiRepositoryImpl),
+            getCurrentWeatherByCoordsUseCase = GetCurrentWeatherByCoordsUseCase(apiRepositoryImpl)
+        )
+    }
+
 }

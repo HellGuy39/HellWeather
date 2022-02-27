@@ -1,171 +1,168 @@
 package com.hellguy39.hellweather.presentation.activities.main
 
-import android.content.SharedPreferences
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonObject
-import com.hellguy39.hellweather.repository.database.LocationRepository
-import com.hellguy39.hellweather.repository.database.pojo.UserLocation
-import com.hellguy39.hellweather.repository.database.pojo.WeatherData
-import com.hellguy39.hellweather.repository.server.ApiService
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.models.request.OneCallRequest
+import com.hellguy39.hellweather.domain.models.weather.WeatherData
+import com.hellguy39.hellweather.domain.usecase.local.UserLocationUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.FirstBootValueUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
+import com.hellguy39.hellweather.domain.usecase.requests.weather.WeatherRequestUseCases
+import com.hellguy39.hellweather.domain.utils.OPEN_WEATHER_API_KEY
+import com.hellguy39.hellweather.utils.State
+import com.hellguy39.hellweather.domain.utils.Unit
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val repository: LocationRepository,
-    private val mService: ApiService,
-    private val defSharPrefs: SharedPreferences
+    private val userLocationUseCases: UserLocationUseCases,
+    private val unitsUseCases: UnitsUseCases,
+    private val firstBootValueUseCases: FirstBootValueUseCases,
+    private val weatherRequestUseCases: WeatherRequestUseCases
 ): ViewModel() {
 
-    val userLocationsLive = MutableLiveData<List<UserLocation>>()
+    val userLocationsLive = MutableLiveData<List<UserLocationParam>>()
     val weatherDataListLive = MutableLiveData<List<WeatherData>>()
-    val statusLive = MutableLiveData<String>()
+    val statusLive = MutableLiveData<Enum<State>>()
+    val errorMessage = MutableLiveData<String>()
     val firstBootLive = MutableLiveData<Boolean>()
 
-    private val jsonList: MutableList<JsonObject> = mutableListOf()
     private val weatherDataList: MutableList<WeatherData> = mutableListOf()
 
     private val lang = Locale.getDefault().country
-    private var _units = METRIC
-    private var _firstBoot = false
+    private var units = Unit.Metric.toString()
+    private var firstBoot = false
 
     init {
-        statusLive.value = EXPECTATION
+        statusLive.value = State.Expectation
 
-        _units = defSharPrefs.getString(PREFS_UNITS, METRIC).toString()
-        _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, true)
-        firstBootLive.value = _firstBoot
+        units = unitsUseCases.getUnitsUseCase.invoke()
+        firstBoot = firstBootValueUseCases.getFirstBootValueUseCase.invoke()
 
-        viewModelScope.launch {
-            if (!_firstBoot) {
-                userLocationsLive.value = getLocationsFromRepository()
+        firstBootLive.value = firstBoot
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            if (!firstBoot) {
+                val list = userLocationUseCases.getUserLocationListUseCase.invoke()
+
+                withContext(Dispatchers.Main) {
+                    if (list.data != null) {
+                        userLocationsLive.value = list.data!!
+                    } else {
+                        statusLive.value = State.Empty
+                    }
+                }
             }
+        }
+    }
+
+    fun getUserLocationsList(): List<UserLocationParam> {
+        return if (userLocationsLive.value != null) {
+            userLocationsLive.value!!
+        } else {
+            listOf()
         }
     }
 
     fun onRepositoryChanged() {
-        _firstBoot = defSharPrefs.getBoolean(PREFS_FIRST_BOOT, false)
-        firstBootLive.value = _firstBoot
 
-        if (statusLive.value != IN_PROGRESS) {
-            statusLive.value = IN_PROGRESS
-            jsonList.clear()
-            weatherDataList.clear()
+        updateFirstBootValue()
 
-            weatherDataListLive.value = weatherDataList
+        if (!isInProgress()) {
+            statusLive.value = State.Progress
+
+            clearWeatherDataList()
+
             userLocationsLive.value = listOf()
 
-            viewModelScope.launch {
-                userLocationsLive.value = getLocationsFromRepository()
-                val list = userLocationsLive.value
-                if (!list.isNullOrEmpty()) {
-                    loadAllLocation(list)
+            viewModelScope.launch(Dispatchers.IO) {
+                val list = userLocationUseCases.getUserLocationListUseCase.invoke()
+
+                if (list.data != null) {
+                    fetchWeather(list.data!!)
                 }
-                else
-                {
-                    statusLive.value = EMPTY_LIST
+
+                withContext(Dispatchers.Main) {
+
+                    if (list.data != null) {
+                        userLocationsLive.value = list.data!!
+                    } else {
+                        statusLive.value = State.Empty
+                    }
+
                 }
             }
         }
     }
 
-    private suspend fun getLocationsFromRepository() : List<UserLocation> {
-        return repository.getLocations().first()
-    }
+    fun fetchWeather(list: List<UserLocationParam>) {
 
-    fun loadAllLocation(list: List<UserLocation>) {
-        viewModelScope.launch {
-            _units = defSharPrefs.getString(PREFS_UNITS, METRIC).toString() //Needs to be updated here
+        viewModelScope.launch(Dispatchers.Main) {
+            clearWeatherDataList()
+        }
 
-            val converter = Converter()
-            weatherDataList.clear()
-            jsonList.clear()
+        viewModelScope.launch(Dispatchers.IO) {
 
-            weatherDataListLive.value = weatherDataList
-
-            //Log.d("DEBUG", list.toString())
+            units = unitsUseCases.getUnitsUseCase.invoke() //Needs to be updated here
 
             if (list.isNotEmpty()) {
-                //Log.d("DEBUG", "IN IF")
                 for (n in list.indices) {
-                    val request: JsonObject = sendRequest(list[n])
 
-                    if (converter.checkRequest(request) == FAILURE)
+                    val model = OneCallRequest(
+                        list[n].lat,
+                        list[n].lat,
+                        "minutely,alerts",
+                        units,
+                        lang,
+                        OPEN_WEATHER_API_KEY
+                    )
+
+                    val request = weatherRequestUseCases.getOneCallWeatherUseCase.invoke(model)
+
+                    if (request.data != null)
                     {
-                        statusLive.value = FAILURE
-                        return@launch
-                    }
-                    else if (converter.checkRequest(request) == INCORRECT_OBJ)
-                    {
-                        statusLive.value = ERROR
-                        return@launch
-                    }
-
-                    jsonList.add(request)
-                    val obj : WeatherData = converter.toWeatherObject(request)
-                    weatherDataList.add(obj)
-                }
-                /*for(n in jsonList.indices) {
-                    weatherObjList.add(convertToWeatherObject(jsonList[n]))
-                }*/
-                //Log.d("DEBUG", "SUCCESSFUL")
-                weatherDataListLive.value = weatherDataList
-                statusLive.value = SUCCESSFUL
-            }
-
-        }
-    }
-
-    private suspend fun sendRequest(userLocation: UserLocation): JsonObject {
-        return suspendCoroutine { continuation ->
-            mService.getWeatherOneCall(
-                userLocation.lat.toDouble(),
-                userLocation.lon.toDouble(),
-                "minutely,alerts",
-                _units,
-                lang,
-                OPEN_WEATHER_API_KEY
-            ).enqueue(object : Callback<JsonObject> {
-
-                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                    if (response.isSuccessful)
-                    {
-                        Log.d("DEBUG", call.request().url.toString())
-                        if (response.body() != null) {
-                            continuation.resume(response.body() as JsonObject)
-                        } else {
-                            continuation.resume(JsonObject().apply { addProperty("request", INCORRECT_OBJ) })
-                        }
+                        weatherDataList.add(request.data!!)
                     }
                     else
                     {
-                        continuation.resume(JsonObject().apply { addProperty("request", INCORRECT_OBJ) })
+                        withContext(Dispatchers.Main) {
+                            errorMessage.value = request.message!!
+                            statusLive.value = State.Error
+                        }
+                        return@launch
                     }
-
                 }
 
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    continuation.resume(JsonObject().apply { addProperty("request", FAILURE) })
+                withContext(Dispatchers.Main) {
+                    weatherDataListLive.value = weatherDataList
+                    statusLive.value = State.Successful
                 }
-
-            })
+            }
         }
     }
+
+    private fun clearWeatherDataList() {
+        weatherDataList.clear()
+        weatherDataListLive.value = weatherDataList
+    }
+
+    private fun updateFirstBootValue() {
+        viewModelScope.launch(Dispatchers.IO) {
+            firstBoot = firstBootValueUseCases.getFirstBootValueUseCase.invoke()
+            withContext(Dispatchers.Main) {
+                firstBootLive.value = firstBoot
+            }
+        }
+    }
+
+    fun isInProgress(): Boolean = statusLive.value == State.Progress
 
 }

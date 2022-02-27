@@ -30,6 +30,9 @@
     <string name="location_deleted">Location deleted</string>
     <string name="searching">Searching…</string>
     <string name="search">Search</string>
+    <string name="add_new_location">Add new location</string>
+    <string name="failed_to_find_device_location">Failed to find device location</string>
+    <string name="delete">Delete</string>
 
     <!-- Tittles-->
     <string name="tittle_welcome">Welcome</string>
@@ -58,6 +61,11 @@
 
     <string name="general">General</string>
     <string name="customization">Customization</string>
+
+    <!-- Confirmation -->
+    <string name="country_and_location_name" translatable="false">%1$s, %2$s</string>
+    <string name="gmt" translatable="false">%1$d GMT</string>
+    <string name="plus_gmt" translatable="false">+%1$d GMT</string>
 
     <!-- Home -->
     <string name="sunrise">Sunrise</string>
@@ -125,7 +133,7 @@
     <string name="high">High</string>
     <string name="very_high">Very high</string>
     <string name="extreme">Extreme</string>
-    
+
     <!-- Helper texts -->
     <string name="after_n_hours">*after N hours</string>
     <string name="values_in_percents">values in %</string>
@@ -154,5 +162,10 @@
     <string name="github_hellweather" translatable="false">https://github.com/HellGuy39/HellWeather</string>
     <string name="author" translatable="false">HellGuy39</string>
     <string name="dev_year" translatable="false">2022</string>
+
+    <string name="app_widget_description" translatable="false">description</string>
+    <string name="configure" translatable="false">Configure</string>
+    <string name="add_widget" translatable="false">add</string>
+    <string name="appwidget_text" translatable="false">text</string>
 
 </resources>

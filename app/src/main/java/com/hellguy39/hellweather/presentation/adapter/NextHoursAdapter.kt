@@ -2,20 +2,15 @@ package com.hellguy39.hellweather.presentation.adapter
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.HourItemBinding
-import com.hellguy39.hellweather.repository.database.pojo.DailyWeather
-import com.hellguy39.hellweather.repository.database.pojo.HourlyWeather
-import com.hellguy39.hellweather.utils.STANDARD
+import com.hellguy39.hellweather.domain.models.weather.HourlyWeather
+import com.hellguy39.hellweather.domain.utils.Unit
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,13 +24,13 @@ class NextHoursAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): NextHoursAdapter.HourViewHolder {
+    ): HourViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.hour_item, parent, false)
         return HourViewHolder(itemView)
     }
 
     override fun onBindViewHolder(
-        holder: NextHoursAdapter.HourViewHolder,
+        holder: HourViewHolder,
         position: Int)
     {
         val hourlyWeather: HourlyWeather = hourList[position]
@@ -54,7 +49,7 @@ class NextHoursAdapter(
             position: Int, units: String,
             resources: Resources
         ) {
-            if (units == STANDARD)
+            if (units == Unit.Standard.name)
                 _binding.tvTemp.text = String.format(resources.getString(R.string.item_temp_kelvin), hourlyWeather.temp)
             else
                 _binding.tvTemp.text = String.format(resources.getString(R.string.item_temp_degree), hourlyWeather.temp)
@@ -73,7 +68,6 @@ class NextHoursAdapter(
 
             Glide.with(context)
                 .load("https://openweathermap.org/img/wn/${hourlyWeather.icon}@2x.png")
-                //.dontAnimate()
                 .placeholder(R.drawable.ic_round_image_not_supported_24)
                 .error(R.drawable.ic_outline_error_outline_24)
                 .centerCrop()

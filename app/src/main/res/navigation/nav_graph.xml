@@ -62,9 +62,6 @@
             app:popExitAnim="@anim/to_right_out"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
-        <argument
-            android:name="userLocation"
-            app:argType="com.hellguy39.hellweather.repository.database.pojo.UserLocation" />
         <action
             android:id="@+id/action_confirmationCityFragment_to_locationManagerFragment"
             app:destination="@id/locationManagerFragment"
@@ -73,6 +70,9 @@
             app:popEnterAnim="@anim/to_right_in"
             app:popExitAnim="@anim/to_right_out"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="userLocationParam"
+            app:argType="com.hellguy39.hellweather.domain.models.param.UserLocationParam" />
     </fragment>
     <fragment
         android:id="@+id/customizeFragment"

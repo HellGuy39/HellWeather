@@ -7,7 +7,7 @@ import androidx.navigation.findNavController
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWelcomeBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.utils.DISABLE
+import com.hellguy39.hellweather.utils.Selector
 
 class WelcomeFragment : Fragment() {
 
@@ -17,9 +17,9 @@ class WelcomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (activity as MainActivity).drawerControl(DISABLE)
+        (activity as MainActivity).drawerControl(Selector.Disable)
         (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_welcome))
-        (activity as MainActivity).updateToolbarMenu(DISABLE)
+        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
 
         return inflater.inflate(R.layout.fragment_welcome, container, false)
     }

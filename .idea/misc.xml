@@ -37,10 +37,14 @@
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/foreground_service_fragment.xml" value="0.259375" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_add_city.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_add_location.xml" value="0.264" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_add_new_item_page.xml" value="0.259375" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_app_info.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_blank.xml" value="0.259375" />
-        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_home.xml" value="0.4" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_weather_page.xml" value="0.25" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_weather_page_collapse.xml" value="0.2553846153846154" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_weather_page_motion.xml" value="0.259375" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_weather_page_only_nested.xml" value="0.259375" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/fragment_welcome.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/home_page_item.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/hour_item.xml" value="0.371875" />
@@ -53,6 +57,8 @@
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/quick_weather_fragment.xml" value="0.259375" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/search_fragment.xml" value="0.27946127946127947" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/settings_fragment.xml" value="0.259375" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/weather_widget.xml" value="0.1171875" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/weather_widget_configure.xml" value="0.264" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/menu/drawer_menu.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/menu/toolbar_menu.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3880208333333333" />
@@ -60,7 +66,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
