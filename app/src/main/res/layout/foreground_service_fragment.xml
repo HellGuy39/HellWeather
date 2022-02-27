@@ -68,26 +68,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/tvLanguage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center|start"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="@string/location"
-                    android:textSize="22sp" />
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1">
+                    android:hint="@string/location">
 
                     <AutoCompleteTextView
                         android:id="@+id/acLocation"
@@ -101,30 +89,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/tvUpdateTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center|start"
-                    android:layout_gravity="center"
-                    android:maxLines="2"
-                    android:autoSizeMaxTextSize="22sp"
-                    android:autoSizeMinTextSize="14sp"
-                    android:autoSizeTextType="uniform"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="@string/update_time"
-                    android:textSize="22sp" />
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1">
+                    android:hint="@string/update_time"
+                    android:layout_gravity="center">
 
                     <AutoCompleteTextView
                         android:id="@+id/acUpdTime"

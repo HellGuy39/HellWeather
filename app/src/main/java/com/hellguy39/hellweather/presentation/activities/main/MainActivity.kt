@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
 
         firstBoot = intent.getBooleanExtra(Prefs.FirstBoot.name, false)
         serviceMode = intent.getBooleanExtra(Prefs.ServiceMode.name, false)
+
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
@@ -78,6 +79,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
             }
         }
 
+        checkService()
         setObservers()
     }
 
@@ -132,36 +134,51 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         }
     }
 
+    private fun checkService() = CoroutineScope(Dispatchers.IO).launch {
+        val serviceMode = serviceUseCases.getServiceModeUseCase.invoke()
+
+        if (serviceMode && !WeatherService.isRunning()) {
+            serviceControl(Selector.Enable)
+        }
+    }
+
     fun serviceControl(action: Enum<Selector>) {
         when(action) {
             Selector.Enable -> {
-                val list = viewModel.userLocationsLive.value
-
-                if (!list.isNullOrEmpty()) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val locationStr = serviceUseCases.getServiceLocationUseCase.invoke()
-
-                            var userLocationPos = 0
-
-                            for (n in list.indices) {
-                                if (locationStr == list[n].locationName)
-                                    userLocationPos = n
-                            }
-
-                            WeatherService.startService(this@MainActivity, list[userLocationPos])
-                        }
-                    }
+                if (!WeatherService.isRunning()) {
+                    startService()
                 }
-                Selector.Disable -> {
-                    if (!WeatherService.isRunning()) {
-                        serviceControl(Selector.Disable)
-                    }
+            }
+            Selector.Disable -> {
+                if (WeatherService.isRunning()) {
+                    WeatherService.stopService(this)
                 }
-                Selector.Reboot -> {
-                    if (WeatherService.isRunning()) {
-                        WeatherService.stopService(this)
-                    }
+            }
+            Selector.Reboot -> {
+                if (WeatherService.isRunning()) {
+                    WeatherService.stopService(this)
+                    startService()
                 }
+            }
+        }
+    }
+
+    private fun startService() {
+        val list = viewModel.userLocationsLive.value
+
+        if (!list.isNullOrEmpty()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val locationStr = serviceUseCases.getServiceLocationUseCase.invoke()
+
+                var userLocationPos = 0
+
+                for (n in list.indices) {
+                    if (locationStr == list[n].locationName)
+                        userLocationPos = n
+                }
+
+                WeatherService.startService(this@MainActivity, list[userLocationPos])
+            }
         }
     }
 

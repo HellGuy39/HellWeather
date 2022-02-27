@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.fragments.settings.SettingsFragment">
 
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -51,23 +50,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <TextView
-                            android:id="@+id/tvLanguage"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/roboto_regular"
-                            android:text="@string/language"
-                            android:textSize="22sp" />
+                        android:orientation="horizontal">
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:hint="@string/language">
 
                             <AutoCompleteTextView
                                 android:id="@+id/acLanguage"
@@ -81,23 +70,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <TextView
-                            android:id="@+id/tvUnits"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/roboto_regular"
-                            android:text="@string/units"
-                            android:textSize="22sp" />
+                        android:orientation="horizontal">
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:hint="@string/units">
 
                             <AutoCompleteTextView
                                 android:id="@+id/acUnits"
@@ -140,23 +119,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <TextView
-                            android:id="@+id/tvTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/roboto_regular"
-                            android:text="@string/theme"
-                            android:textSize="22sp" />
+                        android:orientation="horizontal">
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:hint="@string/theme">
 
                             <AutoCompleteTextView
                                 android:id="@+id/acTheme"
@@ -170,23 +139,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <TextView
-                            android:id="@+id/tvThemeMode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/roboto_regular"
-                            android:text="@string/mode"
-                            android:textSize="22sp" />
+                        android:orientation="horizontal">
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:hint="@string/mode">
 
                             <AutoCompleteTextView
                                 android:id="@+id/acMode"

@@ -141,6 +141,11 @@ class WeatherService : Service() {
         return START_STICKY
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        isRunning = false
+    }
+
     override fun onBind(p0: Intent?): IBinder? {
         return null
     }
