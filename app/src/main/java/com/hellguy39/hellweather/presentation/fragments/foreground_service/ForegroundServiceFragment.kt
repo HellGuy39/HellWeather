@@ -14,6 +14,7 @@ import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.utils.Selector
+import com.hellguy39.hellweather.utils.setToolbarNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,26 +45,16 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
         _mainViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_foreground_service))
-        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
-
-        return inflater.inflate(R.layout.foreground_service_fragment, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = ForegroundServiceFragmentBinding.bind(view)
-
+        _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
     }
 
     override fun onStart() {
         super.onStart()
 
-        val userLocationList = _mainViewModel.userLocationsLive.value
+        //val userLocationList = _mainViewModel.userLocationsLive.value
 
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -72,11 +63,11 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
             serviceMode = _viewModel.getServiceMode()
 
             withContext(Dispatchers.Main) {
-                if (userLocationList != null)
+                /*if (userLocationList != null)
                     setupLocation(userLocationList)
                 else
                     _binding.acLocation.isEnabled = false
-
+*/
                 setupUpdTime()
                 setupServiceSwitch()
                 setupServiceSwitch()

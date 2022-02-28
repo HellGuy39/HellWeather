@@ -6,7 +6,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -14,12 +14,13 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
-import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
-import com.hellguy39.hellweather.presentation.services.WeatherService
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.usecase.prefs.service.ServiceUseCases
 import com.hellguy39.hellweather.domain.utils.Prefs
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
+import com.hellguy39.hellweather.presentation.services.WeatherService
+import com.hellguy39.hellweather.utils.Selector
+import com.hellguy39.hellweather.utils.State
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,13 +28,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
+class MainActivity : AppCompatActivity()/*, MenuItem.OnMenuItemClickListener*/ {
 
     @Inject
     lateinit var serviceUseCases: ServiceUseCases
-
-    //private val locationManagerViewModel : LocationManagerViewModel by viewModels()
-    //private lateinit var drawerLayout: DrawerLayout
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -52,7 +50,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         val view = binding.root
         setContentView(view)
 
-        toolBarMenu = binding.topAppBar.menu
+        //toolBarMenu = binding.topAppBar.menu
 
         firstBoot = intent.getBooleanExtra(Prefs.FirstBoot.name, false)
         serviceMode = intent.getBooleanExtra(Prefs.ServiceMode.name, false)
@@ -60,11 +58,11 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        binding.topAppBar.setNavigationOnClickListener {
+        /*binding.topAppBar.setNavigationOnClickListener {
             openDrawer()
-        }
+        }*/
 
-        binding.topAppBar.menu.getItem(0).setOnMenuItemClickListener(this)
+        //binding.topAppBar.menu.getItem(0).setOnMenuItemClickListener(this)
 
         binding.navigationView.setCheckedItem(R.id.homeFragment)
         NavigationUI.setupWithNavController(binding.navigationView, navController)
@@ -72,14 +70,12 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         setupMaterialShapeToDrawer()
 
         if (firstBoot) {
-            drawerControl(Selector.Disable)
-
             if(isOnHomeFragment()) {
                 navController.navigate(HomeFragmentDirections.actionHomeFragmentToWelcomeFragment())
             }
         }
 
-        checkService()
+        //checkService()
         setObservers()
     }
 
@@ -94,8 +90,8 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun setObservers() {
-        viewModel.userLocationsLive.observe(this) {
-            if (!viewModel.isInProgress()) {
+        viewModel.getUserLocationsList().observe(this) {
+            /*if (!viewModel.isInProgress()) {
                 if (it.isNullOrEmpty()) {
                     viewModel.statusLive.value = State.Empty
                     return@observe
@@ -112,13 +108,20 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
                         updateData(it)
                     }
                 }
+            }*/
+            if (!it.isNullOrEmpty()) {
+
+            }
+            else
+            {
+
             }
         }
     }
 
-    private fun updateData(list: List<UserLocationParam>) {
+    /*private fun updateData(list: List<UserLocationParam>) {
 
-        if (!viewModel.isInProgress()) {
+        *//*if (!viewModel.isInProgress()) {
             viewModel.statusLive.value = State.Progress
 
             if (list.isNotEmpty()) {
@@ -131,8 +134,8 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
             {
                 viewModel.statusLive.value = State.Empty
             }
-        }
-    }
+        }*//*
+    }*/
 
     private fun checkService() = CoroutineScope(Dispatchers.IO).launch {
         val serviceMode = serviceUseCases.getServiceModeUseCase.invoke()
@@ -164,7 +167,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun startService() {
-        val list = viewModel.userLocationsLive.value
+        val list = viewModel.getUserLocationsList().value
 
         if (!list.isNullOrEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
@@ -182,9 +185,9 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         }
     }
 
-    fun setToolbarTittle(s: String) {
+    /*fun setToolbarTittle(s: String) {
         binding.topAppBar.title = s
-    }
+    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
@@ -193,22 +196,6 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    fun drawerControl(action: Enum<Selector>) {
-        when(action) {
-            Selector.Enable -> {
-                binding.topAppBar.setNavigationOnClickListener {
-                    openDrawer()
-                }
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            }
-            Selector.Disable -> {
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                binding.topAppBar.setNavigationOnClickListener {
-                    //Nothing
-                }
-            }
-        }
-    }
     override fun onBackPressed() {
         if (binding.drawerLayout.isOpen)
         {
@@ -220,17 +207,7 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
         }
     }
 
-    fun updateToolbarMenu(action: Enum<Selector>) {
-        if (toolBarMenu != null) {
-
-            when(action) {
-                Selector.Enable -> toolBarMenu!!.findItem(R.id.update).isVisible = true
-                Selector.Disable -> toolBarMenu!!.findItem(R.id.update).isVisible = false
-            }
-        }
-    }
-
-    override fun onMenuItemClick(p0: MenuItem?): Boolean {
+    /*override fun onMenuItemClick(p0: MenuItem?): Boolean {
         when (p0?.itemId) {
             R.id.update -> {
                 if (isOnHomeFragment()) {
@@ -242,9 +219,9 @@ class MainActivity : AppCompatActivity(), MenuItem.OnMenuItemClickListener {
             }
         }
         return true
-    }
+    }*/
 
-    private fun openDrawer() = binding.drawerLayout.open()
+    fun openDrawer() = binding.drawerLayout.open()
 
     private fun closeDrawer() = binding.drawerLayout.close()
 

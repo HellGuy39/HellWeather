@@ -1,5 +1,6 @@
 package com.hellguy39.hellweather.presentation.activities.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +12,8 @@ import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.FirstBootValueU
 import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
 import com.hellguy39.hellweather.domain.usecase.requests.weather.WeatherRequestUseCases
 import com.hellguy39.hellweather.domain.utils.OPEN_WEATHER_API_KEY
-import com.hellguy39.hellweather.utils.State
 import com.hellguy39.hellweather.domain.utils.Unit
+import com.hellguy39.hellweather.utils.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,13 +29,11 @@ class MainActivityViewModel @Inject constructor(
     private val weatherRequestUseCases: WeatherRequestUseCases
 ): ViewModel() {
 
-    val userLocationsLive = MutableLiveData<List<UserLocationParam>>()
-    val weatherDataListLive = MutableLiveData<List<WeatherData>>()
-    val statusLive = MutableLiveData<Enum<State>>()
-    val errorMessage = MutableLiveData<String>()
-    val firstBootLive = MutableLiveData<Boolean>()
-
-    private val weatherDataList: MutableList<WeatherData> = mutableListOf()
+    private val userLocationsLive = MutableLiveData<List<UserLocationParam>>()
+    private val weatherDataListLive = MutableLiveData<List<WeatherData>>()
+    private val statusLive = MutableLiveData<Enum<State>>()
+    private val errorMessage = MutableLiveData<String>()
+    private val firstBootLive = MutableLiveData<Boolean>()
 
     private val lang = Locale.getDefault().country
     private var units = Unit.Metric.toString()
@@ -64,12 +63,24 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun getUserLocationsList(): List<UserLocationParam> {
-        return if (userLocationsLive.value != null) {
-            userLocationsLive.value!!
-        } else {
-            listOf()
-        }
+    fun getStatus(): LiveData<Enum<State>>  {
+        return statusLive
+    }
+
+    fun getUserLocationsList(): LiveData<List<UserLocationParam>> {
+        return userLocationsLive
+    }
+
+    fun getWeatherDataList(): LiveData<List<WeatherData>> {
+        return weatherDataListLive
+    }
+
+    fun getErrorMessage(): LiveData<String> {
+        return errorMessage
+    }
+
+    fun getFirstBootValue(): LiveData<Boolean> {
+        return firstBootLive
     }
 
     fun onRepositoryChanged() {
@@ -103,7 +114,7 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun fetchWeather(list: List<UserLocationParam>) {
+    fun fetchWeather(locationList: List<UserLocationParam>) {
 
         viewModelScope.launch(Dispatchers.Main) {
             clearWeatherDataList()
@@ -112,13 +123,14 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             units = unitsUseCases.getUnitsUseCase.invoke() //Needs to be updated here
+            val dataList: MutableList<WeatherData> = mutableListOf()
 
-            if (list.isNotEmpty()) {
-                for (n in list.indices) {
+            if (locationList.isNotEmpty()) {
+                for (n in locationList.indices) {
 
                     val model = OneCallRequest(
-                        list[n].lat,
-                        list[n].lat,
+                        locationList[n].lat,
+                        locationList[n].lat,
                         "minutely,alerts",
                         units,
                         lang,
@@ -129,7 +141,10 @@ class MainActivityViewModel @Inject constructor(
 
                     if (request.data != null)
                     {
-                        weatherDataList.add(request.data!!)
+                        // That's need to display location name on Fragment inside ViewPager
+                        request.data!!.currentWeather.name = locationList[n].locationName
+
+                        dataList.add(request.data!!)
                     }
                     else
                     {
@@ -142,7 +157,7 @@ class MainActivityViewModel @Inject constructor(
                 }
 
                 withContext(Dispatchers.Main) {
-                    weatherDataListLive.value = weatherDataList
+                    weatherDataListLive.value = dataList
                     statusLive.value = State.Successful
                 }
             }
@@ -150,8 +165,7 @@ class MainActivityViewModel @Inject constructor(
     }
 
     private fun clearWeatherDataList() {
-        weatherDataList.clear()
-        weatherDataListLive.value = weatherDataList
+        weatherDataListLive.value = mutableListOf()
     }
 
     private fun updateFirstBootValue() {

@@ -63,17 +63,6 @@ class AddLocationFragment : Fragment(R.layout.fragment_add_location), View.OnCli
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
-        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
-        (activity as MainActivity).drawerControl(Selector.Disable)
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?)

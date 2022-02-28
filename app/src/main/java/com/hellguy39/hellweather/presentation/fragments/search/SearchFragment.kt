@@ -33,21 +33,11 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_search))
-        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
-
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _fragView = view
         _binding = SearchFragmentBinding.bind(view)
+        _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
 
         _binding.ibSearch.setOnClickListener {
             val input = _binding.etCity.text.toString()
@@ -77,8 +67,8 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
             when (it) {
                 State.Error -> {
                     refreshing(false)
-                    if (isOnSearchFragment())
-                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.error))
+                    /*if (isOnSearchFragment())
+                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.error))*/
                 }
                 State.Progress -> {
                     refreshing(true)
@@ -89,12 +79,12 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
 
     private fun updateUI(currentWeather: CurrentWeather) {
 
-        if (isOnSearchFragment()) {
+        /*if (isOnSearchFragment()) {
             (activity as MainActivity).setToolbarTittle(
                 SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
                     currentWeather.dt * 1000)
             )
-        }
+        }*/
 
         GlideApp.with(_binding.ivWeather.context)
             .load("https://openweathermap.org/img/wn/${currentWeather.icon}@2x.png")
@@ -117,7 +107,7 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
         _binding.tvTemp.text = currentWeather.temp
         _binding.tvDot.text = tempDesignation
 
-        _binding.tvName.text = currentWeather.name
+        _binding.collapseToolbar.title = currentWeather.name
         _binding.tvHumidity.text = String.format(resources.getString(R.string.humidity_text), currentWeather.humidity)
         _binding.tvVisibility.text = String.format(resources.getString(R.string.visibility_text), (currentWeather.visibility / 1000))
 
@@ -151,7 +141,7 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
             _binding.tfCity.isEnabled = false
             _binding.progressIndicator.visibility = View.VISIBLE
             _binding.ibSearch.isEnabled = false
-            (activity as MainActivity).setToolbarTittle(resources.getString(R.string.searching))
+            /*(activity as MainActivity).setToolbarTittle(resources.getString(R.string.searching))*/
         }
         else
         {

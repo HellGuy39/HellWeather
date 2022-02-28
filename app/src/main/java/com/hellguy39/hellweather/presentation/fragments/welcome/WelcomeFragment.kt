@@ -13,17 +13,6 @@ class WelcomeFragment : Fragment() {
 
     private lateinit var binding: FragmentWelcomeBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        (activity as MainActivity).drawerControl(Selector.Disable)
-        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_welcome))
-        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
-
-        return inflater.inflate(R.layout.fragment_welcome, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

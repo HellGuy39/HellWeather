@@ -17,6 +17,7 @@ import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewMo
 import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.utils.Selector
+import com.hellguy39.hellweather.utils.setToolbarNavigation
 import com.hellguy39.hellweather.utils.shortSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +26,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
     private lateinit var mainViewModel: MainActivityViewModel
     private lateinit var viewModel: LocationManagerViewModel
-    private lateinit var binding: LocationManagerFragmentBinding
+    private lateinit var _binding: LocationManagerFragmentBinding
     private lateinit var fragView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,29 +35,19 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
         mainViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
-        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
-        (activity as MainActivity).drawerControl(Selector.Enable)
-
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragView = view
-        binding = LocationManagerFragmentBinding.bind(view)
+        _binding = LocationManagerFragmentBinding.bind(view)
+
+        _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
 
         setObservers()
 
-        binding.recyclerLocations.layoutManager =
+        _binding.recyclerLocations.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        binding.fabAdd.setOnClickListener {
+        _binding.fabAdd.setOnClickListener {
             fragView.findNavController()
                 .navigate(LocationManagerFragmentDirections.actionLocationManagerFragmentToAddCityFragment())
         }
@@ -64,7 +55,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
     }
 
     private fun setObservers() {
-        mainViewModel.userLocationsLive.observe(activity as MainActivity) {
+        /*mainViewModel.userLocationsLive.observe(activity as MainActivity) {
             updateRecycler(it)
         }
 
@@ -75,11 +66,11 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
                 if (list.isNotEmpty())
                     updateRecycler(list)
 
-        }
+        }*/
     }
 
     private fun updateRecycler(list: List<UserLocationParam>) {
-        val weatherDataList = mainViewModel.weatherDataListLive.value ?: return
+        /*val weatherDataList = mainViewModel.weatherDataListLive.value ?: return
 
         val adapter = LocationsAdapter(
             locationList = list,
@@ -88,7 +79,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
             units = viewModel.getUnits()
         )
 
-        binding.recyclerLocations.adapter = adapter
+        _binding.recyclerLocations.adapter = adapter
 
         val swipeGesture = object : SwipeGesture(requireContext(), resources) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -98,13 +89,13 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
                 deleteLocationItem(mainViewModel.getUserLocationsList()[pos])
 
-                binding.recyclerLocations.adapter?.notifyItemRemoved(pos)
+                _binding.recyclerLocations.adapter?.notifyItemRemoved(pos)
             }
         }
 
         val touchHelper = ItemTouchHelper(swipeGesture)
-        touchHelper.attachToRecyclerView(binding.recyclerLocations)
-
+        touchHelper.attachToRecyclerView(_binding.recyclerLocations)
+*/
     }
 
     private fun deleteLocationItem(userLocationParam: UserLocationParam) {

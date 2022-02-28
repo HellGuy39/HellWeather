@@ -25,8 +25,10 @@ import com.hellguy39.hellweather.domain.models.weather.WeatherData
 import com.hellguy39.hellweather.domain.utils.MM_HG
 import com.hellguy39.hellweather.domain.utils.Unit
 import com.hellguy39.hellweather.glide.GlideApp
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.adapter.NextDaysAdapter
 import com.hellguy39.hellweather.presentation.adapter.NextHoursAdapter
+import com.hellguy39.hellweather.utils.setToolbarNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,6 +72,8 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentWeatherPageCollapseBinding.bind(view!!)
+
+        _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
 
         CoroutineScope(Dispatchers.Main).launch {
             if (this@WeatherPageFragment::weatherData.isInitialized) {
@@ -177,23 +181,25 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
             .centerCrop()
             .into(_binding.ivWeather)
 
+        _binding.collapseToolbar.title = wm.name
+
         when (units) {
             Unit.Standard.name -> {
-                _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_kelvin_text), wm.temp, wm.wDescription)
+                //_binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_kelvin_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_kelvin_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_kelvin_text),wm.tempFeelsLike)
                 _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_kelvin_text), wm.dewPoint)
 
             }
             Unit.Imperial.name -> {
-                _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
+                //_binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_degree_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),wm.tempFeelsLike)
                 _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_fahrenheit_text), wm.dewPoint)
 
             }
             Unit.Metric.name -> {
-                _binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
+                //_binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_degree_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_degree_text),wm.tempMax, wm.tempMin)
                 _binding.tvTempFeelsLike.text = String.format(resources.getString(R.string.temp_feels_like_degree_text),wm.tempFeelsLike)
                 _binding.tvDewPoint.text = String.format(resources.getString(R.string.dew_point_now_celsius_text), wm.dewPoint)

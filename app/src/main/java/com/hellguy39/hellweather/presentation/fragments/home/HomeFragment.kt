@@ -1,6 +1,7 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.hellguy39.hellweather.databinding.FragmentHomeBinding
 import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
+import com.hellguy39.hellweather.presentation.adapter.ErrorPageAdapter
 import com.hellguy39.hellweather.presentation.adapter.WeatherPageAdapter
 import com.hellguy39.hellweather.utils.Selector
 import com.hellguy39.hellweather.utils.State
@@ -42,18 +44,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        (activity as MainActivity).setToolbarTittle(getString(R.string.loading))
-        (activity as MainActivity).updateToolbarMenu(Selector.Enable)
-
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
@@ -61,17 +51,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onStart() {
         super.onStart()
-        if(mainActivityViewModel.firstBootLive.value == false) {
+        /*if(mainActivityViewModel.firstBootLive.value == false) {
             refreshing(Selector.Enable)
             setStatusObserver()
-        }
+        }*/
     }
 
-    private fun setStatusObserver() {
+    /*private fun setStatusObserver() {
         mainActivityViewModel.statusLive.observe(activity as MainActivity) {
-            if (it == null)
-                return@observe
-
             when (it) {
                 State.Successful -> {
 
@@ -102,13 +89,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         ) { tab, position ->
                             tab.text = userLocations[position].locationName
 
-                            if (isOnHomeFragment()) {
+                            *//*if (isOnHomeFragment()) {
                                 (activity as MainActivity).setToolbarTittle(
                                     SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
                                         Date(weatherDataList[position].currentWeather.dt * 1000)
                                     )
                                 )
-                            }
+                            }*//*
                         }
                         tabLayoutMediator.attach()
                         //animateViewPager()
@@ -119,8 +106,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     refreshing(Selector.Disable)
                     val errorMessage = mainActivityViewModel.errorMessage.value
 
-                    if (isOnHomeFragment())
-                        (activity as MainActivity).setToolbarTittle(errorMessage!!)
+                    val pagerAdapter = ErrorPageAdapter(
+                        frag = this@HomeFragment,
+                        errorMessage = errorMessage!!
+                    )
+
+                    binding.viewPager.adapter = pagerAdapter
+
+                    *//*if (isOnHomeFragment())
+                        (activity as MainActivity).setToolbarTittle(errorMessage)*//*
                 }
                 State.Progress -> {
                     refreshing(Selector.Enable)
@@ -129,12 +123,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 State.Empty -> {
                     refreshing(Selector.Disable)
 
-                    if (isOnHomeFragment())
-                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))
+                    *//*if (isOnHomeFragment())
+                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))*//*
                 }
             }
         }
-    }
+    }*/
 
     /*private fun animateViewPager() {
         binding.viewPager.apply {
@@ -164,7 +158,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         if (action == Selector.Enable) {
             binding.progressIndicator.visibility = View.VISIBLE
-            (activity as MainActivity).setToolbarTittle(getString(R.string.loading))
+            /*(activity as MainActivity).setToolbarTittle(getString(R.string.loading))*/
         }
         else
         {

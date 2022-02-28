@@ -33,21 +33,13 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
         _viewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_settings))
-        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
-
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = SettingsFragmentBinding.bind(view)
 
+        _binding.toolbar.setNavigationOnClickListener {
+            (activity as MainActivity).openDrawer()
+        }
     }
 
     override fun onStart() {

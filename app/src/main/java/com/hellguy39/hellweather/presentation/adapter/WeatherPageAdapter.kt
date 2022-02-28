@@ -13,6 +13,10 @@ class WeatherPageAdapter(
 
     override fun getItemCount(): Int = weatherDataList.size
 
-    override fun createFragment(position: Int): WeatherPageFragment
-        = WeatherPageFragment.newInstance(weatherData = weatherDataList[position], units = units)
+    override fun createFragment(
+        position: Int
+    ): WeatherPageFragment = WeatherPageFragment.newInstance(
+        weatherData = weatherDataList[position],
+        units = units
+    )
 }

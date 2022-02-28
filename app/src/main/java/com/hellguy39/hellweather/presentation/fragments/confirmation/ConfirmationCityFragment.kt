@@ -1,11 +1,9 @@
 package com.hellguy39.hellweather.presentation.fragments.confirmation
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.fragment.app.Fragment
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.hellguy39.hellweather.R
@@ -13,7 +11,6 @@ import com.hellguy39.hellweather.databinding.ConfirmationCityFragmentBinding
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
-import com.hellguy39.hellweather.utils.Selector
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,18 +26,6 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[ConfirmationCityViewModel::class.java]
         mainViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        (activity as MainActivity).setToolbarTittle(getString(R.string.tittle_location_manager))
-        (activity as MainActivity).updateToolbarMenu(Selector.Disable)
-        (activity as MainActivity).drawerControl(Selector.Disable)
-
-        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(
@@ -91,14 +76,15 @@ class ConfirmationCityFragment : Fragment(R.layout.confirmation_city_fragment), 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.fabTrue -> {
+
                 viewModel.saveToDatabase(userLocationParam)
-                mainViewModel.onRepositoryChanged()
-                (activity as MainActivity).drawerControl(Selector.Enable)
 
                 if (viewModel.isFirstBoot()) {
                     viewModel.disableFirstBoot()
+                    mainViewModel.onRepositoryChanged()
                     navigateToHome(p0)
                 } else {
+                    mainViewModel.onRepositoryChanged()
                     navigateToLocationManager(p0)
                 }
             }

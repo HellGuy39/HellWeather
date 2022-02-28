@@ -17,7 +17,7 @@ class ConfirmationCityViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun saveToDatabase(userLocation: UserLocationParam) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userLocationUseCases.addUserLocationUseCase.invoke(userLocation)
         }
     }
