@@ -40,16 +40,13 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
         _binding.toolbar.setNavigationOnClickListener {
             (activity as MainActivity).openDrawer()
         }
+
+        setObservers()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        CoroutineScope(Dispatchers.Main).launch {
-            setupThemes()
-            setupMode()
-            setupLanguages()
-            setupUnits()
+    private fun setObservers() {
+        _viewModel.getUnits().observe(viewLifecycleOwner) { units ->
+            setupUnits(units = units)
         }
     }
 
@@ -77,11 +74,11 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
         _binding.acMode.isEnabled = false
     }
 
-    private fun setupUnits() {
+    private fun setupUnits(units: String) {
         val adapterUnits = ArrayAdapter(requireContext(), R.layout.list_item, unitsList)
         _binding.acUnits.setAdapter(adapterUnits)
 
-        when (_viewModel.getSavedUnits()) {
+        when (units) {
             Unit.Standard.name -> {
                 _binding.acUnits.setText(_binding.acUnits.adapter.getItem(0).toString(), false)
             }
@@ -94,10 +91,7 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
         }
 
         _binding.acUnits.setOnItemClickListener { _, _, i, _ ->
-            //_binding.acUnits.setText(_binding.acUnits.adapter.getItem(i).toString(), false)
             _viewModel.saveUnits(_binding.acUnits.adapter.getItem(i).toString())
         }
-
     }
-
 }

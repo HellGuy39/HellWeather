@@ -10,23 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.ForegroundServiceFragmentBinding
-import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.utils.Selector
 import com.hellguy39.hellweather.utils.setToolbarNavigation
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment) {
-
-    /*companion object {
-        fun newInstance() = ForegroundServiceFragment()
-    }*/
 
     private val updTimeItemsStr = listOf("15 mins", "30 mins", "1 hour", "3 hours", "6 hours")
     private val updTimeItemsInt = listOf(15, 30, 60, 60 * 3, 60 * 6)
@@ -34,10 +25,6 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
     private lateinit var _viewModel: ForegroundServiceViewModel
     private lateinit var _mainViewModel: MainActivityViewModel
     private lateinit var _binding: ForegroundServiceFragmentBinding
-
-    private var selectedLoc: String? = null
-    private var selectedTime: Int = 3 * 60
-    private var serviceMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,36 +36,26 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
         super.onViewCreated(view, savedInstanceState)
         _binding = ForegroundServiceFragmentBinding.bind(view)
         _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
+        setObservers()
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun setObservers() {
+        _viewModel.getServiceLocation().observe(viewLifecycleOwner) {
+            setupLocation(selectedLocation = it)
+        }
 
-        //val userLocationList = _mainViewModel.userLocationsLive.value
+        _viewModel.getUpdateTime().observe(viewLifecycleOwner) {
+            setupUpdTime(selectedTime = it)
+        }
 
-        CoroutineScope(Dispatchers.IO).launch {
-
-            selectedLoc = _viewModel.getServiceLocation()
-            selectedTime = _viewModel.getUpdateTime()
-            serviceMode = _viewModel.getServiceMode()
-
-            withContext(Dispatchers.Main) {
-                /*if (userLocationList != null)
-                    setupLocation(userLocationList)
-                else
-                    _binding.acLocation.isEnabled = false
-*/
-                setupUpdTime()
-                setupServiceSwitch()
-                setupServiceSwitch()
-            }
+        _viewModel.getServiceMode().observe(viewLifecycleOwner) {
+            setupServiceSwitch(isChecked = it)
         }
     }
 
-    private fun setupServiceSwitch() {
+    private fun setupServiceSwitch(isChecked: Boolean) {
 
-        if (serviceMode)
-            _binding.serviceSwitch.isChecked = true
+        _binding.serviceSwitch.isChecked = isChecked
 
         _binding.serviceSwitch.setOnCheckedChangeListener { _, b ->
             if (b) {
@@ -92,20 +69,21 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
         }
     }
 
-    private fun setupLocation(list: List<UserLocationParam>) {
+    private fun setupLocation(selectedLocation: String) {
+
+        val locationList = _mainViewModel.getUserLocationsList().value
         val locationNameList = mutableListOf<String>()
-
-        if (list.isEmpty())
-            return
-
         var selectedListPos = 0
 
-        for (n in list.indices) {
+        if (locationList.isNullOrEmpty())
+            return
 
-            if (selectedLoc != null && list[n].locationName == selectedLoc)
+        for (n in locationList.indices) {
+
+            if (locationList[n].locationName == selectedLocation)
                 selectedListPos = n
 
-            locationNameList.add(list[n].locationName)
+            locationNameList.add(locationList[n].locationName)
         }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, locationNameList)
@@ -120,7 +98,7 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
 
     }
 
-    private fun setupUpdTime() {
+    private fun setupUpdTime(selectedTime: Int) {
 
         var selectedPos = 3 // 3 hour
 
@@ -142,4 +120,11 @@ class ForegroundServiceFragment : Fragment(R.layout.foreground_service_fragment)
 
     }
 
+    fun acceptOptionsForService() {
+        val mode = _viewModel.getServiceMode().value ?: return
+
+        if (mode) {
+            (activity as MainActivity).serviceControl(Selector.Reboot)
+        }
+    }
 }

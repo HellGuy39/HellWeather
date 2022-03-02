@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 class HomeViewModel : ViewModel() {
 
     init {
-        Log.d("##### DEBUG #####", "MODEL INIT")
+       /* Log.d("##### DEBUG #####", "MODEL INIT")*/
     }
 
     override fun onCleared() {
         super.onCleared()
-        Log.d("##### DEBUG #####", "ON CLEARED")
+        /*Log.d("##### DEBUG #####", "ON CLEARED")*/
     }
 
 }

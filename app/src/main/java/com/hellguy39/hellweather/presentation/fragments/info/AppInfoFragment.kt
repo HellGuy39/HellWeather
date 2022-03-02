@@ -1,18 +1,15 @@
 package com.hellguy39.hellweather.presentation.fragments.info
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.hellguy39.hellweather.BuildConfig
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentAppInfoBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.utils.Selector
 import com.hellguy39.hellweather.utils.setToolbarNavigation
 
-class AppInfoFragment : Fragment() {
+class AppInfoFragment : Fragment(R.layout.fragment_app_info) {
 
     private lateinit var _binding: FragmentAppInfoBinding
     private val hazeTittle = "Haze"

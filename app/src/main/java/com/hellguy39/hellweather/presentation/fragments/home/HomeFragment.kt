@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -51,21 +52,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onStart() {
         super.onStart()
-        /*if(mainActivityViewModel.firstBootLive.value == false) {
+        if(mainActivityViewModel.getFirstBootValue().value == false) {
             refreshing(Selector.Enable)
             setStatusObserver()
-        }*/
+        }
     }
 
-    /*private fun setStatusObserver() {
-        mainActivityViewModel.statusLive.observe(activity as MainActivity) {
+    private fun setStatusObserver() {
+        mainActivityViewModel.getStatus().observe(activity as MainActivity) {
             when (it) {
                 State.Successful -> {
 
                     refreshing(Selector.Disable)
 
-                    val weatherDataList = mainActivityViewModel.weatherDataListLive.value
-                    val userLocations = mainActivityViewModel.userLocationsLive.value
+                    val weatherDataList = mainActivityViewModel.getWeatherDataList().value
+                    val userLocations = mainActivityViewModel.getUserLocationsList().value
 
                     if (userLocations == null || userLocations.isEmpty())
                         return@observe
@@ -87,15 +88,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             binding.tabLayout,
                             binding.viewPager
                         ) { tab, position ->
-                            tab.text = userLocations[position].locationName
-
-                            *//*if (isOnHomeFragment()) {
+                            //tab.text = userLocations[position].locationName
+                            //tab.icon = ResourcesCompat.getDrawable(resources,R.drawable.ic_baseline_lens_24, null)
+                            /*if (isOnHomeFragment()) {
                                 (activity as MainActivity).setToolbarTittle(
                                     SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
                                         Date(weatherDataList[position].currentWeather.dt * 1000)
                                     )
                                 )
-                            }*//*
+                            }*/
                         }
                         tabLayoutMediator.attach()
                         //animateViewPager()
@@ -104,7 +105,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                 State.Error -> {
                     refreshing(Selector.Disable)
-                    val errorMessage = mainActivityViewModel.errorMessage.value
+                    val errorMessage = mainActivityViewModel.getErrorMessage().value
 
                     val pagerAdapter = ErrorPageAdapter(
                         frag = this@HomeFragment,
@@ -113,8 +114,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                     binding.viewPager.adapter = pagerAdapter
 
-                    *//*if (isOnHomeFragment())
-                        (activity as MainActivity).setToolbarTittle(errorMessage)*//*
+                    /*if (isOnHomeFragment())
+                        (activity as MainActivity).setToolbarTittle(errorMessage)*/
                 }
                 State.Progress -> {
                     refreshing(Selector.Enable)
@@ -123,12 +124,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 State.Empty -> {
                     refreshing(Selector.Disable)
 
-                    *//*if (isOnHomeFragment())
-                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))*//*
+                    /*if (isOnHomeFragment())
+                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))*/
                 }
             }
         }
-    }*/
+    }
 
     /*private fun animateViewPager() {
         binding.viewPager.apply {

@@ -1,6 +1,7 @@
 package com.hellguy39.hellweather.presentation.activities.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -28,7 +29,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity()/*, MenuItem.OnMenuItemClickListener*/ {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var serviceUseCases: ServiceUseCases
@@ -36,10 +37,8 @@ class MainActivity : AppCompatActivity()/*, MenuItem.OnMenuItemClickListener*/ {
     private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: MainActivityBinding
-    private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
-    private  var toolBarMenu: Menu? = null
 
     private var firstBoot = false
     private var serviceMode = false
@@ -50,19 +49,12 @@ class MainActivity : AppCompatActivity()/*, MenuItem.OnMenuItemClickListener*/ {
         val view = binding.root
         setContentView(view)
 
-        //toolBarMenu = binding.topAppBar.menu
 
         firstBoot = intent.getBooleanExtra(Prefs.FirstBoot.name, false)
         serviceMode = intent.getBooleanExtra(Prefs.ServiceMode.name, false)
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-
-        /*binding.topAppBar.setNavigationOnClickListener {
-            openDrawer()
-        }*/
-
-        //binding.topAppBar.menu.getItem(0).setOnMenuItemClickListener(this)
 
         binding.navigationView.setCheckedItem(R.id.homeFragment)
         NavigationUI.setupWithNavController(binding.navigationView, navController)
@@ -75,7 +67,7 @@ class MainActivity : AppCompatActivity()/*, MenuItem.OnMenuItemClickListener*/ {
             }
         }
 
-        //checkService()
+        checkService()
         setObservers()
     }
 
@@ -91,51 +83,17 @@ class MainActivity : AppCompatActivity()/*, MenuItem.OnMenuItemClickListener*/ {
 
     private fun setObservers() {
         viewModel.getUserLocationsList().observe(this) {
-            /*if (!viewModel.isInProgress()) {
-                if (it.isNullOrEmpty()) {
-                    viewModel.statusLive.value = State.Empty
-                    return@observe
+            if (!viewModel.isInProgress()) {
+                if (viewModel.getStatus().value != State.Empty) {
+                    //val weatherDataList = viewModel.weatherDataListLive.value
+                    viewModel.fetchWeather(it)
+                    /*if (serviceMode) {
+                        serviceControl(Selector.Reboot)
+                    }*/
                 }
-
-                val weatherDataList = viewModel.weatherDataListLive.value
-
-                if (weatherDataList == null) {
-                    updateData(it)
-                }
-
-                if (weatherDataList != null) {
-                    if (weatherDataList.isEmpty()) {
-                        updateData(it)
-                    }
-                }
-            }*/
-            if (!it.isNullOrEmpty()) {
-
-            }
-            else
-            {
-
             }
         }
     }
-
-    /*private fun updateData(list: List<UserLocationParam>) {
-
-        *//*if (!viewModel.isInProgress()) {
-            viewModel.statusLive.value = State.Progress
-
-            if (list.isNotEmpty()) {
-                viewModel.fetchWeather(list)
-                if (serviceMode) {
-                    serviceControl(Selector.Reboot)
-                }
-            }
-            else
-            {
-                viewModel.statusLive.value = State.Empty
-            }
-        }*//*
-    }*/
 
     private fun checkService() = CoroutineScope(Dispatchers.IO).launch {
         val serviceMode = serviceUseCases.getServiceModeUseCase.invoke()
@@ -185,17 +143,6 @@ class MainActivity : AppCompatActivity()/*, MenuItem.OnMenuItemClickListener*/ {
         }
     }
 
-    /*fun setToolbarTittle(s: String) {
-        binding.topAppBar.title = s
-    }*/
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onBackPressed() {
         if (binding.drawerLayout.isOpen)
         {
@@ -206,20 +153,6 @@ class MainActivity : AppCompatActivity()/*, MenuItem.OnMenuItemClickListener*/ {
             super.onBackPressed()
         }
     }
-
-    /*override fun onMenuItemClick(p0: MenuItem?): Boolean {
-        when (p0?.itemId) {
-            R.id.update -> {
-                if (isOnHomeFragment()) {
-                    val list = viewModel.userLocationsLive.value
-
-                    if (list != null)
-                        updateData(list)
-                }
-            }
-        }
-        return true
-    }*/
 
     fun openDrawer() = binding.drawerLayout.open()
 

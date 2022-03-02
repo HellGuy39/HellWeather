@@ -163,7 +163,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         val listHours: MutableList<HourlyWeather> = weatherData.hourlyWeather
 
         _binding.recyclerNextDays.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = NextDaysAdapter(context, listDays, units, resources)
         }
         _binding.recyclerNextHours.apply {

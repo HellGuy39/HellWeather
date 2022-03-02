@@ -1,82 +1,80 @@
 package com.hellguy39.hellweather.presentation.fragments.location_manager
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.fragment.app.Fragment
 import android.view.View
-import android.view.ViewGroup
-import androidx.navigation.findNavController
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.LocationManagerFragmentBinding
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.models.weather.WeatherData
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.presentation.adapter.LocationsAdapter
-import com.hellguy39.hellweather.domain.models.param.UserLocationParam
-import com.hellguy39.hellweather.utils.Selector
 import com.hellguy39.hellweather.utils.setToolbarNavigation
 import com.hellguy39.hellweather.utils.shortSnackBar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
-    private lateinit var mainViewModel: MainActivityViewModel
-    private lateinit var viewModel: LocationManagerViewModel
+    private lateinit var _mainViewModel: MainActivityViewModel
+    private lateinit var _viewModel: LocationManagerViewModel
     private lateinit var _binding: LocationManagerFragmentBinding
-    private lateinit var fragView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[LocationManagerViewModel::class.java]
-        mainViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
+        _viewModel = ViewModelProvider(this)[LocationManagerViewModel::class.java]
+        _mainViewModel = ViewModelProvider(activity as MainActivity)[MainActivityViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragView = view
         _binding = LocationManagerFragmentBinding.bind(view)
 
         _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
-
-        setObservers()
 
         _binding.recyclerLocations.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         _binding.fabAdd.setOnClickListener {
-            fragView.findNavController()
+            findNavController()
                 .navigate(LocationManagerFragmentDirections.actionLocationManagerFragmentToAddCityFragment())
         }
 
+        setObservers()
     }
 
     private fun setObservers() {
-        /*mainViewModel.userLocationsLive.observe(activity as MainActivity) {
-            updateRecycler(it)
+        _mainViewModel.getWeatherDataList().observe(activity as MainActivity) { weatherDataList ->
+
+            val locationsList = _mainViewModel.getUserLocationsList().value
+
+            if (!locationsList.isNullOrEmpty() && !weatherDataList.isNullOrEmpty()) {
+                updateRecycler(locationList = locationsList, weatherDataList = weatherDataList)
+            } else if (!locationsList.isNullOrEmpty()){
+                updateRecycler(locationList = locationsList)
+            }
+
         }
-
-        mainViewModel.weatherDataListLive.observe(activity as MainActivity) {
-            val list = mainViewModel.userLocationsLive.value
-
-            if (list != null)
-                if (list.isNotEmpty())
-                    updateRecycler(list)
-
-        }*/
     }
 
-    private fun updateRecycler(list: List<UserLocationParam>) {
-        /*val weatherDataList = mainViewModel.weatherDataListLive.value ?: return
+    private fun updateRecycler(
+        locationList: List<UserLocationParam> = listOf(),
+        weatherDataList: List<WeatherData> = listOf()
+    ) {
+        val units = _viewModel.getUnits()
 
         val adapter = LocationsAdapter(
-            locationList = list,
+            locationList = locationList,
             weatherDataList = weatherDataList,
             resources = resources,
-            units = viewModel.getUnits()
+            units = units
         )
 
         _binding.recyclerLocations.adapter = adapter
@@ -87,7 +85,7 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
                 val pos = viewHolder.bindingAdapterPosition
 
-                deleteLocationItem(mainViewModel.getUserLocationsList()[pos])
+                deleteLocationItem(_mainViewModel.getUserLocationsList().value?.get(pos) ?: return)
 
                 _binding.recyclerLocations.adapter?.notifyItemRemoved(pos)
             }
@@ -95,13 +93,12 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
         val touchHelper = ItemTouchHelper(swipeGesture)
         touchHelper.attachToRecyclerView(_binding.recyclerLocations)
-*/
     }
 
     private fun deleteLocationItem(userLocationParam: UserLocationParam) {
-        viewModel.onDeleteItem(userLocationParam)
-        mainViewModel.onRepositoryChanged()
-        fragView.shortSnackBar(resources.getString(R.string.location_deleted))
+        _viewModel.onDeleteItem(userLocationParam)
+        _mainViewModel.onRepositoryChanged()
+        _binding.root.shortSnackBar(resources.getString(R.string.location_deleted))
     }
 
 }
