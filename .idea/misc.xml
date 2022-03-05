@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable-v21/app_widget_background.xml" value="0.2645" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable-v21/app_widget_inner_view_background.xml" value="0.2645" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable-v24/gradient_cloudy_day.xml" value="0.3880208333333333" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.225" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/backdrop_shape.xml" value="0.3880208333333333" />
@@ -29,6 +31,9 @@
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/splash_screen.xml" value="0.3880208333333333" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/splash_screen_day.xml" value="0.3729166666666667" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/splash_screen_night.xml" value="0.3880208333333333" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/tab_indicator_default.xml" value="0.2645" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/tab_indicator_selected.xml" value="0.2645" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/drawable/tab_selector.xml" value="0.2645" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/activity_new_user.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/activity_splash_screen.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/confirmation_city_fragment.xml" value="0.35462962962962963" />
@@ -58,7 +63,7 @@
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/quick_weather_fragment.xml" value="0.259375" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/search_fragment.xml" value="0.27946127946127947" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/settings_fragment.xml" value="0.259375" />
-        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/weather_widget.xml" value="0.1171875" />
+        <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/weather_widget.xml" value="0.264" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/layout/weather_widget_configure.xml" value="0.264" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/menu/drawer_menu.xml" value="0.371875" />
         <entry key="..\:/Users/alexe/AndroidStudioProjects/HellWeather/app/src/main/res/menu/toolbar_menu.xml" value="0.371875" />

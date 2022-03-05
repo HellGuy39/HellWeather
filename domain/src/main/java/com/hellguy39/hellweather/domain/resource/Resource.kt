@@ -1,6 +1,6 @@
 package com.hellguy39.hellweather.domain.resource
 
-typealias SimpleResource = Resource<Unit>
+//typealias SimpleResource = Resource<Unit>
 
 sealed class Resource<T>(
     val data: T? = null,

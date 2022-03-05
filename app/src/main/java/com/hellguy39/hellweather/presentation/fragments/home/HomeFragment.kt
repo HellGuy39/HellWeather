@@ -84,22 +84,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                         binding.viewPager.adapter = pagerAdapter
 
-                        tabLayoutMediator = TabLayoutMediator(
-                            binding.tabLayout,
-                            binding.viewPager
-                        ) { tab, position ->
-                            //tab.text = userLocations[position].locationName
-                            //tab.icon = ResourcesCompat.getDrawable(resources,R.drawable.ic_baseline_lens_24, null)
-                            /*if (isOnHomeFragment()) {
+                        if (weatherDataList.size > 1) {
+                            tabLayoutMediator = TabLayoutMediator(
+                                binding.tabLayout,
+                                binding.viewPager
+                            ) { tab, position ->
+                                //tab.text = userLocations[position].locationName
+                                //tab.icon = ResourcesCompat.getDrawable(resources,R.drawable.ic_baseline_lens_24, null)
+                                /*if (isOnHomeFragment()) {
                                 (activity as MainActivity).setToolbarTittle(
                                     SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
                                         Date(weatherDataList[position].currentWeather.dt * 1000)
                                     )
                                 )
                             }*/
+                            }
+                            tabLayoutMediator.attach()
+                            //animateViewPager()
                         }
-                        tabLayoutMediator.attach()
-                        //animateViewPager()
                     }
                 }
 

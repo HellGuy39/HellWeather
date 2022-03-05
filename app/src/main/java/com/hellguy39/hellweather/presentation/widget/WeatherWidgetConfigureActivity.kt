@@ -1,31 +1,68 @@
 package com.hellguy39.hellweather.presentation.widget
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import androidx.appcompat.app.AppCompatActivity
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.WeatherWidgetConfigureBinding
+import com.hellguy39.hellweather.domain.models.param.UserLocationParam
+import com.hellguy39.hellweather.domain.usecase.local.UserLocationUseCases
+import com.hellguy39.hellweather.domain.utils.Prefs
+import com.hellguy39.hellweather.domain.utils.Unit
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-/**
- * The configuration screen for the [WeatherWidget] AppWidget.
- */
-class WeatherWidgetConfigureActivity : Activity() {
+@AndroidEntryPoint
+class WeatherWidgetConfigureActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var userLocationUseCases: UserLocationUseCases
+
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private lateinit var appWidgetText: EditText
-    private var onClickListener = View.OnClickListener {
-        val context = this@WeatherWidgetConfigureActivity
+    private lateinit var acLocation: AutoCompleteTextView
+    private lateinit var acUnits: AutoCompleteTextView
 
-        // When the button is clicked, store the string locally
-        val widgetText = appWidgetText.text.toString()
-        saveTitlePref(context, appWidgetId, widgetText)
+    private var selectedLocation = 0
+    private var selectedUnits = Unit.Metric
+
+    private val unitsList = listOf(Unit.Standard.name, Unit.Metric.name, Unit.Imperial.name)
+
+    private lateinit var _binding: WeatherWidgetConfigureBinding
+    private var locationList: List<UserLocationParam> = listOf()
+
+    private var onClickListener = View.OnClickListener {
+
+        val _selectedLocation = _binding.acLocation.text.toString()
+        var selectedLocationParam = UserLocationParam()
+
+        for (n in locationList.indices) {
+            if (locationList[n].locationName == _selectedLocation) {
+                selectedLocationParam = locationList[n]
+            }
+        }
+
+        saveLocation(this, appWidgetId, _binding.acLocation.adapter.getItem(selectedLocation).toString())
+        saveUnits(this, appWidgetId, selectedUnits.name)
+        saveWidgetLocation(
+            this@WeatherWidgetConfigureActivity,
+            appWidgetId,
+            selectedLocationParam.locationName,
+            selectedLocationParam.lat,
+            selectedLocationParam.lon
+        )
 
         // It is the responsibility of the configuration activity to update the app widget
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
+        val appWidgetManager = AppWidgetManager.getInstance(this@WeatherWidgetConfigureActivity)
+        updateAppWidget(this@WeatherWidgetConfigureActivity, appWidgetManager, appWidgetId)
 
         // Make sure we pass back the original appWidgetId
         val resultValue = Intent()
@@ -33,20 +70,57 @@ class WeatherWidgetConfigureActivity : Activity() {
         setResult(RESULT_OK, resultValue)
         finish()
     }
-    private lateinit var binding: WeatherWidgetConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
-
-        // Set the result to CANCELED.  This will cause the widget host to cancel
-        // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
+        _binding = WeatherWidgetConfigureBinding.inflate(layoutInflater)
+        setContentView(_binding.root)
 
-        binding = WeatherWidgetConfigureBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        _binding.fabNext.setOnClickListener(onClickListener)
 
-        appWidgetText = binding.appwidgetText as EditText
-        binding.addButton.setOnClickListener(onClickListener)
+        CoroutineScope(Dispatchers.IO).launch {
+            val _selectedLocation = getLocation(this@WeatherWidgetConfigureActivity, appWidgetId)
+            val selectedUnit = getUnits(this@WeatherWidgetConfigureActivity, appWidgetId)
+            val request = userLocationUseCases.getUserLocationListUseCase.invoke()
+
+            val locationNameList = mutableListOf<String>()
+            var selectedListPos = 0
+
+            if (request.data == null)
+                return@launch
+
+            locationList = request.data!!
+
+            for (n in locationList.indices) {
+
+                if (locationList[n].locationName == _selectedLocation)
+                    selectedListPos = n
+
+                locationNameList.add(locationList[n].locationName)
+            }
+
+            withContext(Dispatchers.Main) {
+                val adapter = ArrayAdapter(
+                    this@WeatherWidgetConfigureActivity,
+                    R.layout.list_item,
+                    locationNameList
+                )
+
+                (_binding.acLocation as? AutoCompleteTextView)?.setAdapter(adapter)
+
+                if (_binding.acLocation.adapter.getItem(selectedListPos) != null)
+                    _binding.acLocation.setText(
+                        _binding.acLocation.adapter.getItem(selectedListPos).toString(), false
+                    )
+
+                _binding.acLocation.setOnItemClickListener { _, _, i, _ ->
+                    selectedLocation = i
+                        //_binding.acLocation.adapter.getItem(i).toString()
+                }
+            }
+
+        }
 
         // Find the widget id from the intent.
         val intent = intent
@@ -62,32 +136,66 @@ class WeatherWidgetConfigureActivity : Activity() {
             finish()
             return
         }
-
-        appWidgetText.setText(loadTitlePref(this@WeatherWidgetConfigureActivity, appWidgetId))
     }
 
+    fun saveWidgetLocation(
+        context: Context,
+        appWidgetId: Int,
+        locationName: String,
+        lat: Double,
+        lon: Double
+    ) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
+        prefs.putString(KEY_NAME + appWidgetId, locationName)
+        prefs.putString(KEY_LAT + appWidgetId, lat.toString())
+        prefs.putString(KEY_LON + appWidgetId, lon.toString())
+        prefs.apply()
+    }
 }
 
 private const val PREFS_NAME = "com.hellguy39.hellweather.presentation.widget.WeatherWidget"
 private const val PREF_PREFIX_KEY = "appwidget_"
 
-// Write the prefix to the SharedPreferences object for this widget
-internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
-    prefs.apply()
-}
+private const val KEY_LAT = "appwidget_location_lat_"
+private const val KEY_LON = "appwidget_location_lon_"
+private const val KEY_NAME = "appwidget_location_name_"
+private const val KEY_LOCATION = "appwidget_location_"
+private const val KEY_UNITS = "appwidget_units_"
 
-// Read the prefix from the SharedPreferences object for this widget.
-// If there is no preference saved, get the default from a resource
-internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
+
+internal fun getWidgetLocation(context: Context, appWidgetId: Int): UserLocationParam {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0)
-    val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
-    return titleValue ?: context.getString(R.string.appwidget_text)
+    val lat: Double = prefs.getString(KEY_LAT + appWidgetId, "0.0")?.toDouble() ?: 0.0
+    val lon: Double = prefs.getString(KEY_LON + appWidgetId, "0.0")?.toDouble() ?: 0.0
+    val name: String = prefs.getString(KEY_NAME + appWidgetId, "N/A") as String
+    return UserLocationParam(lat = lat, lon = lon, locationName = name)
 }
 
-internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
+internal fun deleteWidgetCoordinates(context: Context, appWidgetId: Int) {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.remove(PREF_PREFIX_KEY + appWidgetId)
+    prefs.remove(KEY_LAT + appWidgetId)
+    prefs.remove(KEY_LON + appWidgetId)
     prefs.apply()
+}
+
+internal fun saveLocation(context: Context, appWidgetId: Int, location: String) {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
+    prefs.putString(KEY_LOCATION + appWidgetId, location)
+    prefs.apply()
+}
+
+internal fun saveUnits(context: Context, appWidgetId: Int, units: String) {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
+    prefs.putString(KEY_UNITS + appWidgetId, units)
+    prefs.apply()
+}
+
+internal fun getLocation(context: Context, appWidgetId: Int): String {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
+    return prefs.getString(KEY_LOCATION + appWidgetId, Prefs.None.name) as String
+}
+
+internal fun getUnits(context: Context, appWidgetId: Int): String {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
+    return prefs.getString(KEY_UNITS + appWidgetId, Prefs.None.name) as String
 }

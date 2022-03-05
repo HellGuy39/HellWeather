@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        checkService()
         setObservers()
     }
 
@@ -83,6 +82,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setObservers() {
         viewModel.getUserLocationsList().observe(this) {
+            checkService()
             if (!viewModel.isInProgress()) {
                 if (viewModel.getStatus().value != State.Empty) {
                     //val weatherDataList = viewModel.weatherDataListLive.value
@@ -103,43 +103,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun serviceControl(action: Enum<Selector>) {
-        when(action) {
+    fun serviceControl(action: Enum<Selector>) = CoroutineScope(Dispatchers.IO).launch {
+        when (action) {
             Selector.Enable -> {
                 if (!WeatherService.isRunning()) {
-                    startService()
+                    startService(viewModel.getUserLocationsList().value)
                 }
             }
             Selector.Disable -> {
                 if (WeatherService.isRunning()) {
-                    WeatherService.stopService(this)
+                    WeatherService.stopService(this@MainActivity)
                 }
             }
             Selector.Reboot -> {
                 if (WeatherService.isRunning()) {
-                    WeatherService.stopService(this)
-                    startService()
+                    WeatherService.stopService(this@MainActivity)
+                    startService(viewModel.getUserLocationsList().value)
                 }
             }
         }
     }
 
-    private fun startService() {
-        val list = viewModel.getUserLocationsList().value
+    private suspend fun startService(locationList: List<UserLocationParam>?) {
+        if (!locationList.isNullOrEmpty()) {
+            val locationStr = serviceUseCases.getServiceLocationUseCase.invoke()
 
-        if (!list.isNullOrEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val locationStr = serviceUseCases.getServiceLocationUseCase.invoke()
+            var userLocationPos = 0
 
-                var userLocationPos = 0
-
-                for (n in list.indices) {
-                    if (locationStr == list[n].locationName)
-                        userLocationPos = n
-                }
-
-                WeatherService.startService(this@MainActivity, list[userLocationPos])
+            for (n in locationList.indices) {
+                if (locationStr == locationList[n].locationName)
+                    userLocationPos = n
             }
+
+            WeatherService.startService(this@MainActivity, locationList[userLocationPos])
         }
     }
 

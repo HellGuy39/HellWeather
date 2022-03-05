@@ -46,7 +46,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsvContent"
         android:layout_width="match_parent"
@@ -61,102 +60,80 @@
             android:orientation="vertical"
             android:paddingBottom="128dp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/mainCard"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="6dp"
-                app:cardCornerRadius="@dimen/card_default_corner"
-                app:cardElevation="@dimen/card_default_elevation"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:strokeWidth="@dimen/card_default_stroke_width">
+                android:layout_height="match_parent"
+                android:paddingTop="0dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/tvDot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text=""
+                    android:textSize="48sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvTemp"
+                    app:layout_constraintStart_toEndOf="@+id/tvTemp"
+                    app:layout_constraintTop_toTopOf="@id/tvTemp"
+                    app:layout_constraintVertical_bias="0.25"
+                    tools:text="°C" />
+
+                <TextView
+                    android:id="@+id/tvDescription"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="12dp">
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="32sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="@font/roboto_light"
+                    android:maxLines="2"
+                    android:textSize="32sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTemp"
+                    tools:text="Clear" />
 
-                    <TextView
-                        android:id="@+id/tvDot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/roboto_regular"
-                        android:gravity="center"
-                        android:text=""
-                        android:textSize="32sp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvTemp"
-                        app:layout_constraintStart_toEndOf="@+id/tvTemp"
-                        app:layout_constraintTop_toTopOf="@id/tvTemp"
-                        app:layout_constraintVertical_bias="0.25"
-                        tools:text="°C" />
+                <TextView
+                    android:id="@+id/tvMaxMinTemp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_light"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    tools:layout_editor_absoluteX="192dp"
+                    tools:layout_editor_absoluteY="55dp"
+                    tools:text="Max.: 26°, min.: 9°" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tvDot"
-                        app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:id="@+id/ivWeather"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@+id/tvDescription"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/tvDot"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-
-                        <TextView
-                            android:id="@+id/tvDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeMaxTextSize="32sp"
-                            android:autoSizeMinTextSize="12sp"
-                            android:autoSizeTextType="uniform"
-                            android:fontFamily="@font/roboto_light"
-                            android:maxLines="2"
-                            android:textSize="32sp"
-                            tools:text="Clear" />
-
-                        <TextView
-                            android:id="@+id/tvMaxMinTemp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_light"
-                            android:textSize="18sp"
-                            android:visibility="gone"
-                            tools:text="Max.: 26°, min.: 9°" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivWeather"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_gravity="center"
-                        android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvTemp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:fontFamily="@font/roboto_light"
-                        android:gravity="center"
-                        android:text=""
-                        android:textSize="64sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ivWeather"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="9" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
+                <TextView
+                    android:id="@+id/tvTemp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_light"
+                    android:gravity="center"
+                    android:text=""
+                    android:textSize="96sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="9" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

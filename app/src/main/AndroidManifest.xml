@@ -15,6 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HellWeather"
         android:usesCleartextTraffic="true">
+
+        <!--Receivers  -->
         <receiver
             android:name=".presentation.widget.WeatherWidget"
             android:exported="true">
@@ -26,20 +28,14 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/weather_widget_info" />
         </receiver>
-
-        <activity
-            android:name=".presentation.widget.WeatherWidgetConfigureActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
         <!-- Services -->
         <service
             android:name=".presentation.services.WeatherService"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.INTERNET" /> <!-- Activities -->
+            android:permission="android.permission.INTERNET" />
+
+        <!-- Activities -->
         <activity
             android:name=".presentation.activities.main.MainActivity"
             android:exported="false"
@@ -58,6 +54,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.widget.WeatherWidgetConfigureActivity"
+            android:exported="true"
+            android:theme="@style/Theme.HellWeather">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

@@ -5,27 +5,29 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
 import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.domain.usecase.requests.weather.WeatherRequestUseCases
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-/**
- * Implementation of App Widget functionality.
- * App Widget Configuration implemented in [WeatherWidgetConfigureActivity]
- */
+@AndroidEntryPoint
 class WeatherWidget : AppWidgetProvider() {
+
+    @Inject
+    lateinit var requestUseCases: WeatherRequestUseCases
+
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            deleteTitlePref(context, appWidgetId)
+            deleteWidgetCoordinates(context, appWidgetId)
         }
     }
 
@@ -43,11 +45,13 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    val widgetText = loadTitlePref(context, appWidgetId)
-    // Construct the RemoteViews object
-    val views = RemoteViews(context.packageName, R.layout.weather_widget)
-    views.setTextViewText(R.id.appwidget_text, widgetText)
+    val userLocationParam = getWidgetLocation(context, appWidgetId)
 
-    // Instruct the widget manager to update the widget
+
+
+    val views = RemoteViews(context.packageName, R.layout.weather_widget)
+    views.setTextViewText(R.id.tvCity, userLocationParam.locationName)
+
+
     appWidgetManager.updateAppWidget(appWidgetId, views)
 }
