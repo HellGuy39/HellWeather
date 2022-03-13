@@ -75,11 +75,6 @@
             app:argType="com.hellguy39.hellweather.domain.models.param.UserLocationParam" />
     </fragment>
     <fragment
-        android:id="@+id/customizeFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.customization.CustomizeFragment"
-        android:label="customize_fragment"
-        tools:layout="@layout/customize_fragment" />
-    <fragment
         android:id="@+id/locationManagerFragment"
         android:name="com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerFragment"
         android:label="location_manager_fragment"

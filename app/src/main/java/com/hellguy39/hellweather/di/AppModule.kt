@@ -5,6 +5,9 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.hellguy39.hellweather.App
 import com.hellguy39.hellweather.data.repositories.PrefsRepositoryImpl
+import com.hellguy39.hellweather.domain.usecase.format.FormatTimeUseCase
+import com.hellguy39.hellweather.domain.usecase.format.FormatTimeWithDayUseCase
+import com.hellguy39.hellweather.domain.usecase.format.FormatUseCases
 import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.FirstBootValueUseCases
 import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.GetFirstBootValueUseCase
 import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.SaveFirstBootValueUseCase
@@ -12,6 +15,12 @@ import com.hellguy39.hellweather.domain.usecase.prefs.lang.GetLangUseCase
 import com.hellguy39.hellweather.domain.usecase.prefs.lang.LangUseCases
 import com.hellguy39.hellweather.domain.usecase.prefs.lang.SaveLangUseCase
 import com.hellguy39.hellweather.domain.usecase.prefs.service.*
+import com.hellguy39.hellweather.domain.usecase.prefs.theme.GetThemeUseCase
+import com.hellguy39.hellweather.domain.usecase.prefs.theme.SaveThemeUseCase
+import com.hellguy39.hellweather.domain.usecase.prefs.theme.ThemeUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.theme_mode.GetThemeModeUseCase
+import com.hellguy39.hellweather.domain.usecase.prefs.theme_mode.SaveThemeModeUseCase
+import com.hellguy39.hellweather.domain.usecase.prefs.theme_mode.ThemeModeUseCases
 import com.hellguy39.hellweather.domain.usecase.prefs.units.GetUnitsUseCase
 import com.hellguy39.hellweather.domain.usecase.prefs.units.SaveUnitsUseCase
 import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
@@ -74,6 +83,33 @@ object AppModule {
             getServiceLocationUseCase = GetServiceLocationUseCase(prefsRepositoryImpl),
             getServiceModeUseCase = GetServiceModeUseCase(prefsRepositoryImpl),
             getServiceUpdateTimeUseCase = GetServiceUpdateTimeUseCase(prefsRepositoryImpl)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideFormatUseCases(): FormatUseCases {
+        return FormatUseCases(
+            formatTimeUseCase = FormatTimeUseCase(),
+            formatTimeWithDayUseCase = FormatTimeWithDayUseCase()
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideThemeUseCases(prefsRepositoryImpl: PrefsRepositoryImpl): ThemeUseCases {
+        return ThemeUseCases(
+            getThemeUseCase = GetThemeUseCase(prefsRepositoryImpl),
+            saveThemeUseCase = SaveThemeUseCase(prefsRepositoryImpl)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideThemeModeUseCases(prefsRepositoryImpl: PrefsRepositoryImpl): ThemeModeUseCases {
+        return ThemeModeUseCases(
+            getThemeModeUseCase = GetThemeModeUseCase(prefsRepositoryImpl),
+            saveThemeModeUseCase = SaveThemeModeUseCase(prefsRepositoryImpl)
         )
     }
 

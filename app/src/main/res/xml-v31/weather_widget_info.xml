@@ -7,6 +7,9 @@
     android:minWidth="110dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/example_appwidget_preview"
+    android:previewLayout="@layout/weather_widget"
     android:resizeMode="horizontal"
+    android:targetCellWidth="2"
+    android:targetCellHeight="1"
     android:updatePeriodMillis="300000"
     android:widgetCategory="home_screen" />

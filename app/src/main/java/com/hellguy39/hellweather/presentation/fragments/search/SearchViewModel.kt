@@ -1,5 +1,6 @@
 package com.hellguy39.hellweather.presentation.fragments.search
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,11 +25,23 @@ class SearchViewModel @Inject constructor(
 ): ViewModel() {
 
     private val lang = langUseCases.getLangUseCase.invoke()
-    val currentWeatherLive = MutableLiveData<CurrentWeather>()
-    val statusLive = MutableLiveData<Enum<State>>()
+    private val currentWeatherLive = MutableLiveData<CurrentWeather>()
+    private val statusLive = MutableLiveData<Enum<State>>()
+    private val errorMessage = MutableLiveData<String>()
 
-    fun getCurrentWeather(cityName: String) {
+    fun getCurrentWeather(): LiveData<CurrentWeather> {
+        return currentWeatherLive
+    }
 
+    fun getStatus(): LiveData<Enum<State>> {
+        return statusLive
+    }
+
+    fun getErrorMessage(): LiveData<String> {
+        return errorMessage
+    }
+
+    fun fetchWeather(cityName: String) {
         if (isInProgress())
             return
         else
@@ -49,6 +62,7 @@ class SearchViewModel @Inject constructor(
                     currentWeatherLive.value = response.data!!
                     statusLive.value = State.Successful
                 } else {
+                    errorMessage.value = response.message!!
                     statusLive.value = State.Error
                 }
             }

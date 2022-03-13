@@ -55,18 +55,13 @@ class LocationManagerFragment : Fragment(R.layout.location_manager_fragment) {
 
             val locationsList = _mainViewModel.getUserLocationsList().value
 
-            if (!locationsList.isNullOrEmpty() && !weatherDataList.isNullOrEmpty()) {
-                updateRecycler(locationList = locationsList, weatherDataList = weatherDataList)
-            } else if (!locationsList.isNullOrEmpty()){
-                updateRecycler(locationList = locationsList)
-            }
-
+            updateRecycler(locationList = locationsList, weatherDataList = weatherDataList)
         }
     }
 
     private fun updateRecycler(
-        locationList: List<UserLocationParam> = listOf(),
-        weatherDataList: List<WeatherData> = listOf()
+        locationList: List<UserLocationParam>? = listOf(),
+        weatherDataList: List<WeatherData>? = listOf()
     ) {
         val units = _viewModel.getUnits()
 

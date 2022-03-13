@@ -1,27 +1,29 @@
 package com.hellguy39.hellweather.presentation.fragments.search
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.SearchFragmentBinding
-import com.hellguy39.hellweather.glide.GlideApp
-import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.domain.models.weather.CurrentWeather
+import com.hellguy39.hellweather.domain.usecase.format.FormatUseCases
 import com.hellguy39.hellweather.domain.utils.MM_HG
 import com.hellguy39.hellweather.domain.utils.Unit
-import com.hellguy39.hellweather.utils.*
+import com.hellguy39.hellweather.glide.GlideApp
+import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.utils.State
+import com.hellguy39.hellweather.utils.setToolbarNavigation
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchFragment: Fragment(R.layout.search_fragment) {
+
+    @Inject
+    lateinit var formatUseCases: FormatUseCases
 
     private lateinit var _viewModel: SearchViewModel
     private lateinit var _binding: SearchFragmentBinding
@@ -30,7 +32,6 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,19 +44,18 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
             val input = _binding.etCity.text.toString()
             if (!checkInput(input)) {
                 refreshing(true)
-                _viewModel.getCurrentWeather(input)
-            }
-            else
-            {
-                //_fragView.shortSnackBar(resources.getString(R.string.not_funny))
-                //_binding.tfCity.error = resources.getString(R.string.not_funny)
+                _viewModel.fetchWeather(input)
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
-        _viewModel.currentWeatherLive.observe(viewLifecycleOwner) {
+        setObservers()
+    }
+
+    private fun setObservers() {
+        _viewModel.getCurrentWeather().observe(viewLifecycleOwner) {
             if (isOnSearchFragment()) {
                 if (it != null) {
                     refreshing(false)
@@ -63,12 +63,15 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
                 }
             }
         }
-        _viewModel.statusLive.observe(viewLifecycleOwner) {
+        _viewModel.getStatus().observe(viewLifecycleOwner) {
             when (it) {
                 State.Error -> {
                     refreshing(false)
-                    /*if (isOnSearchFragment())
-                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.error))*/
+                    val errorMessage = _viewModel.getErrorMessage().value
+
+                    if (!errorMessage.isNullOrEmpty()) {
+                        _binding.collapseToolbar.title = errorMessage
+                    }
                 }
                 State.Progress -> {
                     refreshing(true)
@@ -78,13 +81,6 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
     }
 
     private fun updateUI(currentWeather: CurrentWeather) {
-
-        /*if (isOnSearchFragment()) {
-            (activity as MainActivity).setToolbarTittle(
-                SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
-                    currentWeather.dt * 1000)
-            )
-        }*/
 
         GlideApp.with(_binding.ivWeather.context)
             .load("https://openweathermap.org/img/wn/${currentWeather.icon}@2x.png")
@@ -100,8 +96,8 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
             else -> resources.getString(R.string.degree)
         }
 
-        _binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(currentWeather.sunrise * 1000))
-        _binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(currentWeather.sunset * 1000))
+        _binding.tvSunrise.text = formatUseCases.formatTimeUseCase.invoke(currentWeather.sunrise)
+        _binding.tvSunset.text = formatUseCases.formatTimeUseCase.invoke(currentWeather.sunset)
 
         _binding.tvDescription.text = currentWeather.wDescription
         _binding.tvTemp.text = currentWeather.temp
@@ -111,10 +107,8 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
         _binding.tvHumidity.text = String.format(resources.getString(R.string.humidity_text), currentWeather.humidity)
         _binding.tvVisibility.text = String.format(resources.getString(R.string.visibility_text), (currentWeather.visibility / 1000))
 
-        //Pressure
         _binding.tvPressure.text = String.format(resources.getString(R.string.pressure_text),(currentWeather.pressure.toDouble() * MM_HG).toInt())
 
-        //Wind
         _binding.tvWind.text = String.format(resources.getString(R.string.wind_speed_text),currentWeather.windSpeed)
         _binding.tvWindDirection.text = String.format(resources.getString(R.string.wind_direction_text),currentWeather.windDeg)
         _binding.tvWindGust.text = String.format(resources.getString(R.string.wind_gust_text),currentWeather.windGust)
@@ -132,7 +126,7 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
             else
                 ""
 
-        crossfade()
+        fade()
     }
 
     private fun refreshing(b: Boolean) {
@@ -141,7 +135,6 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
             _binding.tfCity.isEnabled = false
             _binding.progressIndicator.visibility = View.VISIBLE
             _binding.ibSearch.isEnabled = false
-            /*(activity as MainActivity).setToolbarTittle(resources.getString(R.string.searching))*/
         }
         else
         {
@@ -151,7 +144,7 @@ class SearchFragment: Fragment(R.layout.search_fragment) {
         }
     }
 
-    private fun crossfade() {
+    private fun fade() {
         _binding.nsvContent.apply {
             alpha = 0f
             visibility = View.VISIBLE

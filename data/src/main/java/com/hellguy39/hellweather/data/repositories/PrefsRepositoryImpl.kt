@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.hellguy39.hellweather.domain.repository.PrefsRepository
 import com.hellguy39.hellweather.domain.utils.Prefs
+import com.hellguy39.hellweather.domain.utils.ThemeModes
+import com.hellguy39.hellweather.domain.utils.Themes
 import com.hellguy39.hellweather.domain.utils.Unit
 
 class PrefsRepositoryImpl(private val sharedPreferences: SharedPreferences) : PrefsRepository {
@@ -59,6 +61,28 @@ class PrefsRepositoryImpl(private val sharedPreferences: SharedPreferences) : Pr
     override suspend fun saveServiceUpdateTime(minutes: Int) {
         sharedPreferences.edit {
             putInt(Prefs.ServiceUpdateTime.name, minutes)
+            commit()
+        }
+    }
+
+    override fun getTheme(): String {
+        return sharedPreferences.getString(Prefs.Theme.name, Themes.HellStyle.name) as String
+    }
+
+    override suspend fun saveTheme(theme: String) {
+        sharedPreferences.edit {
+            putString(Prefs.Theme.name, theme)
+            commit()
+        }
+    }
+
+    override fun getThemeMode(): String {
+        return sharedPreferences.getString(Prefs.ThemeMode.name, ThemeModes.FollowSystem.name) as String
+    }
+
+    override suspend fun saveThemeMode(mode: String) {
+        sharedPreferences.edit {
+            putString(Prefs.ThemeMode.name, mode)
             commit()
         }
     }

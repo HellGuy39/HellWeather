@@ -15,4 +15,10 @@ interface PrefsRepository {
 
     fun getServiceUpdateTime(): Int
     suspend fun saveServiceUpdateTime(minutes: Int)
+
+    fun getTheme(): String
+    suspend fun saveTheme(theme: String)
+
+    fun getThemeMode(): String
+    suspend fun saveThemeMode(mode: String)
 }

@@ -2,12 +2,9 @@ package com.hellguy39.hellweather.presentation.activities.main
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -17,7 +14,11 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.usecase.prefs.service.ServiceUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.theme.ThemeUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.theme_mode.ThemeModeUseCases
 import com.hellguy39.hellweather.domain.utils.Prefs
+import com.hellguy39.hellweather.domain.utils.ThemeModes
+import com.hellguy39.hellweather.domain.utils.Themes
 import com.hellguy39.hellweather.presentation.fragments.home.HomeFragmentDirections
 import com.hellguy39.hellweather.presentation.services.WeatherService
 import com.hellguy39.hellweather.utils.Selector
@@ -34,6 +35,12 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var serviceUseCases: ServiceUseCases
 
+    @Inject
+    lateinit var themeUseCases: ThemeUseCases
+
+    @Inject
+    lateinit var themeModeUseCases: ThemeModeUseCases
+
     private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: MainActivityBinding
@@ -45,10 +52,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupTheme()
         binding = MainActivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
 
         firstBoot = intent.getBooleanExtra(Prefs.FirstBoot.name, false)
         serviceMode = intent.getBooleanExtra(Prefs.ServiceMode.name, false)
@@ -70,6 +77,32 @@ class MainActivity : AppCompatActivity() {
         setObservers()
     }
 
+    private fun setupTheme() {
+        val theme = themeUseCases.getThemeUseCase.invoke()
+        val themeMode = themeModeUseCases.getThemeModeUseCase.invoke()
+
+        when (theme) {
+            Themes.HellStyle.name -> {
+                when(themeMode) {
+                    ThemeModes.FollowSystem.name -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                        setTheme(R.style.Theme_HellWeather)
+                    }
+
+                    ThemeModes.Dark.name -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        setTheme(R.style.Theme_HellWeather)
+                    }
+
+                    ThemeModes.Light.name -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        setTheme(R.style.Theme_HellWeather)
+                    }
+                }
+            }
+        }
+    }
+
     private fun setupMaterialShapeToDrawer() {
         val navViewBackground:MaterialShapeDrawable = binding.navigationView.background as MaterialShapeDrawable
         navViewBackground.shapeAppearanceModel = navViewBackground.shapeAppearanceModel
@@ -85,14 +118,19 @@ class MainActivity : AppCompatActivity() {
             checkService()
             if (!viewModel.isInProgress()) {
                 if (viewModel.getStatus().value != State.Empty) {
-                    //val weatherDataList = viewModel.weatherDataListLive.value
                     viewModel.fetchWeather(it)
-                    /*if (serviceMode) {
-                        serviceControl(Selector.Reboot)
-                    }*/
                 }
             }
         }
+    }
+
+    fun onRefresh() {
+        val locationList = viewModel.getUserLocationsList().value
+
+        if (locationList.isNullOrEmpty())
+            return
+
+        viewModel.fetchWeather(locationList)
     }
 
     private fun checkService() = CoroutineScope(Dispatchers.IO).launch {

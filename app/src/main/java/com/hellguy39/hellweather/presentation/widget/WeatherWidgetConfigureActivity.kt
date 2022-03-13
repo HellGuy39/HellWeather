@@ -12,6 +12,8 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.WeatherWidgetConfigureBinding
 import com.hellguy39.hellweather.domain.models.param.UserLocationParam
 import com.hellguy39.hellweather.domain.usecase.local.UserLocationUseCases
+import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
+import com.hellguy39.hellweather.domain.usecase.requests.weather.WeatherRequestUseCases
 import com.hellguy39.hellweather.domain.utils.Prefs
 import com.hellguy39.hellweather.domain.utils.Unit
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,31 +29,32 @@ class WeatherWidgetConfigureActivity : AppCompatActivity() {
     @Inject
     lateinit var userLocationUseCases: UserLocationUseCases
 
+    @Inject
+    lateinit var unitsUseCases: UnitsUseCases
+
+    @Inject
+    lateinit var requestUseCases: WeatherRequestUseCases
+
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var acLocation: AutoCompleteTextView
-    private lateinit var acUnits: AutoCompleteTextView
 
-    private var selectedLocation = 0
-    private var selectedUnits = Unit.Metric
-
-    private val unitsList = listOf(Unit.Standard.name, Unit.Metric.name, Unit.Imperial.name)
+    private var selectedLocationAcPos = 0
 
     private lateinit var _binding: WeatherWidgetConfigureBinding
     private var locationList: List<UserLocationParam> = listOf()
 
     private var onClickListener = View.OnClickListener {
 
-        val _selectedLocation = _binding.acLocation.text.toString()
+        val selectedLocation = _binding.acLocation.text.toString()
         var selectedLocationParam = UserLocationParam()
 
         for (n in locationList.indices) {
-            if (locationList[n].locationName == _selectedLocation) {
+            if (locationList[n].locationName == selectedLocation) {
                 selectedLocationParam = locationList[n]
             }
         }
 
-        saveLocation(this, appWidgetId, _binding.acLocation.adapter.getItem(selectedLocation).toString())
-        saveUnits(this, appWidgetId, selectedUnits.name)
+        saveLocation(this, appWidgetId, _binding.acLocation.adapter.getItem(selectedLocationAcPos).toString())
         saveWidgetLocation(
             this@WeatherWidgetConfigureActivity,
             appWidgetId,
@@ -62,7 +65,13 @@ class WeatherWidgetConfigureActivity : AppCompatActivity() {
 
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(this@WeatherWidgetConfigureActivity)
-        updateAppWidget(this@WeatherWidgetConfigureActivity, appWidgetManager, appWidgetId)
+        updateAppWidget(
+            this@WeatherWidgetConfigureActivity,
+            appWidgetManager,
+            appWidgetId,
+            unitsUseCases,
+            requestUseCases
+        )
 
         // Make sure we pass back the original appWidgetId
         val resultValue = Intent()
@@ -81,7 +90,6 @@ class WeatherWidgetConfigureActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val _selectedLocation = getLocation(this@WeatherWidgetConfigureActivity, appWidgetId)
-            val selectedUnit = getUnits(this@WeatherWidgetConfigureActivity, appWidgetId)
             val request = userLocationUseCases.getUserLocationListUseCase.invoke()
 
             val locationNameList = mutableListOf<String>()
@@ -101,21 +109,22 @@ class WeatherWidgetConfigureActivity : AppCompatActivity() {
             }
 
             withContext(Dispatchers.Main) {
-                val adapter = ArrayAdapter(
+                val locationAdapter = ArrayAdapter(
                     this@WeatherWidgetConfigureActivity,
                     R.layout.list_item,
                     locationNameList
                 )
 
-                (_binding.acLocation as? AutoCompleteTextView)?.setAdapter(adapter)
+                (_binding.acLocation as? AutoCompleteTextView)?.setAdapter(locationAdapter)
 
-                if (_binding.acLocation.adapter.getItem(selectedListPos) != null)
-                    _binding.acLocation.setText(
-                        _binding.acLocation.adapter.getItem(selectedListPos).toString(), false
-                    )
+
+                _binding.acLocation.setText(
+                    _binding.acLocation.adapter.getItem(selectedListPos).toString(),
+                    false
+                )
 
                 _binding.acLocation.setOnItemClickListener { _, _, i, _ ->
-                    selectedLocation = i
+                    selectedLocationAcPos = i
                         //_binding.acLocation.adapter.getItem(i).toString()
                 }
             }
@@ -138,7 +147,7 @@ class WeatherWidgetConfigureActivity : AppCompatActivity() {
         }
     }
 
-    fun saveWidgetLocation(
+    private fun saveWidgetLocation(
         context: Context,
         appWidgetId: Int,
         locationName: String,
@@ -184,18 +193,18 @@ internal fun saveLocation(context: Context, appWidgetId: Int, location: String) 
     prefs.apply()
 }
 
-internal fun saveUnits(context: Context, appWidgetId: Int, units: String) {
+/*internal fun saveUnits(context: Context, appWidgetId: Int, units: String) {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
     prefs.putString(KEY_UNITS + appWidgetId, units)
     prefs.apply()
-}
+}*/
 
 internal fun getLocation(context: Context, appWidgetId: Int): String {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0)
     return prefs.getString(KEY_LOCATION + appWidgetId, Prefs.None.name) as String
 }
 
-internal fun getUnits(context: Context, appWidgetId: Int): String {
+/*internal fun getUnits(context: Context, appWidgetId: Int): String {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0)
     return prefs.getString(KEY_UNITS + appWidgetId, Prefs.None.name) as String
-}
+}*/

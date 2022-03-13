@@ -1,21 +1,17 @@
 package com.hellguy39.hellweather.presentation.fragments.settings
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.SettingsFragmentBinding
+import com.hellguy39.hellweather.domain.utils.ThemeModes
+import com.hellguy39.hellweather.domain.utils.Themes
 import com.hellguy39.hellweather.domain.utils.Unit
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.settings_fragment) {
@@ -25,8 +21,8 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
 
     private val languageList = listOf("System","Russian", "English", "Deutsch", "Francais")
     private val unitsList = listOf(Unit.Standard.name, Unit.Metric.name, Unit.Imperial.name)
-    private val themeList = listOf("HellStyle")
-    private val modeList = listOf("Auto")
+    private val themeList = listOf(Themes.HellStyle.name)
+    private val modeList = listOf(ThemeModes.FollowSystem.name, ThemeModes.Dark.name, ThemeModes.Light.name)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,14 +44,28 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
         _viewModel.getUnits().observe(viewLifecycleOwner) { units ->
             setupUnits(units = units)
         }
+        _viewModel.getTheme().observe(viewLifecycleOwner) { theme ->
+            setupThemes(theme = theme)
+        }
+        _viewModel.getThemeMode().observe(viewLifecycleOwner) { mode ->
+            setupMode(mode = mode)
+        }
     }
 
-    private fun setupThemes() {
+    private fun setupThemes(theme: String) {
         val adapterTheme = ArrayAdapter(requireContext(), R.layout.list_item, themeList)
         _binding.acTheme.setAdapter(adapterTheme)
-        _binding.acTheme.setText(_binding.acTheme.adapter.getItem(0).toString(), false)
 
-        _binding.acTheme.isEnabled = false
+        when (theme) {
+            Themes.HellStyle.name -> {
+                _binding.acTheme.setText(_binding.acTheme.adapter.getItem(0).toString(), false)
+            }
+        }
+
+        _binding.acTheme.setOnItemClickListener { _, _, i, _ ->
+            _viewModel.saveTheme(_binding.acTheme.adapter.getItem(i).toString())
+        }
+
     }
 
     private fun setupLanguages() {
@@ -63,15 +73,27 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
         _binding.acLanguage.setAdapter(adapterLanguage)
         _binding.acLanguage.setText(_binding.acLanguage.adapter.getItem(0).toString(), false)
 
-        _binding.acLanguage.isEnabled = false
     }
 
-    private fun setupMode() {
+    private fun setupMode(mode: String) {
         val adapterMode = ArrayAdapter(requireContext(), R.layout.list_item, modeList)
         _binding.acMode.setAdapter(adapterMode)
-        _binding.acMode.setText(_binding.acMode.adapter.getItem(0).toString(), false)
 
-        _binding.acMode.isEnabled = false
+        when(mode) {
+            ThemeModes.FollowSystem.name -> {
+                _binding.acMode.setText(_binding.acMode.adapter.getItem(0).toString(), false)
+            }
+            ThemeModes.Dark.name -> {
+                _binding.acMode.setText(_binding.acMode.adapter.getItem(1).toString(), false)
+            }
+            ThemeModes.Light.name -> {
+                _binding.acMode.setText(_binding.acMode.adapter.getItem(2).toString(), false)
+            }
+        }
+
+        _binding.acMode.setOnItemClickListener { _, _, i, _ ->
+            _viewModel.saveThemeMode(_binding.acMode.adapter.getItem(i).toString())
+        }
     }
 
     private fun setupUnits(units: String) {

@@ -14,8 +14,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class LocationsAdapter(
-    private val locationList: List<UserLocationParam>,
-    private val weatherDataList: List<WeatherData>,
+    private val locationList: List<UserLocationParam>?,
+    private val weatherDataList: List<WeatherData>?,
     private val resources: Resources,
     private val units: String
     ) : RecyclerView.Adapter<LocationsAdapter.LocationViewHolder> () {
@@ -32,33 +32,38 @@ class LocationsAdapter(
         holder: LocationViewHolder,
         position: Int)
     {
-        if (weatherDataList.isNotEmpty())
-            holder.bindWithWeather(
-                locationList = locationList,
-                weatherDataList = weatherDataList,
-                position = position,
-                units = units,
-                resources = resources
-            )
+        holder.bind(
+            locationList = locationList,
+            weatherDataList = weatherDataList,
+            position = position,
+            units = units,
+            resources = resources
+        )
     }
 
-    override fun getItemCount(): Int = locationList.size
+    override fun getItemCount(): Int = locationList?.size ?: 0
 
     class LocationViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         private val _binding = LocationItemBinding.bind(v)
 
-        fun bindWithWeather(
-            locationList: List<UserLocationParam>,
-            weatherDataList: List<WeatherData>,
+        fun bind(
+            locationList: List<UserLocationParam>?,
+            weatherDataList: List<WeatherData>?,
             position: Int,
             units: String,
             resources: Resources
         ) {
+            if (locationList == null)
+                return
+
+            _binding.tvLocationName.text = locationList[position].locationName
+
+            if (weatherDataList.isNullOrEmpty())
+                return
 
             val weatherItem = weatherDataList[position]
 
-            _binding.tvLocationName.text = locationList[position].locationName
             _binding.tvWeatherDescription.text = weatherItem.currentWeather.wDescription
 
             when (units) {

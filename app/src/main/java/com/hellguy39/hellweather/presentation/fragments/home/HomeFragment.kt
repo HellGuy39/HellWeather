@@ -1,17 +1,14 @@
 package com.hellguy39.hellweather.presentation.fragments.home
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHomeBinding
+import com.hellguy39.hellweather.domain.models.weather.WeatherData
 import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
@@ -20,11 +17,6 @@ import com.hellguy39.hellweather.presentation.adapter.WeatherPageAdapter
 import com.hellguy39.hellweather.utils.Selector
 import com.hellguy39.hellweather.utils.State
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -68,40 +60,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     val weatherDataList = mainActivityViewModel.getWeatherDataList().value
                     val userLocations = mainActivityViewModel.getUserLocationsList().value
 
-                    if (userLocations == null || userLocations.isEmpty())
+                    if (userLocations.isNullOrEmpty())
                         return@observe
 
-                    if (weatherDataList == null || weatherDataList.isEmpty())
+                    if (weatherDataList.isNullOrEmpty())
                         return@observe
 
-                    CoroutineScope(Dispatchers.Main).launch {
+                    setupPagerAdapter(weatherDataList)
 
-                        val pagerAdapter = WeatherPageAdapter(
-                            frag = this@HomeFragment,
-                            weatherDataList = weatherDataList,
-                            units = unitsUseCases.getUnitsUseCase.invoke()
-                        )
-
-                        binding.viewPager.adapter = pagerAdapter
-
-                        if (weatherDataList.size > 1) {
-                            tabLayoutMediator = TabLayoutMediator(
-                                binding.tabLayout,
-                                binding.viewPager
-                            ) { tab, position ->
-                                //tab.text = userLocations[position].locationName
-                                //tab.icon = ResourcesCompat.getDrawable(resources,R.drawable.ic_baseline_lens_24, null)
-                                /*if (isOnHomeFragment()) {
-                                (activity as MainActivity).setToolbarTittle(
-                                    SimpleDateFormat("E, HH:mm", Locale.getDefault()).format(
-                                        Date(weatherDataList[position].currentWeather.dt * 1000)
-                                    )
-                                )
-                            }*/
-                            }
-                            tabLayoutMediator.attach()
-                            //animateViewPager()
+                    if (weatherDataList.size > 1) {
+                        tabLayoutMediator = TabLayoutMediator(
+                            binding.tabLayout,
+                            binding.viewPager
+                        ) { tab, position ->
                         }
+
+                        tabLayoutMediator.attach()
+                        //animateViewPager()
                     }
                 }
 
@@ -116,8 +91,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                     binding.viewPager.adapter = pagerAdapter
 
-                    /*if (isOnHomeFragment())
-                        (activity as MainActivity).setToolbarTittle(errorMessage)*/
                 }
                 State.Progress -> {
                     refreshing(Selector.Enable)
@@ -125,25 +98,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                 State.Empty -> {
                     refreshing(Selector.Disable)
-
-                    /*if (isOnHomeFragment())
-                        (activity as MainActivity).setToolbarTittle(resources.getString(R.string.no_locations))*/
                 }
             }
         }
     }
 
-    /*private fun animateViewPager() {
-        binding.viewPager.apply {
-            alpha = 0f
-            visibility = View.VISIBLE
+    private fun setupPagerAdapter(receivedWeather: List<WeatherData>) {
+        val pagerAdapter = WeatherPageAdapter(
+            frag = this@HomeFragment,
+            weatherDataList = receivedWeather,
+            units = unitsUseCases.getUnitsUseCase.invoke()
+        )
 
-            animate()
-                .alpha(1f)
-                .setDuration(300)
-                .setListener(null)
-        }
-    }*/
+        binding.viewPager.adapter = pagerAdapter
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -161,10 +129,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         if (action == Selector.Enable) {
             binding.progressIndicator.visibility = View.VISIBLE
-            /*(activity as MainActivity).setToolbarTittle(getString(R.string.loading))*/
-        }
-        else
-        {
+        } else {
             binding.progressIndicator.visibility = View.INVISIBLE
         }
     }

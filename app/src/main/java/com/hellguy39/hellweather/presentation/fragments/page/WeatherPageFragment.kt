@@ -19,9 +19,9 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherPageCollapseBinding
-import com.hellguy39.hellweather.domain.models.weather.DailyWeather
 import com.hellguy39.hellweather.domain.models.weather.HourlyWeather
 import com.hellguy39.hellweather.domain.models.weather.WeatherData
+import com.hellguy39.hellweather.domain.usecase.format.FormatUseCases
 import com.hellguy39.hellweather.domain.utils.MM_HG
 import com.hellguy39.hellweather.domain.utils.Unit
 import com.hellguy39.hellweather.glide.GlideApp
@@ -33,8 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+import javax.inject.Inject
 
 
 private const val WEATHER_DATA_ARG = "wd_arg"
@@ -42,6 +41,9 @@ private const val UNITS_ARG = "units_arg"
 
 @AndroidEntryPoint
 class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
+
+    @Inject
+    lateinit var formatUserCases: FormatUseCases
 
     companion object {
         @JvmStatic
@@ -72,18 +74,31 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentWeatherPageCollapseBinding.bind(view!!)
-
+        _binding.root.visibility = View.INVISIBLE
         _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
 
         CoroutineScope(Dispatchers.Main).launch {
             if (this@WeatherPageFragment::weatherData.isInitialized) {
                 updateUI(weatherData)
-                updateRecyclersView(weatherData)
+                setupAdapters(weatherData)
                 updateGraph(weatherData)
+                fade()
             }
         }
 
         return view
+    }
+
+    private fun fade() {
+        _binding.root.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+
+            animate()
+                .alpha(1f)
+                .setDuration(300)
+                .setListener(null)
+        }
     }
 
     private fun updateGraph(weatherData: WeatherData) {
@@ -137,7 +152,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         val xAxisLabel: MutableList<String> = mutableListOf()
 
         for (n in list.indices) {
-            xAxisLabel.add(SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(list[n].dt * 1000)))
+            xAxisLabel.add(formatUserCases.formatTimeUseCase.invoke(list[n].dt))
         }
 
         _binding.graphView.xAxis.textColor = textColor
@@ -157,10 +172,11 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         _binding.graphView.animateXY(1000, 1000)
     }
 
-    private fun updateRecyclersView(weatherData: WeatherData) = CoroutineScope(Dispatchers.Main).launch {
+    private fun setupAdapters(weatherData: WeatherData) {
 
-        val listDays: MutableList<DailyWeather> = weatherData.dailyWeather
-        val listHours: MutableList<HourlyWeather> = weatherData.hourlyWeather
+        val listDays = weatherData.dailyWeather
+        val listHours = weatherData.hourlyWeather
+
 
         _binding.recyclerNextDays.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -218,20 +234,17 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         _binding.tvTemp.text = wm.temp //+ "°"
 
         _binding.tvWeather.text = wm.wDescription
-        _binding.tvSunrise.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunrise * 1000))
-        _binding.tvSunset.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(wm.sunset * 1000))
+        _binding.tvSunrise.text = formatUserCases.formatTimeUseCase.invoke(wm.sunrise)
+        _binding.tvSunset.text = formatUserCases.formatTimeUseCase.invoke(wm.sunset)
 
         _binding.tvTempFeelsDescription.text =
             if (wm.tempFeelsLike.toInt() == wm.temp.toInt()
                 || wm.tempFeelsLike.toInt() == wm.temp.toInt() - 1
                 || wm.tempFeelsLike.toInt() == wm.temp.toInt() + 1)
                 resources.getString(R.string.feels_about_the_same)
-            /*else if (wm.tempFeelsLike.toInt() <= wm.temp.toInt())
-                "Feels colder with the wind"*/
             else
                 ""
 
-        // UV index
         _binding.tvUV.text = wm.uvi.toInt().toString()
         _binding.tvUVDescription.text =
             if (wm.uvi.toInt() == 0 || wm.uvi.toInt() == 1 || wm.uvi.toInt() == 2)
@@ -257,26 +270,14 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
             ResourcesCompat.getColorStateList(resources, R.color.deep_purple_400, null)
 
 
-        //Visibility
-        _binding.tvVisibility.text = String.format(resources.getString(R.string.visibility_text), (wm.visibility / 1000))//(wm.visibility / 1000).toString() + " " + resources.getString(R.string.kilometres)
-        /*_binding.tvVisibilityDescription.text = if ((wm.visibility / 1000) >= 7 && (wm.visibility / 1000) <= 10)
-            "Visibility reduced due to light haze"
-        else if ((wm.visibility / 1000) >= 11 && (wm.visibility / 1000) <= 13)
-            "Now it's clear"
-        else if ((wm.visibility / 1000) >= 14)
-            "Now it's quite clear"
-        else ""*/
+        _binding.tvVisibility.text = String.format(resources.getString(R.string.visibility_text), (wm.visibility / 1000))
 
-        //Humidity
         _binding.tvHumidity.text = String.format(resources.getString(R.string.humidity_text),wm.humidity)
 
+        _binding.tvPressure.text = String.format(resources.getString(R.string.pressure_text),(wm.pressure.toDouble() * MM_HG).toInt())
 
-        //Pressure
-        _binding.tvPressure.text = String.format(resources.getString(R.string.pressure_text),(wm.pressure.toDouble() * MM_HG).toInt())//(wm.pressure.toDouble() * MM_HG).toInt().toString() + "\n" + resources.getString(R.string.mm_hg)
-
-        //Wind
-        _binding.tvWind.text = String.format(resources.getString(R.string.wind_speed_text),wm.windSpeed)//wm.windSpeed + " " + resources.getString(R.string.meters_per_second)
-        _binding.tvWindDirection.text = String.format(resources.getString(R.string.wind_direction_text),wm.windDeg)//resources.getString(R.string.direction) + wm.windDeg + resources.getString(R.string.degree)
-        _binding.tvWindGust.text = String.format(resources.getString(R.string.wind_gust_text),wm.windGust)//resources.getString(R.string.gust) + wm.windGust + resources.getString(R.string.meters_per_second)
+        _binding.tvWind.text = String.format(resources.getString(R.string.wind_speed_text),wm.windSpeed)
+        _binding.tvWindDirection.text = String.format(resources.getString(R.string.wind_direction_text),wm.windDeg)
+        _binding.tvWindGust.text = String.format(resources.getString(R.string.wind_gust_text),wm.windGust)
     }
 }

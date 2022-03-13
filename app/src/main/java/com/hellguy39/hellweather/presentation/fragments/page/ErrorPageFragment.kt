@@ -38,6 +38,10 @@ class ErrorPageFragment : Fragment(R.layout.fragment_no_internet_page) {
         _binding = FragmentNoInternetPageBinding.bind(view)
         _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
         _binding.toolbar.title = errorMessage
+
+        _binding.btnRetry.setOnClickListener {
+            (activity as MainActivity).onRefresh()
+        }
     }
 
 }

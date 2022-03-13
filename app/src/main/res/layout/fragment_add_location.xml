@@ -15,6 +15,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -39,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:hint="@string/location_name"
                 app:boxCornerRadiusBottomEnd="@dimen/card_default_corner"
@@ -61,23 +62,24 @@
 
             <Button
                 android:id="@+id/btnFindMe"
-                android:layout_gravity="start"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_gravity="start"
                 android:layout_marginStart="8dp"
-                app:icon="@drawable/ic_round_my_location_24"
-                style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:text="@string/find_me" />
+                android:layout_marginTop="8dp"
+                android:text="@string/find_me"
+                app:icon="@drawable/ic_round_my_location_24" />
 
         </LinearLayout>
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progressLinear"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

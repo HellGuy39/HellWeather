@@ -7,5 +7,7 @@ enum class Prefs {
     ServiceLocation,
     ServiceUpdateTime,
     ServiceMode,
+    Theme,
+    ThemeMode,
     None
 }
