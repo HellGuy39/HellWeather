@@ -67,9 +67,9 @@ class WeatherService : Service() {
         val lang = Locale.getDefault().country
 
         CoroutineScope(Dispatchers.IO).launch {
-            units = unitsUseCases.getUnitsUseCase.invoke()//intent?.getStringExtra("units")
-            pauseTime = useCases.getServiceUpdateTimeUseCase.invoke()//intent?.getLongExtra("pauseTime", 90 * 10000)
-            userLocation = intent?.getSerializableExtra("location") as UserLocationParam
+            units = unitsUseCases.getUnitsUseCase.invoke()
+            pauseTime = useCases.getServiceUpdateTimeUseCase.invoke()
+            userLocation = intent?.getParcelableExtra<UserLocationParam>("location") as UserLocationParam
             pauseTime *= 10000
         }
 

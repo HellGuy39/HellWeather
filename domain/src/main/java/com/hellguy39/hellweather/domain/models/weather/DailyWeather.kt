@@ -1,7 +1,9 @@
 package com.hellguy39.hellweather.domain.models.weather
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class DailyWeather(
     var temp: String = "N/A",
     var dt: String = "N/A",
@@ -15,4 +17,4 @@ data class DailyWeather(
     var night: String = "N/A",
     var eve: String = "N/A",
     var morn: String = "N/A",
-) : Serializable
+) : Parcelable

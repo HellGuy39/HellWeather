@@ -1,7 +1,9 @@
 package com.hellguy39.hellweather.domain.models.weather
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class HourlyWeather(
     var dt: Long = 0,
     var temp: String = "N/A",
@@ -11,4 +13,4 @@ data class HourlyWeather(
     var pop: Double = 0.0,
     var windSpeed: String = "N/A",
     var icon: String = "N/A"
-) : Serializable
+) : Parcelable

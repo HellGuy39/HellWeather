@@ -2,6 +2,7 @@ package com.hellguy39.hellweather.presentation.fragments.page
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.YAxis
@@ -33,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -49,21 +52,30 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         @JvmStatic
         fun newInstance(weatherData: WeatherData, units: String) = WeatherPageFragment().apply {
             arguments = Bundle().apply {
-                putSerializable(WEATHER_DATA_ARG,weatherData)
+                putParcelable(WEATHER_DATA_ARG,weatherData)
                 putString(UNITS_ARG, units)
             }
         }
     }
 
     private lateinit var _binding: FragmentWeatherPageCollapseBinding
-    private lateinit var weatherData: WeatherData
-    private lateinit var units: String
+    private val weatherData = MutableLiveData<WeatherData>()
+    private val units = MutableLiveData<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            weatherData = it.getSerializable(WEATHER_DATA_ARG) as WeatherData
-            units = it.getString(UNITS_ARG) as String
+        Log.d("DEBUG", "HERE")
+        CoroutineScope(Dispatchers.IO).launch {
+            var wd = WeatherData()
+            var unit = Unit.Metric.name
+            arguments?.let {
+                 wd = it.getParcelable<WeatherData>(WEATHER_DATA_ARG) as WeatherData
+                 unit = it.getString(UNITS_ARG) as String
+            }
+            withContext(Dispatchers.Main) {
+                weatherData.value = wd
+                units.value = unit
+            }
         }
     }
 
@@ -77,11 +89,14 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         _binding.root.visibility = View.INVISIBLE
         _binding.toolbar.setToolbarNavigation(toolbar = _binding.toolbar, activity = activity as MainActivity)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            if (this@WeatherPageFragment::weatherData.isInitialized) {
-                updateUI(weatherData)
-                setupAdapters(weatherData)
-                updateGraph(weatherData)
+        weatherData.observe(viewLifecycleOwner) { _weatherData ->
+            if (_weatherData == null)
+                return@observe
+
+            CoroutineScope(Dispatchers.Main).launch {
+                updateUI(_weatherData)
+                setupAdapters(_weatherData)
+                updateGraph(_weatherData)
                 fade()
             }
         }
@@ -177,20 +192,22 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
         val listDays = weatherData.dailyWeather
         val listHours = weatherData.hourlyWeather
 
+        val _units = units.value ?: Unit.Metric.name
 
         _binding.recyclerNextDays.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = NextDaysAdapter(context, listDays, units, resources)
+            adapter = NextDaysAdapter(context, listDays, _units, resources)
         }
         _binding.recyclerNextHours.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = NextHoursAdapter(context, listHours, units, resources)
+            adapter = NextHoursAdapter(context, listHours, _units, resources)
         }
     }
 
     private fun updateUI(weatherData: WeatherData) {
 
         val wm = weatherData.currentWeather
+        val _units = units.value ?: Unit.Metric
 
         GlideApp.with(_binding.ivWeather.context)
             .load("https://openweathermap.org/img/wn/${wm.icon}@2x.png")
@@ -199,7 +216,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
 
         _binding.collapseToolbar.title = wm.name
 
-        when (units) {
+        when (_units) {
             Unit.Standard.name -> {
                 //_binding.collapseToolbar.title = String.format(resources.getString(R.string.top_tittle_kelvin_text), wm.temp, wm.wDescription)
                 _binding.tvMaxMinTemp.text = String.format(resources.getString(R.string.max_min_kelvin_text),wm.tempMax, wm.tempMin)
@@ -223,7 +240,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page_collapse) {
             }
         }
 
-        val tempDesignation = when (units) {
+        val tempDesignation = when (_units) {
             Unit.Standard.name -> resources.getString(R.string.kelvin)
             Unit.Metric.name -> resources.getString(R.string.celsius)
             Unit.Imperial.name -> resources.getString(R.string.fahrenheit)

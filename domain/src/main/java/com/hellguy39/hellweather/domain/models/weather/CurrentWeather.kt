@@ -1,7 +1,9 @@
 package com.hellguy39.hellweather.domain.models.weather
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class CurrentWeather(
     var name: String = "N/A",
 
@@ -28,4 +30,4 @@ data class CurrentWeather(
 
     var tempMax: String = "N/A",
     var tempMin: String = "N/A",
-) : Serializable
+) : Parcelable
