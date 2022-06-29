@@ -3,103 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/navigation_weather">
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_welcomeFragment"
-            app:destination="@id/welcomeFragment"
-            app:enterAnim="@anim/fade_in"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/addCityFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.add.AddLocationFragment"
-        android:label="fragment_add_city"
-        tools:layout="@layout/fragment_add_location" >
-        <action
-            android:id="@+id/action_addCityFragment_to_confirmationCityFragment"
-            app:destination="@id/confirmationCityFragment"
-            app:enterAnim="@anim/to_left_in"
-            app:exitAnim="@anim/to_left_out"
-            app:popEnterAnim="@anim/to_right_in"
-            app:popExitAnim="@anim/to_right_out" />
-    </fragment>
-    <fragment
-        android:id="@+id/welcomeFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.welcome.WelcomeFragment"
-        android:label="fragment_welcome"
-        tools:layout="@layout/fragment_welcome">
-        <action
-            android:id="@+id/action_welcomeFragment_to_addCityFragment"
-            app:destination="@id/addCityFragment"
-            app:enterAnim="@anim/to_left_in"
-            app:exitAnim="@anim/to_left_out"
-            app:popEnterAnim="@anim/to_right_in"
-            app:popExitAnim="@anim/to_right_out" />
-    </fragment>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.settings.SettingsFragment"
-        android:label="settings_fragment"
-        tools:layout="@layout/settings_fragment" />
-    <fragment
-        android:id="@+id/confirmationCityFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.confirmation.ConfirmationCityFragment"
-        android:label="confirmation_city_fragment"
-        tools:layout="@layout/confirmation_city_fragment" >
-        <action
-            android:id="@+id/action_confirmationCityFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/to_left_in"
-            app:exitAnim="@anim/to_left_out"
-            app:popEnterAnim="@anim/to_right_in"
-            app:popExitAnim="@anim/to_right_out"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_confirmationCityFragment_to_locationManagerFragment"
-            app:destination="@id/locationManagerFragment"
-            app:enterAnim="@anim/to_left_in"
-            app:exitAnim="@anim/to_left_out"
-            app:popEnterAnim="@anim/to_right_in"
-            app:popExitAnim="@anim/to_right_out"
-            app:popUpToInclusive="true" />
-        <argument
-            android:name="userLocationParam"
-            app:argType="com.hellguy39.hellweather.domain.models.param.UserLocationParam" />
-    </fragment>
-    <fragment
-        android:id="@+id/locationManagerFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.location_manager.LocationManagerFragment"
-        android:label="location_manager_fragment"
-        tools:layout="@layout/location_manager_fragment" >
-        <action
-            android:id="@+id/action_locationManagerFragment_to_addCityFragment"
-            app:destination="@id/addCityFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
-    <fragment
-        android:id="@+id/appInfoFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.info.AppInfoFragment"
-        android:label="fragment_app_info"
-        tools:layout="@layout/fragment_app_info" />
-    <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.search.SearchFragment"
-        android:label="search_fragment"
-        tools:layout="@layout/search_fragment" />
-    <fragment
-        android:id="@+id/foregroundServiceFragment"
-        android:name="com.hellguy39.hellweather.presentation.fragments.foreground_service.ForegroundServiceFragment"
-        android:label="foreground_service_fragment"
-        tools:layout="@layout/foreground_service_fragment" />
+    <navigation android:id="@+id/navigation_weather"
+        app:startDestination="@id/weatherFragment">
+
+        <fragment
+            android:id="@+id/weatherFragment"
+            android:name="com.hellguy39.hellweather.presentation.fragments.weather.WeatherFragment"
+            android:label="fragment_weather"
+            tools:layout="@layout/fragment_weather" />
+    </navigation>
+
 </navigation>

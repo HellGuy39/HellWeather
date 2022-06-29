@@ -56,15 +56,15 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     //Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.4.1"
-    implementation "androidx.navigation:navigation-ui-ktx:2.4.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.4.2"
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
 
     // Feature module Support
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.4.1"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.4.2"
 
     //Chart
     implementation 'com.github.swapnil1104:CurveGraphView:2.1'
@@ -75,40 +75,17 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.38.1"
 
     //Google
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
 
     //Swipe decorator
     implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.3'
 
-    /*implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
-    implementation 'androidx.compose.ui:ui:1.0.5'*/
-    // Tooling support (Previews, etc.)
-    //implementation 'androidx.compose.ui:ui-tooling:1.0.5'
-
-    //implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
-    // Integration with activities
-    //implementation 'androidx.activity:activity-compose:1.4.0'
-    // Compose Material Design
-    //implementation 'androidx.compose.material:material:1.0.5'
-    // Animations
-    //implementation 'androidx.compose.animation:animation:1.0.5'
-    // Tooling support (Previews, etc.)
-    //implementation 'androidx.compose.ui:ui-tooling:1.0.5'
-    // Integration with ViewModels
-    //implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
-    // UI Tests
-    //androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.5'
-    // When using a MDC theme
-    //implementation "com.google.android.material:compose-theme-adapter:1.1.2"
-    // When using a AppCompat theme
-    //implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
-
     //AndroidX
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
@@ -127,10 +104,10 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.4.2'
     kapt 'androidx.room:room-compiler:2.4.2'
 
-    //Network
+    // Retrofit
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.3"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3"
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0")) // define a BOM and its version
-    implementation("com.squareup.okhttp3:okhttp") // define any required OkHttp artifacts without version
-    implementation("com.squareup.okhttp3:logging-interceptor")
 }

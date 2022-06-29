@@ -1,115 +1,48 @@
 package com.hellguy39.hellweather.di
 
-import android.app.Application
-import android.content.SharedPreferences
-import androidx.preference.PreferenceManager
-import com.hellguy39.hellweather.App
-import com.hellguy39.hellweather.data.repositories.PrefsRepositoryImpl
-import com.hellguy39.hellweather.domain.usecase.format.FormatTimeUseCase
-import com.hellguy39.hellweather.domain.usecase.format.FormatTimeWithDayUseCase
-import com.hellguy39.hellweather.domain.usecase.format.FormatUseCases
-import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.FirstBootValueUseCases
-import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.GetFirstBootValueUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.first_boot.SaveFirstBootValueUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.lang.GetLangUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.lang.LangUseCases
-import com.hellguy39.hellweather.domain.usecase.prefs.lang.SaveLangUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.service.*
-import com.hellguy39.hellweather.domain.usecase.prefs.theme.GetThemeUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.theme.SaveThemeUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.theme.ThemeUseCases
-import com.hellguy39.hellweather.domain.usecase.prefs.theme_mode.GetThemeModeUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.theme_mode.SaveThemeModeUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.theme_mode.ThemeModeUseCases
-import com.hellguy39.hellweather.domain.usecase.prefs.units.GetUnitsUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.units.SaveUnitsUseCase
-import com.hellguy39.hellweather.domain.usecase.prefs.units.UnitsUseCases
+import com.hellguy39.hellweather.data.remote.OpenWeatherApi
+import com.hellguy39.hellweather.data.repository.OpenWeatherRepositoryImpl
+import com.hellguy39.hellweather.domain.repository.OpenWeatherRepository
+import com.hellguy39.hellweather.domain.usecase.GetOneCallWeatherUseCase
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
 @Module
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Provides
     @Singleton
-    fun defSharedPrefs(app: Application): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(app)
+    fun provideOpenWeatherApi(): OpenWeatherApi {
+        return Retrofit.Builder()
+            .baseUrl(OpenWeatherApi.BASE_URL)
+            .client(OkHttpClient.Builder()
+                .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }).build())
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
     }
 
     @Provides
     @Singleton
-    fun providePrefsRepository(sharedPreferences: SharedPreferences): PrefsRepositoryImpl {
-        return PrefsRepositoryImpl(sharedPreferences)
+    fun provideOpenWeatherRepository(api: OpenWeatherApi): OpenWeatherRepository {
+        return OpenWeatherRepositoryImpl(api)
     }
 
     @Provides
     @Singleton
-    fun provideGetLangUseCase(prefsRepositoryImpl: PrefsRepositoryImpl): LangUseCases {
-        return LangUseCases(
-            getLangUseCase = GetLangUseCase(),
-            saveLangUseCase = SaveLangUseCase()
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideUnitsUseCases(prefsRepositoryImpl: PrefsRepositoryImpl): UnitsUseCases {
-        return UnitsUseCases(
-            getUnitsUseCase = GetUnitsUseCase(prefsRepositoryImpl),
-            saveUnitsUseCase = SaveUnitsUseCase(prefsRepositoryImpl)
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideFirstBootValueUseCases(prefsRepositoryImpl: PrefsRepositoryImpl): FirstBootValueUseCases {
-        return FirstBootValueUseCases(
-            getFirstBootValueUseCase = GetFirstBootValueUseCase(prefsRepositoryImpl),
-            saveFirstBootValueUseCase = SaveFirstBootValueUseCase(prefsRepositoryImpl)
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideServiceUseCases(prefsRepositoryImpl: PrefsRepositoryImpl): ServiceUseCases {
-        return ServiceUseCases(
-            saveServiceLocationUseCase = SaveServiceLocationUseCase(prefsRepositoryImpl),
-            saveServiceModeUseCase = SaveServiceModeUseCase(prefsRepositoryImpl),
-            saveServiceUpdateTimeUseCase = SaveServiceUpdateTimeUseCase(prefsRepositoryImpl),
-            getServiceLocationUseCase = GetServiceLocationUseCase(prefsRepositoryImpl),
-            getServiceModeUseCase = GetServiceModeUseCase(prefsRepositoryImpl),
-            getServiceUpdateTimeUseCase = GetServiceUpdateTimeUseCase(prefsRepositoryImpl)
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideFormatUseCases(): FormatUseCases {
-        return FormatUseCases(
-            formatTimeUseCase = FormatTimeUseCase(),
-            formatTimeWithDayUseCase = FormatTimeWithDayUseCase()
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideThemeUseCases(prefsRepositoryImpl: PrefsRepositoryImpl): ThemeUseCases {
-        return ThemeUseCases(
-            getThemeUseCase = GetThemeUseCase(prefsRepositoryImpl),
-            saveThemeUseCase = SaveThemeUseCase(prefsRepositoryImpl)
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideThemeModeUseCases(prefsRepositoryImpl: PrefsRepositoryImpl): ThemeModeUseCases {
-        return ThemeModeUseCases(
-            getThemeModeUseCase = GetThemeModeUseCase(prefsRepositoryImpl),
-            saveThemeModeUseCase = SaveThemeModeUseCase(prefsRepositoryImpl)
+    fun provideGetOneCallWeatherUseCase(repository: OpenWeatherRepository): GetOneCallWeatherUseCase {
+        return GetOneCallWeatherUseCase(
+            repository
         )
     }
 

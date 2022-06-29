@@ -168,5 +168,7 @@
     <string name="widget_configuration_tittle">Widget configuration</string>
     <string name="add_widget" translatable="false">add</string>
     <string name="appwidget_text" translatable="false">text</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

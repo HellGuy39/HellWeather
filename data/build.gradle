@@ -42,12 +42,12 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.4.2'
     kapt 'androidx.room:room-compiler:2.4.2'
 
-    //Network
+    // Retrofit
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.3"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3"
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0")) // define a BOM and its version
-    implementation("com.squareup.okhttp3:okhttp") // define any required OkHttp artifacts without version
-    implementation("com.squareup.okhttp3:logging-interceptor")
 
     //Hilt
     implementation "com.google.dagger:hilt-android:2.38.1"
