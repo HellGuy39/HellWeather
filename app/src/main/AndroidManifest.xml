@@ -19,16 +19,8 @@
         <!-- Activities -->
         <activity
             android:name=".presentation.activities.main.MainActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".presentation.activities.splash.CustomSplashScreen"
             android:exported="true"
-            android:theme="@style/AppSplashTheme">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

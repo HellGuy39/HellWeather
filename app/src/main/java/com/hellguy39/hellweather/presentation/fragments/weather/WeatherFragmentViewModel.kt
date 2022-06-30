@@ -1,14 +1,14 @@
 package com.hellguy39.hellweather.presentation.fragments.weather
 
-import android.util.Log
-import androidx.lifecycle.*
+import android.location.Location
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hellguy39.hellweather.domain.model.OneCallWeather
 import com.hellguy39.hellweather.domain.usecase.GetOneCallWeatherUseCase
 import com.hellguy39.hellweather.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +20,12 @@ class WeatherFragmentViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(WeatherFragmentState())
     val uiState: StateFlow<WeatherFragmentState> = _uiState
 
-    fun fetchWeather() = viewModelScope.launch {
-        getOneCallWeatherUseCase.invoke(true, 45.0, 38.0).collect {
+    fun fetchWeather(location: Location) = viewModelScope.launch {
+        getOneCallWeatherUseCase.invoke(
+            fetchFromRemote = true,
+            lat = location.latitude,
+            lon = location.longitude
+        ).collect {
             when(it) {
                 is Resource.Success -> {
                     _uiState.value = WeatherFragmentState(
@@ -42,5 +46,4 @@ class WeatherFragmentViewModel @Inject constructor(
             }
         }
     }
-
 }
