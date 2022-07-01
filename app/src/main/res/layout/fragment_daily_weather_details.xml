@@ -3,11 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:transitionName="@string/weather_card_details_transition"
     tools:context=".presentation.fragments.daily_weather_details.DailyWeatherDetailsFragment">
 
-    <TextView
-        android:id="@+id/tvContent"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/rootCard"
+        style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/card_default_horizontal_margin"
+        android:layout_marginVertical="@dimen/card_default_vertical_margin"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/card_default_corner_radius"
+        app:cardElevation="@dimen/card_default_elevation">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsvContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/layout_default_content_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnClose"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    app:icon="@drawable/ic_baseline_expand_more_24" />
+
+                <TextView
+                    android:id="@+id/tvContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

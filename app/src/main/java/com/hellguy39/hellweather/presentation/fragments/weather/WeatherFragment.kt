@@ -2,31 +2,39 @@ package com.hellguy39.hellweather.presentation.fragments.weather
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialFadeThrough
+import com.google.android.material.transition.platform.MaterialElevationScale
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherBinding
 import com.hellguy39.hellweather.domain.model.DailyWeather
 import com.hellguy39.hellweather.domain.model.HourlyWeather
 import com.hellguy39.hellweather.domain.model.OneCallWeather
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.DailyWeatherAdapter
 import com.hellguy39.hellweather.presentation.adapter.HourlyWeatherAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
-class WeatherFragment : Fragment(R.layout.fragment_weather) {
-
+class WeatherFragment : Fragment(R.layout.fragment_weather),
+    DailyWeatherAdapter.DailyWeatherItemCallback,
+    HourlyWeatherAdapter.HourlyWeatherItemCallback
+{
     private lateinit var binding : FragmentWeatherBinding
+
     private lateinit var viewModel: WeatherFragmentViewModel
+    private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     private val dailyWeatherList = mutableListOf<DailyWeather>()
     private val hourlyWeatherList = mutableListOf<HourlyWeather>()
@@ -39,29 +47,42 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentWeatherBinding.bind(view)
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
 
         binding.refreshLayout.setOnRefreshListener {
             checkPermissionAndFetchWeather()
         }
 
         binding.rvDailyWeather.apply {
-            adapter = DailyWeatherAdapter(dailyWeatherList)
+            adapter = DailyWeatherAdapter(
+                dataSet = dailyWeatherList,
+                callback = this@WeatherFragment,
+                resources = resources
+            )
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
         binding.rvHourlyWeather.apply {
-            adapter = HourlyWeatherAdapter(hourlyWeatherList)
+            adapter = HourlyWeatherAdapter(
+                dataSet = hourlyWeatherList,
+                callback = this@WeatherFragment,
+                resources = resources
+            )
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
     override fun onStart() {
         super.onStart()
+        val state = viewModel.uiState.value
+        if (!state.isLoading && state.oneCallWeather == null)
+            checkPermissionAndFetchWeather()
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect {
                 updateUI(it)
             }
         }
-        checkPermissionAndFetchWeather()
     }
 
     private fun updateUI(state: WeatherFragmentState) {
@@ -83,17 +104,9 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
 
     private fun checkPermissionAndFetchWeather() {
         if((activity as MainActivity).checkPermissions()) {
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                val location = (activity as MainActivity).getCurrentLocation()
-                withContext(Dispatchers.Main) {
-                    if (location != null)
-                        viewModel.fetchWeather(location)
-                    else
-                        Snackbar.make(binding.root, "Couldn't get geolocation", Snackbar.LENGTH_SHORT).show().also {
-                            binding.refreshLayout.isRefreshing = false
-                        }
-                }
-            }
+            viewModel.fetchWeather((activity as MainActivity).locationHelper)
+        } else {
+            binding.refreshLayout.isRefreshing = false
         }
     }
 
@@ -124,12 +137,38 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
     }
 
     private fun showData(data: OneCallWeather) {
+        TransitionManager.beginDelayedTransition(binding.refreshLayout, MaterialFadeThrough())
         binding.tvTemp.text = data.currentWeather?.temp?.roundToInt().toString()
-
         data.dailyWeather?.let { updateDailyWeatherRecycler(it) }
         data.hourlyWeather?.let { updateHourlyWeatherRecycler(it) }
     }
 
-    private fun navigateToLocationFragment() = findNavController()
-        .navigate(WeatherFragmentDirections.actionWeatherFragmentToLocationFragment())
+//    private fun navigateToLocationFragment() = findNavController()
+//        .navigate(WeatherFragmentDirections.actionWeatherFragmentToLocationFragment())
+
+    private fun navigateToDailyWeatherDetailsFragment(itemView: View) {
+        exitTransition = MaterialElevationScale(false)
+        reenterTransition = MaterialElevationScale(true)
+        val directions = WeatherFragmentDirections.actionWeatherFragmentToDailyWeatherDetailsFragment()
+        val extras = FragmentNavigatorExtras(itemView to getString(R.string.weather_card_details_transition))
+        findNavController().navigate(directions, extras)
+    }
+
+    private fun navigateToHourlyWeatherDetailsFragment(itemView: View) {
+        exitTransition = MaterialElevationScale(false)
+        reenterTransition = MaterialElevationScale(true)
+        val directions = WeatherFragmentDirections.actionWeatherFragmentToHourlyWeatherDetailsFragment()
+        val extras = FragmentNavigatorExtras(itemView to getString(R.string.weather_card_details_transition))
+        findNavController().navigate(directions, extras)
+    }
+
+    override fun onClick(dailyWeather: DailyWeather, position: Int, itemView: View) {
+        sharedViewModel.setDailyWeatherItem(dailyWeather)
+        navigateToDailyWeatherDetailsFragment(itemView)
+    }
+
+    override fun onClick(hourlyWeather: HourlyWeather, position: Int, itemView: View) {
+        sharedViewModel.setHourlyWeatherItem(hourlyWeather)
+        navigateToHourlyWeatherDetailsFragment(itemView)
+    }
 }

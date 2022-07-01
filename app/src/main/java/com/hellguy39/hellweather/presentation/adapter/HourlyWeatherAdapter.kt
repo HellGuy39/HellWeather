@@ -1,16 +1,22 @@
 package com.hellguy39.hellweather.presentation.adapter
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.HourlyWeatherItemBinding
 import com.hellguy39.hellweather.domain.model.HourlyWeather
+import com.hellguy39.hellweather.presentation.activities.main.IconHelper
 import com.hellguy39.hellweather.utils.formatAsHour
+import kotlin.math.roundToInt
 
 class HourlyWeatherAdapter(
-    private val dataSet: List<HourlyWeather>
+    private val dataSet: List<HourlyWeather>,
+    private val callback: HourlyWeatherItemCallback,
+    private val resources: Resources
 ): RecyclerView.Adapter<HourlyWeatherAdapter.HourlyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
@@ -21,7 +27,7 @@ class HourlyWeatherAdapter(
     }
 
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
-        holder.bind(dataSet[position])
+        holder.bind(dataSet[position], position, callback)
     }
 
     override fun getItemCount(): Int = dataSet.size
@@ -30,8 +36,29 @@ class HourlyWeatherAdapter(
 
         private val binding = HourlyWeatherItemBinding.bind(itemView)
 
-        fun bind(hourlyWeather: HourlyWeather) {
-            binding.tvDate.text = hourlyWeather.date?.formatAsHour()
+        fun bind(
+            hourlyWeather: HourlyWeather,
+            position: Int,
+            callback: HourlyWeatherItemCallback
+        ) {
+            binding.tvDate.text = if (position == 0) " Now " else hourlyWeather.date?.formatAsHour()
+
+            binding.tvTemp.text = resources.getString(R.string.value_as_temp, hourlyWeather.temp?.roundToInt())
+
+            hourlyWeather.weather?.get(0).let {
+                Glide.with(itemView)
+                    .load(IconHelper().getByIconId(it?.id, it?.icon))
+                    .into(binding.ivIcon)
+            }
+
+            binding.rootCard.transitionName = R.string.hourly_details_transition.toString() + position.toString()
+            binding.rootCard.setOnClickListener {
+                callback.onClick(hourlyWeather, position, binding.rootCard)
+            }
         }
+    }
+
+    interface HourlyWeatherItemCallback {
+        fun onClick(hourlyWeather: HourlyWeather, position: Int, itemView: View)
     }
 }

@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".presentation.fragments.weather.WeatherFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:transitionGroup="true">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nsvContent"
@@ -59,7 +61,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvHourlyWeather"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:transitionGroup="true">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -72,7 +75,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvDailyWeather"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:transitionGroup="true"/>
 
                 <TextView
                     android:id="@+id/tvSupportText2"

@@ -50,7 +50,8 @@ data class DailyWeatherDto(
     @field:Json(name = "pop") val pop: Double?,
     @field:Json(name = "clouds") val clouds: Int?,
     @field:Json(name = "temp") val temp: TempDto?,
-    @field:Json(name = "feels_like") val feelsLike: FeelsLikeDto?
+    @field:Json(name = "feels_like") val feelsLike: FeelsLikeDto?,
+    @field:Json(name = "weather") val weather: List<WeatherDto>?
 )
 
 @Json(name = "temp")

@@ -55,7 +55,8 @@ fun DailyWeatherDto.toDailyWeather(): DailyWeather {
         pop = pop,
         clouds = clouds,
         temp = temp?.toTemp(),
-        feelsLike = feelsLike?.toFeelsLike()
+        feelsLike = feelsLike?.toFeelsLike(),
+        weather = weather?.map { it.toWeather() }
     )
 }
 

@@ -47,7 +47,8 @@ data class DailyWeather(
     val pop: Double?,
     val clouds: Int?,
     val temp: Temp?,
-    val feelsLike: FeelsLike?
+    val feelsLike: FeelsLike?,
+    val weather: List<Weather>?
 )
 
 data class Temp(

@@ -8,11 +8,27 @@
 
     <dimen name="drawer_corner">24dp</dimen>
 
-    <dimen name="card_default_corner">12dp</dimen>
-    <dimen name="card_default_elevation">4dp</dimen>
-    <dimen name="card_default_stroke_width">0dp</dimen>
-
     <dimen name="card_def_height">160dp</dimen>
 
     <dimen name="collapse_height">128dp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_default_corner_radius">12dp</dimen>
+    <dimen name="card_default_elevation">8dp</dimen>
+    <dimen name="card_default_stroke_width">0dp</dimen>
+    <dimen name="card_default_vertical_margin">8dp</dimen>
+    <dimen name="card_default_horizontal_margin">8dp</dimen>
+
+    <!-- Layout -->
+    <dimen name="layout_default_content_padding">8dp</dimen>
+
+    <!-- Icons -->
+    <dimen name="icon_default_margin">8dp</dimen>
+    <dimen name="icon_small_size">12dp</dimen>
+    <dimen name="icon_default_size">24dp</dimen>
+    <dimen name="icon_large_size">32dp</dimen>
+
+    <!-- Icon button -->
+    <dimen name="icon_button_default_size">48dp</dimen>
+
 </resources>
