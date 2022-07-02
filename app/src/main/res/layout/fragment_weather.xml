@@ -16,61 +16,113 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nsvContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="16dp">
+                android:paddingTop="8dp"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvLocation"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="24sp"
-                    tools:text="Krasnodar" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvTemp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="96sp"
-                    android:gravity="center"
+                    <TextView
+                        android:id="@+id/tvCity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="22sp"
+                        tools:text="Krasnodar" />
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="18sp"
+                        tools:text="Tue, 9,41" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_marginVertical="16dp"
-                    tools:text="9°" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/ivIcon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            tools:src="@drawable/ic_cloudy" />
+
+                        <TextView
+                            android:id="@+id/tvWeatherDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:gravity="center"
+                            android:textSize="20sp"
+                            tools:text="Scattered clouds" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvTemp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="64sp"
+                        tools:text="9°" />
+
+                    <TextView
+                        android:id="@+id/tvTempFeelsLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        tools:text="Feels like 6°" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCurrentWeatherDetails"
+                    android:transitionGroup="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
                 <TextView
-                    android:id="@+id/tvWeatherDescription"
-                    android:layout_width="match_parent"
+                    android:id="@+id/tvTittleHourly"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="24sp"
-                    tools:text="Scattered clouds" />
-
-                <TextView
-                    android:id="@+id/tvTempFeelsLike"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="24sp"
-                    tools:text="Feels like 6°" />
+                    android:layout_margin="8dp"
+                    android:text="Hourly forecast"
+                    android:textSize="16sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvHourlyWeather"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:transitionGroup="true">
-
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:transitionGroup="true"
+                    android:requiresFadingEdge="horizontal"
+                    android:fadingEdgeLength="16dp"/>
 
                 <TextView
-                    android:id="@+id/tvSupportText1"
+                    android:id="@+id/tvTittleDaily"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tap the item to see the details" />
+                    android:layout_margin="8dp"
+                    android:textSize="16sp"
+                    android:text="Daily forecast" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvDailyWeather"
@@ -78,14 +130,10 @@
                     android:layout_height="wrap_content"
                     android:transitionGroup="true"/>
 
-                <TextView
-                    android:id="@+id/tvSupportText2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tap the item to see the details" />
-
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

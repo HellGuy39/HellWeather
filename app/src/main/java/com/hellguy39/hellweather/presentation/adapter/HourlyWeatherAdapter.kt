@@ -45,11 +45,9 @@ class HourlyWeatherAdapter(
 
             binding.tvTemp.text = resources.getString(R.string.value_as_temp, hourlyWeather.temp?.roundToInt())
 
-            hourlyWeather.weather?.get(0).let {
-                Glide.with(itemView)
-                    .load(IconHelper().getByIconId(it?.id, it?.icon))
-                    .into(binding.ivIcon)
-            }
+            Glide.with(itemView)
+                .load(IconHelper.getByIconId(hourlyWeather.weather?.get(0)))
+                .into(binding.ivIcon)
 
             binding.rootCard.transitionName = R.string.hourly_details_transition.toString() + position.toString()
             binding.rootCard.setOnClickListener {

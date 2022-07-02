@@ -62,6 +62,10 @@ internal fun Double?.toPercents(): Int {
         (this * 100).toInt()
 }
 
+internal fun Int?.toKilometers(): String {
+    return (this?.div(1000)).toString() + "km"
+}
+
 /*internal fun Snackbar.action(message: String, action: (View) -> Unit) {
     this.setAction(message, action)
 }*/

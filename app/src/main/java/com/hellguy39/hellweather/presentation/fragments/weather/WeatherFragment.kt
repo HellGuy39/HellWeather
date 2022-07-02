@@ -9,20 +9,29 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialFadeThrough
 import com.google.android.material.transition.platform.MaterialElevationScale
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherBinding
+import com.hellguy39.hellweather.domain.model.CurrentWeather
 import com.hellguy39.hellweather.domain.model.DailyWeather
 import com.hellguy39.hellweather.domain.model.HourlyWeather
 import com.hellguy39.hellweather.domain.model.OneCallWeather
+import com.hellguy39.hellweather.presentation.activities.main.IconHelper
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
+import com.hellguy39.hellweather.presentation.adapter.CurrentWeatherDetailsAdapter
 import com.hellguy39.hellweather.presentation.adapter.DailyWeatherAdapter
 import com.hellguy39.hellweather.presentation.adapter.HourlyWeatherAdapter
+import com.hellguy39.hellweather.utils.Detail
+import com.hellguy39.hellweather.utils.formatAsDayWithTime
+import com.hellguy39.hellweather.utils.formatAsHour
+import com.hellguy39.hellweather.utils.toKilometers
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
 
@@ -38,6 +47,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     private val dailyWeatherList = mutableListOf<DailyWeather>()
     private val hourlyWeatherList = mutableListOf<HourlyWeather>()
+    private val currentWeatherDetailsList = mutableListOf<CurrentWeatherDetailsAdapter.DetailModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +79,12 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
                 resources = resources
             )
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+        binding.rvCurrentWeatherDetails.apply {
+            adapter = CurrentWeatherDetailsAdapter(
+                dataSet = currentWeatherDetailsList
+            )
+            layoutManager = GridLayoutManager(context, CurrentWeatherDetailsAdapter.SPAN_COUNT)
         }
     }
 
@@ -136,11 +152,67 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         adapter?.notifyItemRangeInserted(0, newItems.size)
     }
 
+    private fun updateCurrentWeatherDetailsRecycler(currentWeather: CurrentWeather) {
+        val adapter = binding.rvCurrentWeatherDetails.adapter
+
+        // Clear old data
+        val previousSize = adapter?.itemCount ?: 0
+        currentWeatherDetailsList.clear()
+        adapter?.notifyItemRangeRemoved(0, previousSize)
+
+        // Set new data
+        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
+            Detail.Sunrise,
+            currentWeather.sunrise?.formatAsHour())
+        )
+
+        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
+            Detail.Humidity,
+            resources.getString(R.string.value_in_percents, currentWeather.humidity))
+        )
+
+        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
+            Detail.Pressure,
+            currentWeather.pressure.toString())
+        )
+
+        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
+            Detail.Sunset,
+            currentWeather.sunset?.formatAsHour())
+        )
+
+        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
+            Detail.UVI,
+            currentWeather.uvi?.roundToInt().toString())
+        )
+
+        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
+            Detail.Visibility,
+            currentWeather.visibility.toKilometers())
+        )
+
+        adapter?.notifyItemRangeInserted(0, currentWeatherDetailsList.size)
+    }
+
     private fun showData(data: OneCallWeather) {
         TransitionManager.beginDelayedTransition(binding.refreshLayout, MaterialFadeThrough())
-        binding.tvTemp.text = data.currentWeather?.temp?.roundToInt().toString()
+
+        binding.tvTemp.text = resources.getString(R.string.value_as_temp, data.currentWeather?.temp?.roundToInt())
+        binding.tvTempFeelsLike.text = resources.getString(
+            R.string.feels_like,
+            data.currentWeather?.feelsLike?.roundToInt()
+        )
+        binding.tvDate.text = data.currentWeather?.date?.formatAsDayWithTime()
+        binding.tvWeatherDescription.text = data.currentWeather?.weather?.get(0)?.description?.replaceFirstChar(Char::titlecase)
+
+        Glide.with(this)
+            .load(IconHelper.getByIconId(data.currentWeather?.weather?.get(0)))
+            .into(binding.ivIcon)
+
+        // Recyclers
         data.dailyWeather?.let { updateDailyWeatherRecycler(it) }
         data.hourlyWeather?.let { updateHourlyWeatherRecycler(it) }
+        data.currentWeather?.let { updateCurrentWeatherDetailsRecycler(it) }
     }
 
 //    private fun navigateToLocationFragment() = findNavController()

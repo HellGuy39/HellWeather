@@ -43,14 +43,15 @@ class DailyWeatherAdapter(
         ) {
             binding.tvDate.text = if (position == 0) "Today" else dailyWeather.date?.formatAsDay()
 
-            dailyWeather.weather?.get(0).let {
-                Glide.with(itemView)
-                    .load(IconHelper().getByIconId(it?.id, it?.icon))
-                    .into(binding.ivIcon)
-            }
+            Glide.with(itemView)
+                .load(IconHelper.getByIconId(dailyWeather.weather?.get(0)))
+                .into(binding.ivIcon)
 
-            binding.chipMaxTemp.text = resources.getString(R.string.chip_max_temp, dailyWeather.temp?.max?.roundToInt())
-            binding.chipMinTemp.text = resources.getString(R.string.chip_min_temp, dailyWeather.temp?.min?.roundToInt())
+            binding.chipMinMaxTemp.text = resources.getString(
+                R.string.chip_min_max_temp,
+                dailyWeather.temp?.max?.roundToInt(),
+                dailyWeather.temp?.min?.roundToInt()
+            )
             binding.chipPop.text = resources.getString(R.string.value_in_percents, dailyWeather.pop.toPercents())
 
             binding.rootCard.transitionName = R.string.daily_details_transition.toString() + position.toString()

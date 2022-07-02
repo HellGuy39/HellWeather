@@ -64,16 +64,10 @@
                     app:chipIcon="@drawable/ic_rainy" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipMinTemp"
+                    android:id="@+id/chipMinMaxTemp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="L: 16°" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipMaxTemp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="H: 21°" />
+                    tools:text="21 / 16 °C" />
             </com.google.android.material.chip.ChipGroup>
 
             <androidx.constraintlayout.widget.Guideline

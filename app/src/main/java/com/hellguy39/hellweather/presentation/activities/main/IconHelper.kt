@@ -1,10 +1,21 @@
 package com.hellguy39.hellweather.presentation.activities.main
 
 import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.domain.model.Weather
+import com.hellguy39.hellweather.utils.Detail
 
-class IconHelper {
+object IconHelper {
 
-    fun getByIconId(id: Int?, openWeatherIcon: String?): Int {
+    fun getDetailIcon(detail: Enum<Detail>): Int {
+        return when(detail) {
+            else -> R.drawable.ic_unknown
+        }
+    }
+
+    fun getByIconId(weatherModel: Weather?): Int {
+
+        val id = weatherModel?.id
+        val openWeatherIcon = weatherModel?.icon
 
         if (id == null || openWeatherIcon == null)
             return R.drawable.ic_unknown
