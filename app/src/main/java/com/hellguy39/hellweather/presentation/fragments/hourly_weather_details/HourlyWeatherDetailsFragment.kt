@@ -10,7 +10,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHourlyWeatherDetailsBinding
 import com.hellguy39.hellweather.domain.model.HourlyWeather
-import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
+import com.hellguy39.hellweather.presentation.activities.view_model.SharedViewModel
 import com.hellguy39.hellweather.utils.getColorFromAttr
 
 class HourlyWeatherDetailsFragment : Fragment(R.layout.fragment_hourly_weather_details) {

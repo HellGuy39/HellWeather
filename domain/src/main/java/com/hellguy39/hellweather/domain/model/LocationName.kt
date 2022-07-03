@@ -4,6 +4,7 @@ data class LocationName(
     val lat: Double?,
     val lon: Double?,
     val name: String?,
-    val localNames: List<String>?,
+    val localNames: Map<String, String>?,
     val country: String?,
+    val state: String?
 )

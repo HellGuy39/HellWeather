@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.presentation.activities.main
+package com.hellguy39.hellweather.presentation.activities.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

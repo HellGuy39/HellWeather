@@ -73,7 +73,11 @@
         <entry key="app/src/main/res/drawable/ic_cloudy.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_day_clear.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_day_partly_cloudy.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_expand_less.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_expand_more.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_flare.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_foggy.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_humidity.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_night_clear.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_night_partly_cloudy.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_outline_wb_cloudy_24.xml" value="0.241" />
@@ -82,10 +86,17 @@
         <entry key="app/src/main/res/drawable/ic_round_autorenew_24.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_round_my_location_24.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_snow.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_speed.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_thermometer.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_thermostat.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_thunderstorm.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_tornado.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_unknown.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_visibility.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_wind.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/tab_indicator_selected.xml" value="0.241" />
+        <entry key="app/src/main/res/layout/alert_item.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/chip_tag.xml" value="0.29635416666666664" />
         <entry key="app/src/main/res/layout/current_weather_detail_item.xml" value="0.3825944170771757" />
         <entry key="app/src/main/res/layout/daily_weather_item.xml" value="0.36273752848307295" />
         <entry key="app/src/main/res/layout/fragment_daily_weather_details.xml" value="0.3595580063857042" />

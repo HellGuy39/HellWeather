@@ -13,6 +13,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.snackbar.Snackbar
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
+import com.hellguy39.hellweather.helpers.LocationHelper
+import com.hellguy39.hellweather.presentation.activities.view_model.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 

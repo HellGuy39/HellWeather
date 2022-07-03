@@ -46,7 +46,7 @@ data class DailyWeatherDto(
     @field:Json(name = "wind_deg") val windDeg: Int?,
     @field:Json(name = "wind_gust") val windGust: Double?,
     @field:Json(name = "uvi") val uvi: Double?,
-    @field:Json(name = "rain") val rain: Int?,
+    @field:Json(name = "rain") val rain: Double?,
     @field:Json(name = "pop") val pop: Double?,
     @field:Json(name = "clouds") val clouds: Int?,
     @field:Json(name = "temp") val temp: TempDto?,

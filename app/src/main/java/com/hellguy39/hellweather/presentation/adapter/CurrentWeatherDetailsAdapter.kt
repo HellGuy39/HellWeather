@@ -1,5 +1,6 @@
 package com.hellguy39.hellweather.presentation.adapter
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,11 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.CurrentWeatherDetailItemBinding
-import com.hellguy39.hellweather.presentation.activities.main.IconHelper
-import com.hellguy39.hellweather.utils.Detail
+import com.hellguy39.hellweather.domain.model.CurrentWeather
+import com.hellguy39.hellweather.helpers.IconHelper
+import com.hellguy39.hellweather.utils.formatAsHour
+import com.hellguy39.hellweather.utils.toKilometers
+import kotlin.math.roundToInt
 
 class CurrentWeatherDetailsAdapter(
-   private val dataSet: List<DetailModel>
+   private val dataSet: List<DetailModel>,
 ): RecyclerView.Adapter<CurrentWeatherDetailsAdapter.CurrentWeatherDetailsViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -19,7 +23,8 @@ class CurrentWeatherDetailsAdapter(
         viewType: Int
     ): CurrentWeatherDetailsViewHolder {
         return CurrentWeatherDetailsViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.current_weather_detail_item, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.current_weather_detail_item, parent, false)
         )
     }
 
@@ -43,13 +48,53 @@ class CurrentWeatherDetailsAdapter(
             binding.tvAnyValue.text = detailModel.value
         }
     }
-
-    data class DetailModel(
-        val detail: Enum<Detail>,
-        val value: String?
-    )
-
     companion object {
         const val SPAN_COUNT = 3
     }
+}
+
+internal fun CurrentWeather.toDetailsModelList(resources: Resources): List<DetailModel> {
+    return listOf(
+        DetailModel(
+            DetailTitle.Sunrise,
+            this.sunrise?.formatAsHour()
+        ),
+        DetailModel(
+            DetailTitle.Humidity,
+            resources.getString(R.string.value_in_percents, this.humidity)
+        ),
+        DetailModel(
+            DetailTitle.Pressure,
+            resources.getString(R.string.value_as_pressure, this.pressure)
+        ),
+        DetailModel(
+            DetailTitle.Sunset,
+            this.sunset?.formatAsHour()
+        ),
+        DetailModel(
+            DetailTitle.UVI,
+            this.uvi?.roundToInt().toString()
+        ),
+        DetailModel(
+            DetailTitle.Visibility,
+            this.visibility.toKilometers()
+        )
+    )
+}
+
+data class DetailModel(
+    val detail: Enum<DetailTitle>,
+    val value: String?
+)
+
+enum class DetailTitle {
+    Humidity,
+    Pressure,
+    Sunrise,
+    Sunset,
+    UVI,
+    Visibility,
+    Wind,
+    DewPoint,
+    Clouds
 }

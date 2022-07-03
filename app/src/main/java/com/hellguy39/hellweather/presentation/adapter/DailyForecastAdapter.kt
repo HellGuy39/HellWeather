@@ -9,16 +9,16 @@ import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.DailyWeatherItemBinding
 import com.hellguy39.hellweather.domain.model.DailyWeather
-import com.hellguy39.hellweather.presentation.activities.main.IconHelper
+import com.hellguy39.hellweather.helpers.IconHelper
 import com.hellguy39.hellweather.utils.formatAsDay
 import com.hellguy39.hellweather.utils.toPercents
 import kotlin.math.roundToInt
 
-class DailyWeatherAdapter(
+class DailyForecastAdapter(
     private val dataSet: List<DailyWeather>,
     private val callback: DailyWeatherItemCallback,
     private val resources: Resources
-): RecyclerView.Adapter<DailyWeatherAdapter.DailyViewHolder>() {
+): RecyclerView.Adapter<DailyForecastAdapter.DailyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyViewHolder {
         return DailyViewHolder(

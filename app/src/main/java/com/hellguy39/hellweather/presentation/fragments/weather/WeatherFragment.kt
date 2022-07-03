@@ -18,27 +18,19 @@ import com.google.android.material.transition.MaterialFadeThrough
 import com.google.android.material.transition.platform.MaterialElevationScale
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherBinding
-import com.hellguy39.hellweather.domain.model.CurrentWeather
-import com.hellguy39.hellweather.domain.model.DailyWeather
-import com.hellguy39.hellweather.domain.model.HourlyWeather
-import com.hellguy39.hellweather.domain.model.OneCallWeather
-import com.hellguy39.hellweather.presentation.activities.main.IconHelper
+import com.hellguy39.hellweather.domain.model.*
+import com.hellguy39.hellweather.helpers.IconHelper
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
-import com.hellguy39.hellweather.presentation.adapter.CurrentWeatherDetailsAdapter
-import com.hellguy39.hellweather.presentation.adapter.DailyWeatherAdapter
-import com.hellguy39.hellweather.presentation.adapter.HourlyWeatherAdapter
-import com.hellguy39.hellweather.utils.Detail
+import com.hellguy39.hellweather.presentation.activities.view_model.SharedViewModel
+import com.hellguy39.hellweather.presentation.adapter.*
 import com.hellguy39.hellweather.utils.formatAsDayWithTime
-import com.hellguy39.hellweather.utils.formatAsHour
-import com.hellguy39.hellweather.utils.toKilometers
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment(R.layout.fragment_weather),
-    DailyWeatherAdapter.DailyWeatherItemCallback,
-    HourlyWeatherAdapter.HourlyWeatherItemCallback
+    DailyForecastAdapter.DailyWeatherItemCallback,
+    HourlyForecastAdapter.HourlyWeatherItemCallback
 {
     private lateinit var binding : FragmentWeatherBinding
 
@@ -47,7 +39,8 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     private val dailyWeatherList = mutableListOf<DailyWeather>()
     private val hourlyWeatherList = mutableListOf<HourlyWeather>()
-    private val currentWeatherDetailsList = mutableListOf<CurrentWeatherDetailsAdapter.DetailModel>()
+    private val currentWeatherDetailsList = mutableListOf<DetailModel>()
+    private val alertList = mutableListOf<Alert>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +58,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         }
 
         binding.rvDailyWeather.apply {
-            adapter = DailyWeatherAdapter(
+            adapter = DailyForecastAdapter(
                 dataSet = dailyWeatherList,
                 callback = this@WeatherFragment,
                 resources = resources
@@ -73,7 +66,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
         binding.rvHourlyWeather.apply {
-            adapter = HourlyWeatherAdapter(
+            adapter = HourlyForecastAdapter(
                 dataSet = hourlyWeatherList,
                 callback = this@WeatherFragment,
                 resources = resources
@@ -86,12 +79,19 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
             )
             layoutManager = GridLayoutManager(context, CurrentWeatherDetailsAdapter.SPAN_COUNT)
         }
+        binding.rvAlerts.apply {
+            adapter = AlertsAdapter(
+                dataSet = alertList,
+                resources = resources
+            )
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     override fun onStart() {
         super.onStart()
         val state = viewModel.uiState.value
-        if (!state.isLoading && state.oneCallWeather == null)
+        if (!state.isLoading && state.data == null)
             checkPermissionAndFetchWeather()
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -112,7 +112,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
                 .show()
         }
 
-        state.oneCallWeather?.let {
+        state.data?.let {
             showData(it)
         }
 
@@ -161,37 +161,21 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         adapter?.notifyItemRangeRemoved(0, previousSize)
 
         // Set new data
-        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
-            Detail.Sunrise,
-            currentWeather.sunrise?.formatAsHour())
-        )
-
-        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
-            Detail.Humidity,
-            resources.getString(R.string.value_in_percents, currentWeather.humidity))
-        )
-
-        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
-            Detail.Pressure,
-            currentWeather.pressure.toString())
-        )
-
-        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
-            Detail.Sunset,
-            currentWeather.sunset?.formatAsHour())
-        )
-
-        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
-            Detail.UVI,
-            currentWeather.uvi?.roundToInt().toString())
-        )
-
-        currentWeatherDetailsList.add(CurrentWeatherDetailsAdapter.DetailModel(
-            Detail.Visibility,
-            currentWeather.visibility.toKilometers())
-        )
-
+        currentWeatherDetailsList.addAll(currentWeather.toDetailsModelList(resources))
         adapter?.notifyItemRangeInserted(0, currentWeatherDetailsList.size)
+    }
+
+    private fun updateAlertsRecycler(newItems: List<Alert>) {
+        val adapter = binding.rvAlerts.adapter
+
+        // Clear old data
+        val previousSize = adapter?.itemCount ?: 0
+        alertList.clear()
+        adapter?.notifyItemRangeRemoved(0, previousSize)
+
+        // Set new data
+        alertList.addAll(newItems)
+        adapter?.notifyItemRangeInserted(0, newItems.size)
     }
 
     private fun showData(data: OneCallWeather) {
@@ -205,6 +189,9 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         binding.tvDate.text = data.currentWeather?.date?.formatAsDayWithTime()
         binding.tvWeatherDescription.text = data.currentWeather?.weather?.get(0)?.description?.replaceFirstChar(Char::titlecase)
 
+//        if (data.lat != null || data.lon != null)
+//            viewModel.fetchCity(data.lat!!, data.lon!!)
+
         Glide.with(this)
             .load(IconHelper.getByIconId(data.currentWeather?.weather?.get(0)))
             .into(binding.ivIcon)
@@ -213,6 +200,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         data.dailyWeather?.let { updateDailyWeatherRecycler(it) }
         data.hourlyWeather?.let { updateHourlyWeatherRecycler(it) }
         data.currentWeather?.let { updateCurrentWeatherDetailsRecycler(it) }
+        data.alerts?.let { updateAlertsRecycler(it) }
     }
 
 //    private fun navigateToLocationFragment() = findNavController()

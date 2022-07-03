@@ -9,15 +9,15 @@ import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.HourlyWeatherItemBinding
 import com.hellguy39.hellweather.domain.model.HourlyWeather
-import com.hellguy39.hellweather.presentation.activities.main.IconHelper
+import com.hellguy39.hellweather.helpers.IconHelper
 import com.hellguy39.hellweather.utils.formatAsHour
 import kotlin.math.roundToInt
 
-class HourlyWeatherAdapter(
+class HourlyForecastAdapter(
     private val dataSet: List<HourlyWeather>,
     private val callback: HourlyWeatherItemCallback,
     private val resources: Resources
-): RecyclerView.Adapter<HourlyWeatherAdapter.HourlyViewHolder>() {
+): RecyclerView.Adapter<HourlyForecastAdapter.HourlyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
         return  HourlyViewHolder(

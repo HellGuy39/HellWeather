@@ -43,7 +43,7 @@ data class DailyWeather(
     val windDeg: Int?,
     val windGust: Double?,
     val uvi: Double?,
-    val rain: Int?,
+    val rain: Double?,
     val pop: Double?,
     val clouds: Int?,
     val temp: Temp?,

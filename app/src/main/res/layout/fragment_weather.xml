@@ -130,10 +130,22 @@
                     android:layout_height="wrap_content"
                     android:transitionGroup="true"/>
 
+                <TextView
+                    android:id="@+id/tvTittleAlerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:textSize="16sp"
+                    android:text="Alerts" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAlerts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:transitionGroup="true"
+                    android:requiresFadingEdge="horizontal"
+                    android:fadingEdgeLength="16dp"/>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

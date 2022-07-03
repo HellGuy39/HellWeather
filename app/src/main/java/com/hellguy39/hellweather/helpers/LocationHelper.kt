@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.presentation.activities.main
+package com.hellguy39.hellweather.helpers
 
 import android.app.Activity
 import android.content.Context
@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import java.util.concurrent.TimeUnit
@@ -19,8 +18,8 @@ class LocationHelper(private val activity: Activity) {
         LocationServices.getFusedLocationProviderClient(activity)
 
     private val locationRequest = LocationRequest.create().apply {
-        interval = TimeUnit.SECONDS.toMillis(60)
-        fastestInterval = TimeUnit.SECONDS.toMillis(30)
+        interval = TimeUnit.SECONDS.toMillis(30)
+        fastestInterval = TimeUnit.SECONDS.toMillis(15)
         maxWaitTime = TimeUnit.SECONDS.toMillis(2)
         priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY
     }
@@ -30,10 +29,10 @@ class LocationHelper(private val activity: Activity) {
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,
                 object : LocationCallback() {
-                    override fun onLocationResult(p0: LocationResult) {
-                        super.onLocationResult(p0)
+                    override fun onLocationResult(result: LocationResult) {
+                        super.onLocationResult(result)
                         //Log.d("DEBUG", "onLocRes")
-                        continuation.resume(p0.lastLocation)
+                        continuation.resume(result.locations.last())
                         fusedLocationProviderClient.removeLocationUpdates(this)
                     }
 //

@@ -1,10 +1,14 @@
 package com.hellguy39.hellweather.di
 
+import com.hellguy39.hellweather.data.json.LocationNameParser
+import com.hellguy39.hellweather.data.json.OneCallWeatherParser
 import com.hellguy39.hellweather.data.remote.OpenWeatherApi
 import com.hellguy39.hellweather.data.repository.OpenWeatherRepositoryImpl
 import com.hellguy39.hellweather.domain.repository.OpenWeatherRepository
+import com.hellguy39.hellweather.domain.usecase.GetLocationNameUseCase
 import com.hellguy39.hellweather.domain.usecase.GetOneCallWeatherUseCase
-import dagger.Binds
+import com.hellguy39.hellweather.domain.wrapper.RemoteDataUseCases
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,15 +38,43 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOpenWeatherRepository(api: OpenWeatherApi): OpenWeatherRepository {
-        return OpenWeatherRepositoryImpl(api)
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().build()
     }
 
     @Provides
     @Singleton
-    fun provideGetOneCallWeatherUseCase(repository: OpenWeatherRepository): GetOneCallWeatherUseCase {
-        return GetOneCallWeatherUseCase(
-            repository
+    fun provideOneCallWeatherParser(moshi: Moshi): OneCallWeatherParser {
+        return OneCallWeatherParser(moshi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationNameParser(moshi: Moshi): LocationNameParser {
+        return LocationNameParser(moshi)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideOpenWeatherRepository(
+        api: OpenWeatherApi,
+        oneCallWeatherParser: OneCallWeatherParser,
+        locationNameParser: LocationNameParser
+    ): OpenWeatherRepository {
+        return OpenWeatherRepositoryImpl(
+            api = api,
+            locationNameParser = locationNameParser,
+            oneCallWeatherParser = oneCallWeatherParser
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataUseCases(repository: OpenWeatherRepository): RemoteDataUseCases {
+        return RemoteDataUseCases(
+            getLocationName = GetLocationNameUseCase(repository),
+            getOneCallWeather = GetOneCallWeatherUseCase(repository)
         )
     }
 

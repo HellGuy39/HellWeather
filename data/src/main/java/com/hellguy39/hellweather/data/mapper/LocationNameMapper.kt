@@ -9,6 +9,7 @@ fun LocationNameDto.toLocationName() : LocationName{
         lon = lon,
         name = name,
         localNames = localNames,
-        country = country
+        country = country,
+        state = state
     )
 }
