@@ -1,50 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootCard"
+    app:cardElevation="@dimen/card_default_elevation"
+    app:cardCornerRadius="@dimen/card_default_corner_radius"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_marginVertical="@dimen/card_default_vertical_margin"
+    android:layout_marginHorizontal="@dimen/card_default_horizontal_margin"
+    style="@style/Widget.Material3.CardView.Elevated">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/rootCard"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardElevation="@dimen/card_default_elevation"
-        app:cardCornerRadius="@dimen/card_default_corner_radius"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginVertical="@dimen/card_default_vertical_margin"
-        android:layout_marginHorizontal="@dimen/card_default_horizontal_margin"
-        style="@style/Widget.Material3.CardView.Elevated">
+        android:layout_height="match_parent"
+        android:padding="@dimen/layout_default_content_padding"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvDate"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="@dimen/layout_default_content_padding"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1"
             android:gravity="center"
-            android:orientation="vertical">
+            tools:text="9:41" />
 
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:gravity="center"
-                tools:text="9:41" />
+        <ImageView
+            android:id="@+id/ivIcon"
+            app:tint="?attr/colorOnSurface"
+            android:layout_margin="@dimen/icon_default_margin"
+            android:layout_width="@dimen/icon_large_size"
+            android:layout_height="@dimen/icon_large_size"/>
 
-            <ImageView
-                android:id="@+id/ivIcon"
-                android:layout_margin="@dimen/icon_default_margin"
-                android:layout_width="@dimen/icon_large_size"
-                android:layout_height="@dimen/icon_large_size"/>
-
-            <TextView
-                android:id="@+id/tvTemp"
-                android:textSize="22sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="21°"
-                android:gravity="center"/>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvTemp"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="21°"
+            android:gravity="center"/>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

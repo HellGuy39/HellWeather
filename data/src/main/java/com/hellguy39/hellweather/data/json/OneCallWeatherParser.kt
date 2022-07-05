@@ -6,12 +6,16 @@ import com.squareup.moshi.Moshi
 import okhttp3.ResponseBody
 
 class OneCallWeatherParser(
-    private val moshi: Moshi
+    moshi: Moshi
 ) {
     private val jsonAdapter: JsonAdapter<OneCallWeatherDto> =
         moshi.adapter(OneCallWeatherDto::class.java)
 
     fun parse(responseBody: ResponseBody): OneCallWeatherDto? {
         return jsonAdapter.fromJson(responseBody.string())
+    }
+
+    fun parse(response: String?): OneCallWeatherDto? {
+        return response?.let { jsonAdapter.fromJson(it) }
     }
 }

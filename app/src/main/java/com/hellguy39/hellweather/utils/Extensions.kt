@@ -40,6 +40,12 @@ internal fun Long.formatAsDay(): String {
     return formatter.format(date)
 }
 
+internal fun Long.formatAsTitleDate(): String {
+    val date = Date(this * 1000)
+    val formatter: DateFormat = SimpleDateFormat("E, MMM d, HH:mm")
+    return formatter.format(date)
+}
+
 internal fun Double?.toPercents(): Int {
     return if (this == null)
         0

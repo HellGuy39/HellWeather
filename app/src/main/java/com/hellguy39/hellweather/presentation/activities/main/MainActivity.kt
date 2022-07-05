@@ -10,11 +10,11 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.snackbar.Snackbar
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.helpers.LocationHelper
 import com.hellguy39.hellweather.presentation.activities.view_model.SharedViewModel
+import com.hellguy39.hellweather.utils.PermissionState
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity() {
         if(it[android.Manifest.permission.ACCESS_FINE_LOCATION] == true ||
             it[android.Manifest.permission.ACCESS_COARSE_LOCATION] == true)
         {
-            Snackbar.make(binding.root, "Permission granted", Snackbar.LENGTH_LONG).show()
+            viewModel.updatePermissionState(PermissionState.Granted)
         } else {
-            Snackbar.make(binding.root, "Permission denied", Snackbar.LENGTH_LONG).show()
+            viewModel.updatePermissionState(PermissionState.Denied)
         }
     }
 
@@ -58,30 +58,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun checkPermissions() : Boolean {
-        when {
-            !locationHelper.isPermissionsGranted() -> {
-                requestPermissionLauncher.launch(LocationHelper.permissions)
-                return false
-            }
-            !locationHelper.isGeolocationEnabled() -> {
-                Snackbar.make(binding.root, "Geolocation is disabled", Snackbar.LENGTH_LONG)
-                    .setAction("Open settings") {
-                        openLocationSettings()
-                    }
-                    .show()
-                return false
-            }
-            locationHelper.isPermissionsGranted() || locationHelper.isGeolocationEnabled() -> {
-                return true
-            }
-            else -> {
-                return false
-            }
+    fun checkPermissions() : Enum<PermissionState> {
+        return when {
+            !locationHelper.isPermissionsGranted() -> PermissionState.Denied
+            !locationHelper.isGeolocationEnabled() -> PermissionState.GPSDisabled
+            locationHelper.isPermissionsGranted() || locationHelper.isGeolocationEnabled() -> PermissionState.Granted
+            else -> PermissionState.Denied
         }
     }
 
-    private fun openLocationSettings() {
+    fun openLocationSettings() {
         startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+    }
+
+    fun requestPermission() {
+        requestPermissionLauncher.launch(LocationHelper.permissions)
     }
 }

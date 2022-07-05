@@ -4,26 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:transitionGroup="true"
+    android:fitsSystemWindows="true"
     tools:context=".presentation.fragments.location.LocationFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:transitionGroup="true">
 
         <TextView
             android:id="@+id/tvSupportText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
-            android:layout_marginTop="32dp"
             android:layout_marginEnd="64dp"
             android:gravity="center"
-            android:text="Grant access to your geolocation"
-            android:textSize="24sp"
+            android:text="HellWeather uses geolocation to always be useful wherever you are"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivIcon" />
+            app:layout_constraintTop_toBottomOf="@+id/lottieAnimView" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
@@ -32,35 +34,37 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.66" />
 
-        <ImageView
-            android:id="@+id/ivIcon"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:src="@drawable/ic_round_my_location_24"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimView"
+            android:layout_width="256dp"
+            android:layout_height="256dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/paperplane" />
 
         <TextView
             android:id="@+id/tvTittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
             android:text="Location"
-            android:textSize="32sp"
-            app:layout_constraintBottom_toTopOf="@+id/ivIcon"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline4"
+            app:layout_constraintBottom_toTopOf="@+id/lottieAnimView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/btnRequestPermission"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Got it!"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabGrantAccess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Button"
+        android:text="Grant access"
+        app:icon="@drawable/ic_location"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

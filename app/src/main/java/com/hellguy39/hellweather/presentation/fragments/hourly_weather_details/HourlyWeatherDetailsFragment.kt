@@ -44,6 +44,6 @@ class HourlyWeatherDetailsFragment : Fragment(R.layout.fragment_hourly_weather_d
     }
 
     private fun updateUI(hourlyWeather: HourlyWeather) {
-        binding.tvContent.text = hourlyWeather.toString()
+        //binding.tvContent.text = hourlyWeather.toString()
     }
 }

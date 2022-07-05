@@ -18,10 +18,10 @@ class LocationHelper(private val activity: Activity) {
         LocationServices.getFusedLocationProviderClient(activity)
 
     private val locationRequest = LocationRequest.create().apply {
-        interval = TimeUnit.SECONDS.toMillis(30)
-        fastestInterval = TimeUnit.SECONDS.toMillis(15)
-        maxWaitTime = TimeUnit.SECONDS.toMillis(2)
-        priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY
+        interval = TimeUnit.SECONDS.toMillis(15)
+        fastestInterval = TimeUnit.SECONDS.toMillis(2)
+       // maxWaitTime = TimeUnit.SECONDS.toMillis(2)
+        priority = Priority.PRIORITY_HIGH_ACCURACY
     }
 
     suspend fun getLocation(): Location? {
@@ -32,14 +32,9 @@ class LocationHelper(private val activity: Activity) {
                     override fun onLocationResult(result: LocationResult) {
                         super.onLocationResult(result)
                         //Log.d("DEBUG", "onLocRes")
-                        continuation.resume(result.locations.last())
                         fusedLocationProviderClient.removeLocationUpdates(this)
+                        continuation.resume(result.locations.last())
                     }
-//
-//                    override fun onLocationAvailability(p0: LocationAvailability) {
-//                        super.onLocationAvailability(p0)
-//                        Log.d("DEBUG", "Available: ${p0.isLocationAvailable}")
-//                    }
                 }, Looper.myLooper()
             )
         }

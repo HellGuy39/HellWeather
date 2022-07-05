@@ -1,10 +1,10 @@
 package com.hellguy39.hellweather.data.mapper
 
-import com.hellguy39.hellweather.data.remote.dto.LocationNameDto
-import com.hellguy39.hellweather.domain.model.LocationName
+import com.hellguy39.hellweather.data.remote.dto.LocationInfoDto
+import com.hellguy39.hellweather.domain.model.LocationInfo
 
-fun LocationNameDto.toLocationName() : LocationName{
-    return LocationName(
+fun LocationInfoDto.toLocationInfo() : LocationInfo{
+    return LocationInfo(
         lat = lat,
         lon = lon,
         name = name,

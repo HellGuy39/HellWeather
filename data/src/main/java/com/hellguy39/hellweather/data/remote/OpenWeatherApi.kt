@@ -17,7 +17,7 @@ interface OpenWeatherApi {
     ): ResponseBody
 
     @GET("geo/1.0/reverse?")
-    suspend fun getLocationName(
+    suspend fun getLocationInfo(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
         @Query("limit") limit: Int,

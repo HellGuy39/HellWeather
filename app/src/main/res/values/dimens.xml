@@ -14,7 +14,7 @@
 
     <!-- Card -->
     <dimen name="card_default_corner_radius">12dp</dimen>
-    <dimen name="card_default_elevation">8dp</dimen>
+    <dimen name="card_default_elevation">4dp</dimen>
     <dimen name="card_default_stroke_width">0dp</dimen>
     <dimen name="card_default_vertical_margin">8dp</dimen>
     <dimen name="card_default_horizontal_margin">8dp</dimen>
@@ -22,6 +22,9 @@
     <!-- Layout -->
     <dimen name="layout_default_content_padding">8dp</dimen>
 
+    <!-- Text sizes -->
+    <dimen name="page_title">20sp</dimen>
+    
     <!-- Icons -->
     <dimen name="icon_default_margin">8dp</dimen>
     <dimen name="icon_small_size">12dp</dimen>

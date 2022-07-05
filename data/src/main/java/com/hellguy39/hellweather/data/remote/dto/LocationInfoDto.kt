@@ -2,7 +2,7 @@ package com.hellguy39.hellweather.data.remote.dto
 
 import com.squareup.moshi.Json
 
-data class LocationNameDto(
+data class LocationInfoDto(
     @field:Json(name = "lat") val lat: Double?,
     @field:Json(name = "lon") val lon: Double?,
     @field:Json(name = "name") val name: String?,

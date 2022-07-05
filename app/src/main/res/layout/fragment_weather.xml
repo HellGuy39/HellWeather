@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:transitionGroup="true"
     tools:context=".presentation.fragments.weather.WeatherFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -24,75 +25,155 @@
                 android:paddingTop="8dp"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvCity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="22sp"
-                        tools:text="Krasnodar" />
-
-                    <TextView
-                        android:id="@+id/tvDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="18sp"
-                        tools:text="Tue, 9,41" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginVertical="16dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/currentWeatherConstraintLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/ivIcon"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            tools:src="@drawable/ic_cloudy" />
-
-                        <TextView
-                            android:id="@+id/tvWeatherDescription"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:gravity="center"
-                            android:textSize="20sp"
-                            tools:text="Scattered clouds" />
-                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvTemp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="64sp"
-                        tools:text="9°" />
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/chipCity"
+                        app:layout_constraintVertical_chainStyle="packed"
+                        tools:text="9" />
 
                     <TextView
-                        android:id="@+id/tvTempFeelsLike"
+                        android:id="@+id/tvUnits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_marginTop="24dp"
+                        android:text="°C"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                        app:layout_constraintStart_toEndOf="@+id/tvTemp"
+                        app:layout_constraintTop_toTopOf="@+id/tvTemp" />
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_weight="1"
+                        android:gravity="end|center"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"
+                        app:layout_constraintBottom_toBottomOf="@+id/chipCity"
+                        app:layout_constraintEnd_toStartOf="@+id/btnRefresh"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Tue, 9:41" />
+
+                    <Button
+                        android:id="@+id/btnRefresh"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        app:icon="@drawable/ic_refresh"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
+                        app:chipIcon="@drawable/ic_location"
+                        android:clickable="true"
+                        android:checked="false"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Russia, Krasnodar" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textSize="20sp"
-                        tools:text="Feels like 6°" />
-                </LinearLayout>
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toTopOf="@+id/tvTempFeelsLike"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTemp">
+
+                        <ImageView
+                            android:id="@+id/ivIcon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            app:tint="?attr/colorOnSurface"
+                            tools:src="@drawable/ic_cloudy" />
+
+                        <TextView
+                            android:id="@+id/tvWeatherDescription"
+                            style="@style/TextAppearance.MdcTypographyStyles.Headline5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            tools:text="Scattered clouds" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvTempFeelsLike"
+                        style="@style/TextAppearance.MdcTypographyStyles.Headline6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+                        tools:text="Feels like 6 °C" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardLocation"
+                        style="@style/Widget.Material3.CardView.Elevated"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginEnd="@dimen/card_default_horizontal_margin"
+                        android:layout_marginBottom="@dimen/card_default_vertical_margin"
+                        android:visibility="invisible"
+                        app:cardCornerRadius="@dimen/card_default_corner_radius"
+                        app:cardElevation="@dimen/card_default_elevation"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                        app:layout_constraintStart_toStartOf="@+id/chipCity"
+                        app:layout_constraintTop_toBottomOf="@+id/chipCity">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="@dimen/layout_default_content_padding">
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.63" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCurrentWeatherDetails"
@@ -104,9 +185,10 @@
                     android:id="@+id/tvTittleHourly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginHorizontal="8dp"
                     android:text="Hourly forecast"
-                    android:textSize="16sp" />
+                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvHourlyWeather"
@@ -121,7 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:textSize="16sp"
+                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1"
                     android:text="Daily forecast" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -135,7 +217,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:textSize="16sp"
+                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1"
                     android:text="Alerts" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -148,4 +230,12 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- An invisible scrim that captures click events when a chip has been expanded.-->
+    <View
+        android:id="@+id/recipient_card_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

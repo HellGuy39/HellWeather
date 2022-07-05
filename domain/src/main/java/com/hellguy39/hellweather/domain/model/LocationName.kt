@@ -1,6 +1,6 @@
 package com.hellguy39.hellweather.domain.model
 
-data class LocationName(
+data class LocationInfo(
     val lat: Double?,
     val lon: Double?,
     val name: String?,

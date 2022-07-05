@@ -46,6 +46,4 @@ class DailyWeatherDetailsFragment : Fragment(R.layout.fragment_daily_weather_det
     private fun updateUI(dailyWeather: DailyWeather) {
         binding.tvContent.text = dailyWeather.toString()
     }
-
-
 }

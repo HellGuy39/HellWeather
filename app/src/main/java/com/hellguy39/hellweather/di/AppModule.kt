@@ -1,13 +1,16 @@
 package com.hellguy39.hellweather.di
 
-import com.hellguy39.hellweather.data.json.LocationNameParser
+import android.app.Application
+import androidx.room.Room
+import com.hellguy39.hellweather.data.json.LocationInfoParser
 import com.hellguy39.hellweather.data.json.OneCallWeatherParser
+import com.hellguy39.hellweather.data.local.WeatherDatabase
 import com.hellguy39.hellweather.data.remote.OpenWeatherApi
-import com.hellguy39.hellweather.data.repository.OpenWeatherRepositoryImpl
-import com.hellguy39.hellweather.domain.repository.OpenWeatherRepository
-import com.hellguy39.hellweather.domain.usecase.GetLocationNameUseCase
-import com.hellguy39.hellweather.domain.usecase.GetOneCallWeatherUseCase
-import com.hellguy39.hellweather.domain.wrapper.RemoteDataUseCases
+import com.hellguy39.hellweather.data.repository.LocalRepositoryImpl
+import com.hellguy39.hellweather.data.repository.RemoteRepositoryImpl
+import com.hellguy39.hellweather.domain.repository.LocalRepository
+import com.hellguy39.hellweather.domain.repository.RemoteRepository
+import com.hellguy39.hellweather.domain.usecase.GetWeatherForecastUseCase
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -38,6 +41,16 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDatabase(app: Application): WeatherDatabase {
+        return Room.databaseBuilder(
+            app,
+            WeatherDatabase::class.java,
+            "weatherdb.db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
     fun provideMoshi(): Moshi {
         return Moshi.Builder().build()
     }
@@ -50,31 +63,48 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocationNameParser(moshi: Moshi): LocationNameParser {
-        return LocationNameParser(moshi)
+    fun provideLocationNameParser(moshi: Moshi): LocationInfoParser {
+        return LocationInfoParser(moshi)
     }
 
 
     @Provides
     @Singleton
-    fun provideOpenWeatherRepository(
+    fun provideRemoteRepository(
         api: OpenWeatherApi,
         oneCallWeatherParser: OneCallWeatherParser,
-        locationNameParser: LocationNameParser
-    ): OpenWeatherRepository {
-        return OpenWeatherRepositoryImpl(
+        locationInfoParser: LocationInfoParser
+    ): RemoteRepository {
+        return RemoteRepositoryImpl (
             api = api,
-            locationNameParser = locationNameParser,
+            locationInfoParser = locationInfoParser,
             oneCallWeatherParser = oneCallWeatherParser
         )
     }
 
     @Provides
     @Singleton
-    fun provideRemoteDataUseCases(repository: OpenWeatherRepository): RemoteDataUseCases {
-        return RemoteDataUseCases(
-            getLocationName = GetLocationNameUseCase(repository),
-            getOneCallWeather = GetOneCallWeatherUseCase(repository)
+    fun provideLocalRepository(
+        db: WeatherDatabase,
+        oneCallWeatherParser: OneCallWeatherParser,
+        locationInfoParser: LocationInfoParser
+    ): LocalRepository {
+        return LocalRepositoryImpl(
+            db.dao,
+            oneCallWeatherParser,
+            locationInfoParser
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetWeatherForecastUseCase(
+        remoteRepository: RemoteRepository,
+        localRepository: LocalRepository
+    ): GetWeatherForecastUseCase {
+        return GetWeatherForecastUseCase(
+            remoteRepo = remoteRepository,
+            localRepo = localRepository
         )
     }
 

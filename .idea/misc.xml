@@ -78,11 +78,13 @@
         <entry key="app/src/main/res/drawable/ic_flare.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_foggy.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_humidity.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_location.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_night_clear.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_night_partly_cloudy.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_outline_wb_cloudy_24.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_pressure.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_rainy.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_round_autorenew_24.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_round_my_location_24.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_snow.xml" value="0.241" />

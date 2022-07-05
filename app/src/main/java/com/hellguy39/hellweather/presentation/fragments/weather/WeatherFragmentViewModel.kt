@@ -1,11 +1,9 @@
 package com.hellguy39.hellweather.presentation.fragments.weather
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hellguy39.hellweather.domain.model.OneCallWeather
+import com.hellguy39.hellweather.domain.usecase.GetWeatherForecastUseCase
 import com.hellguy39.hellweather.domain.util.Resource
-import com.hellguy39.hellweather.domain.wrapper.RemoteDataUseCases
 import com.hellguy39.hellweather.helpers.LocationHelper
 import com.hellguy39.hellweather.utils.update
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,19 +14,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherFragmentViewModel @Inject constructor(
-    private val remoteDataUseCases: RemoteDataUseCases
+    private val getWeatherForecastUseCase: GetWeatherForecastUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(WeatherFragmentState())
     val uiState: StateFlow<WeatherFragmentState> = _uiState
-
-    fun fetchLocationAndWeather(locationHelper: LocationHelper) = viewModelScope.launch {
-//        _uiState.value = WeatherFragmentState(
-//            isLoading = true
-//        )
-        val location = locationHelper.getLocation()
-
-    }
 
     fun fetchWeather(locationHelper: LocationHelper) = viewModelScope.launch {
         _uiState.value = WeatherFragmentState(
@@ -42,7 +32,7 @@ class WeatherFragmentViewModel @Inject constructor(
                 error = "Couldn't get geolocation"
             )
         } else {
-            remoteDataUseCases.getOneCallWeather.invoke(
+            getWeatherForecastUseCase.invoke(
                 fetchFromRemote = true,
                 lat = location.latitude,
                 lon = location.longitude
@@ -69,22 +59,6 @@ class WeatherFragmentViewModel @Inject constructor(
                             )
                         }
                     }
-                }
-            }
-        }
-    }
-
-    fun fetchCity(lat: Double, lon: Double) = viewModelScope.launch {
-        remoteDataUseCases.getLocationName.invoke(lat = lat, lon = lon, limit = 5).collect {
-            when (it) {
-                is Resource.Success -> {
-                    Log.d("SUCCESS", it.data.toString())
-                }
-                is Resource.Error -> {
-                    Log.d("ERROR", it.message.toString())
-                }
-                is Resource.Loading -> {
-                    Log.d("LOADING", it.message.toString())
                 }
             }
         }
