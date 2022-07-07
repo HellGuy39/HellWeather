@@ -2,24 +2,8 @@ package com.hellguy39.hellweather.helpers
 
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.domain.model.Weather
-import com.hellguy39.hellweather.presentation.adapter.DetailTitle
 
 object IconHelper {
-
-    fun getDetailIcon(detail: Enum<DetailTitle>): Int {
-        return when(detail) {
-            DetailTitle.Clouds -> R.drawable.ic_cloudy
-            DetailTitle.DewPoint -> R.drawable.ic_thermostat
-            DetailTitle.Humidity -> R.drawable.ic_humidity
-            DetailTitle.Pressure -> R.drawable.ic_speed
-            DetailTitle.Sunset -> R.drawable.ic_expand_more
-            DetailTitle.Sunrise -> R.drawable.ic_expand_less
-            DetailTitle.UVI -> R.drawable.ic_flare
-            DetailTitle.Wind -> R.drawable.ic_wind
-            DetailTitle.Visibility -> R.drawable.ic_visibility
-            else -> R.drawable.ic_unknown
-        }
-    }
 
     fun getByIconId(weatherModel: Weather?): Int {
 

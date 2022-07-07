@@ -30,7 +30,7 @@ class RemoteRepositoryImpl(
                 units = "metric"
             )
 
-            val data = oneCallWeatherParser.parse(response)
+            val data = oneCallWeatherParser.parseFromJson(response)
 
             if (data != null)
                 return data.toOneCallWeather()
@@ -59,7 +59,7 @@ class RemoteRepositoryImpl(
                 apiKey = OpenWeatherApi.API_KEY
             )
 
-            val data = locationInfoParser.parse(response)
+            val data = locationInfoParser.parseFromJson(response)
 
             if (data != null)
                return data.map { it.toLocationInfo() }

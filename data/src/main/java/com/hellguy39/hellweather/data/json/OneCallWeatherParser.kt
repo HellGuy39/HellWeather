@@ -11,11 +11,16 @@ class OneCallWeatherParser(
     private val jsonAdapter: JsonAdapter<OneCallWeatherDto> =
         moshi.adapter(OneCallWeatherDto::class.java)
 
-    fun parse(responseBody: ResponseBody): OneCallWeatherDto? {
+    fun parseFromJson(responseBody: ResponseBody): OneCallWeatherDto? {
         return jsonAdapter.fromJson(responseBody.string())
     }
 
-    fun parse(response: String?): OneCallWeatherDto? {
+    fun parseFromJson(response: String?): OneCallWeatherDto? {
         return response?.let { jsonAdapter.fromJson(it) }
     }
+
+    fun parseToJson(oneCallWeatherDto: OneCallWeatherDto?): String? {
+        return jsonAdapter.toJson(oneCallWeatherDto)
+    }
+
 }

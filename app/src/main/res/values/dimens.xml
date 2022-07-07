@@ -20,6 +20,7 @@
     <dimen name="card_default_horizontal_margin">8dp</dimen>
 
     <!-- Layout -->
+    <dimen name="layout_short_content_padding">4dp</dimen>
     <dimen name="layout_default_content_padding">8dp</dimen>
 
     <!-- Text sizes -->

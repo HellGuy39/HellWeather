@@ -6,13 +6,11 @@
     android:id="@+id/rootCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="@dimen/card_default_elevation"
+    app:cardElevation="0dp"
     app:cardCornerRadius="@dimen/card_default_corner_radius"
-    android:clickable="true"
-    android:focusable="true"
     android:layout_marginVertical="@dimen/card_default_vertical_margin"
     android:layout_marginHorizontal="@dimen/card_default_horizontal_margin"
-    style="@style/Widget.Material3.CardView.Elevated">
+    style="@style/Widget.Material3.CardView.Outlined">
 
     <LinearLayout
         android:padding="@dimen/layout_default_content_padding"
@@ -46,10 +44,9 @@
 
         <TextView
             android:id="@+id/tvAnyValue"
-            android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"
             tools:text="10 km" />
 
     </LinearLayout>

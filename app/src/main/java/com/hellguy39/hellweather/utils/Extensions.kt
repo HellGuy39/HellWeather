@@ -1,13 +1,18 @@
 package com.hellguy39.hellweather.utils
 
 import android.content.res.Resources.Theme
+import android.media.Image
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.helpers.IconHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -57,7 +62,6 @@ internal fun Int?.toKilometers(): String {
     return (this?.div(1000)).toString() + " km"
 }
 
-
 inline fun <T> MutableStateFlow<T>.update(function: (T) -> T) {
     while (true) {
         val prevValue = value
@@ -66,6 +70,23 @@ inline fun <T> MutableStateFlow<T>.update(function: (T) -> T) {
             return
         }
     }
+}
+
+internal fun ImageView.setImageAsync(resId: Int) {
+    Glide.with(this.context)
+        .load(resId)
+        .into(this)
+}
+
+internal fun <T> RecyclerView.updateAndClearRecycler(adapterDataSet: MutableList<T>, newData: List<T>) {
+    val adapter = this.adapter
+    // Clear old data
+    val previousSize = adapter?.itemCount ?: 0
+    adapterDataSet.clear()
+    // Set new data
+    adapter?.notifyItemRangeRemoved(0, previousSize)
+    adapterDataSet.addAll(newData)
+    adapter?.notifyItemRangeInserted(0, adapterDataSet.size)
 }
 
 internal fun ChipGroup.addTagChips(dataSet: List<String>?) {

@@ -31,18 +31,148 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btnClose"
-                    style="@style/Widget.Material3.Button.IconButton"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                        android:layout_weight="1"
+                        tools:text="Tue, June 28, 12:00" />
+
+                    <Button
+                        android:id="@+id/btnClose"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:layout_gravity="end"
+                        app:icon="@drawable/ic_expand_more" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivIcon"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:src="@drawable/ic_day_partly_cloudy" />
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    app:icon="@drawable/ic_expand_more" />
+                    app:cardCornerRadius="@dimen/card_default_corner_radius"
+                    android:background="@color/transparent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="@dimen/layout_default_content_padding">
+
+                        <TextView
+                            android:id="@+id/tvTempDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Day: 11 °C" />
+                        <TextView
+                            android:id="@+id/tvTempNight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Night: 5 °C" />
+                        <TextView
+                            android:id="@+id/tvTempMin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Min: 3 °C" />
+                        <TextView
+                            android:id="@+id/tvTempMax"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Max: 12 °C" />
+                        <TextView
+                            android:id="@+id/tvTempEve"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Evening: 4 °C" />
+                        <TextView
+                            android:id="@+id/tvTempMorn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Morning: 5 °C" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/card_default_corner_radius"
+                    android:background="@color/transparent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="@dimen/layout_default_content_padding">
+
+                        <TextView
+                            android:id="@+id/tvTempFeelsDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Day: 11 °C" />
+                        <TextView
+                            android:id="@+id/tvTempFeelsNight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="Night: 3 °C"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+                        <TextView
+                            android:id="@+id/tvTempFeelsEve"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Evening: 4 °C" />
+                        <TextView
+                            android:id="@+id/tvTempFeelsMorn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            tools:text="Morning: 5 °C" />
+
+                    </LinearLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
-                    android:id="@+id/tvContent"
+                    android:id="@+id/tvDetails"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1"
+                    android:text="Details" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class WeatherForecastEntity(
     @PrimaryKey val id: Int? = null,
     val weatherJson: String?,
-    val locationJson: String
+    val locationJson: String?
 )

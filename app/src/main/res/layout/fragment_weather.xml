@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:transitionGroup="true"
     tools:context=".presentation.fragments.weather.WeatherFragment">
 
@@ -12,6 +11,7 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:transitionGroup="true">
 
         <androidx.core.widget.NestedScrollView
@@ -139,15 +139,13 @@
                         android:id="@+id/cardLocation"
                         style="@style/Widget.Material3.CardView.Elevated"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/card_default_horizontal_margin"
                         android:clickable="true"
                         android:focusable="true"
-                        android:layout_marginEnd="@dimen/card_default_horizontal_margin"
-                        android:layout_marginBottom="@dimen/card_default_vertical_margin"
                         android:visibility="invisible"
                         app:cardCornerRadius="@dimen/card_default_corner_radius"
                         app:cardElevation="@dimen/card_default_elevation"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/guideline3"
                         app:layout_constraintStart_toStartOf="@+id/chipCity"
                         app:layout_constraintTop_toBottomOf="@+id/chipCity">
@@ -159,10 +157,41 @@
                             android:padding="@dimen/layout_default_content_padding">
 
                             <TextView
-                                android:id="@+id/textView2"
+                                android:id="@+id/tvLat"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="TextView" />
+                                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                                tools:text="Lat: 45.21" />
+
+                            <TextView
+                                android:id="@+id/tvLon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                                tools:text="Lat: 38.64" />
+
+                            <TextView
+                                android:id="@+id/tvCountry"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                                tools:text="Country: Russia" />
+
+                            <TextView
+                                android:id="@+id/tvState"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                                tools:text="State: Krasnodarskiy Krai" />
+
+                            <TextView
+                                android:id="@+id/tvName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                                tools:text="Name: Krasnodar" />
+
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 

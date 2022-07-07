@@ -13,7 +13,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.MainActivityBinding
 import com.hellguy39.hellweather.helpers.LocationHelper
-import com.hellguy39.hellweather.presentation.activities.view_model.SharedViewModel
 import com.hellguy39.hellweather.utils.PermissionState
 import dagger.hilt.android.AndroidEntryPoint
 

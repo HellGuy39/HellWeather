@@ -1,35 +1,31 @@
 package com.hellguy39.hellweather.presentation.fragments.weather
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.SnapHelper
 import androidx.transition.TransitionManager
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialFadeThrough
-import com.google.android.material.transition.MaterialSharedAxis
-import com.google.android.material.transition.platform.MaterialElevationScale
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherBinding
 import com.hellguy39.hellweather.domain.model.*
 import com.hellguy39.hellweather.helpers.IconHelper
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
-import com.hellguy39.hellweather.presentation.activities.view_model.SharedViewModel
+import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.*
-import com.hellguy39.hellweather.utils.PermissionState
-import com.hellguy39.hellweather.utils.formatAsDayWithTime
+import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
+
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment(R.layout.fragment_weather),
@@ -57,7 +53,8 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         binding = FragmentWeatherBinding.bind(view)
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
-
+        //LinearSnapHelper().attachToRecyclerView()
+        binding.nsvContent
         binding.run {
             btnRefresh.setOnClickListener {
                 checkPermissionAndFetchWeather()
@@ -86,14 +83,10 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
     }
 
     private fun expandLocationChip() {
-        val transform = MaterialContainerTransform().apply {
-            startView = binding.chipCity
-            endView = binding.cardLocation
-            scrimColor = Color.TRANSPARENT
-            endElevation = 16f
-            addTarget(binding.cardLocation)
-        }
-        TransitionManager.beginDelayedTransition(binding.currentWeatherConstraintLayout, transform)
+        TransitionManager.beginDelayedTransition(
+            binding.currentWeatherConstraintLayout,
+            binding.chipCity.transformTo(binding.cardLocation, 16f)
+        )
         binding.run {
             chipCity.visibility = View.INVISIBLE
             cardLocation.visibility = View.VISIBLE
@@ -102,14 +95,10 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
     }
 
     private fun collapseLocationChip() {
-        val transform = MaterialContainerTransform().apply {
-            startView = binding.cardLocation
-            endView = binding.chipCity
-            scrimColor = Color.TRANSPARENT
-            endElevation = 0f
-            addTarget(binding.chipCity)
-        }
-        TransitionManager.beginDelayedTransition(binding.currentWeatherConstraintLayout, transform)
+        TransitionManager.beginDelayedTransition(
+            binding.currentWeatherConstraintLayout,
+            binding.cardLocation.transformTo(binding.chipCity, 0f)
+        )
         binding.run {
             chipCity.visibility = View.VISIBLE
             cardLocation.visibility = View.INVISIBLE
@@ -136,10 +125,11 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
             rvCurrentWeatherDetails.apply {
-                adapter = CurrentWeatherDetailsAdapter(
-                    dataSet = currentWeatherDetailsList
+                adapter = DetailsAdapter(
+                    dataSet = currentWeatherDetailsList,
+                    resources = resources
                 )
-                layoutManager = GridLayoutManager(context, CurrentWeatherDetailsAdapter.SPAN_COUNT)
+                layoutManager = GridLayoutManager(context, DetailsAdapter.SPAN_COUNT)
             }
             rvAlerts.apply {
                 adapter = AlertsAdapter(
@@ -158,14 +148,13 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
             Snackbar.make(binding.root, state.error, Snackbar.LENGTH_LONG)
                 .setAction("Retry") {
                     checkPermissionAndFetchWeather()
-                }
-                .show()
+                }.show()
         }
 
         state.data?.let { data ->
             data.oneCallWeather?.let { oneCallWeather -> showWeatherData(oneCallWeather) }
+            data.locationInfo?.let { list -> if (list.isNotEmpty()) showLocationInfo(list[0]) }
         }
-
     }
 
     private fun checkPermissionAndFetchWeather() {
@@ -178,105 +167,35 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         }
     }
 
-    private fun updateHourlyWeatherRecycler(newItems: List<HourlyWeather>) {
-        val adapter = binding.rvHourlyWeather.adapter
-
-        // Clear old data
-        val previousSize = adapter?.itemCount ?: 0
-        hourlyWeatherList.clear()
-        adapter?.notifyItemRangeRemoved(0, previousSize)
-
-        // Set new data
-        hourlyWeatherList.addAll(newItems)
-        adapter?.notifyItemRangeInserted(0, newItems.size)
-    }
-
-    private fun updateDailyWeatherRecycler(newItems: List<DailyWeather>) {
-        val adapter = binding.rvDailyWeather.adapter
-
-        // Clear old data
-        val previousSize = adapter?.itemCount ?: 0
-        dailyWeatherList.clear()
-        adapter?.notifyItemRangeRemoved(0, previousSize)
-
-        // Set new data
-        dailyWeatherList.addAll(newItems)
-        adapter?.notifyItemRangeInserted(0, newItems.size)
-    }
-
-    private fun updateCurrentWeatherDetailsRecycler(currentWeather: CurrentWeather) {
-        val adapter = binding.rvCurrentWeatherDetails.adapter
-
-        // Clear old data
-        val previousSize = adapter?.itemCount ?: 0
-        currentWeatherDetailsList.clear()
-        adapter?.notifyItemRangeRemoved(0, previousSize)
-
-        // Set new data
-        currentWeatherDetailsList.addAll(currentWeather.toDetailsModelList(resources))
-        adapter?.notifyItemRangeInserted(0, currentWeatherDetailsList.size)
-    }
-
-    private fun updateAlertsRecycler(newItems: List<Alert>) {
-        val adapter = binding.rvAlerts.adapter
-
-        // Clear old data
-        val previousSize = adapter?.itemCount ?: 0
-        alertList.clear()
-        adapter?.notifyItemRangeRemoved(0, previousSize)
-
-        // Set new data
-        alertList.addAll(newItems)
-        adapter?.notifyItemRangeInserted(0, newItems.size)
-    }
-
     private fun showWeatherData(data: OneCallWeather) {
-
-        Glide.with(this)
-            .load(IconHelper.getByIconId(data.currentWeather?.weather?.get(0)))
-            .into(binding.ivIcon)
 
         TransitionManager.beginDelayedTransition(binding.refreshLayout, MaterialFadeThrough())
 
-        binding.tvTemp.text = data.currentWeather?.temp?.roundToInt().toString()//resources.getString(R.string.value_as_temp, data.currentWeather?.temp?.roundToInt())
-        binding.tvTempFeelsLike.text = resources.getString(
-            R.string.feels_like,
-            data.currentWeather?.feelsLike?.roundToInt()
-        )
-        binding.tvDate.text = data.currentWeather?.date?.formatAsDayWithTime()
-        binding.tvWeatherDescription.text = data.currentWeather?.weather?.get(0)?.description?.replaceFirstChar(Char::titlecase)
-
-//        if (data.lat != null || data.lon != null)
-//            viewModel.fetchCity(data.lat!!, data.lon!!)
-
-        // Recyclers
-        data.dailyWeather?.let { updateDailyWeatherRecycler(it) }
-        data.hourlyWeather?.let { updateHourlyWeatherRecycler(it) }
-        data.currentWeather?.let { updateCurrentWeatherDetailsRecycler(it) }
-        data.alerts?.let { updateAlertsRecycler(it) }
+        binding.run {
+            tvTemp.text = data.currentWeather?.temp?.roundToInt().toString()//resources.getString(R.string.value_as_temp, data.currentWeather?.temp?.roundToInt())
+            tvTempFeelsLike.text = resources.getString(
+                R.string.feels_like,
+                data.currentWeather?.feelsLike?.roundToInt()
+            )
+            tvDate.text = data.currentWeather?.date?.formatAsTitleDate()
+            tvWeatherDescription.text = data.currentWeather?.weather?.get(0)?.description?.replaceFirstChar(Char::titlecase)
+            ivIcon.setImageAsync(IconHelper.getByIconId(data.currentWeather?.weather?.get(0)))
+            data.dailyWeather?.let { rvDailyWeather.updateAndClearRecycler(dailyWeatherList, it) }
+            data.hourlyWeather?.let { rvHourlyWeather.updateAndClearRecycler(hourlyWeatherList, it) }
+            data.currentWeather?.let { rvCurrentWeatherDetails.updateAndClearRecycler(currentWeatherDetailsList, it.toDetailsModelList(resources)) }
+            data.alerts?.let { rvAlerts.updateAndClearRecycler(alertList, it) }
+        }
     }
 
-    private fun navigateToLocationFragment() {
-        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
-        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-        val directions = WeatherFragmentDirections.actionWeatherFragmentToLocationFragment()
-        findNavController().navigate(directions)
-    }
-
-    private fun navigateToDailyWeatherDetailsFragment(itemView: View) {
-        exitTransition = MaterialElevationScale(false)
-        reenterTransition = MaterialElevationScale(true)
-        val directions = WeatherFragmentDirections.actionWeatherFragmentToDailyWeatherDetailsFragment()
-        val extras = FragmentNavigatorExtras(itemView to getString(R.string.weather_card_details_transition))
-        findNavController().navigate(directions, extras)
-    }
-
-    private fun navigateToHourlyWeatherDetailsFragment(itemView: View) {
-        exitTransition = MaterialElevationScale(false)
-        reenterTransition = MaterialElevationScale(true)
-        val directions = WeatherFragmentDirections.actionWeatherFragmentToHourlyWeatherDetailsFragment()
-        val extras = FragmentNavigatorExtras(itemView to getString(R.string.weather_card_details_transition))
-        findNavController().navigate(directions, extras)
+    private fun showLocationInfo(info: LocationInfo) {
+        binding.run {
+            chipCity.text = getString(R.string.country_and_city_name, info.country, info.name)
+            tvLat.text = getString(R.string.lat, info.lat?.toFloat())
+            tvLon.text = getString(R.string.lon, info.lon?.toFloat())
+            tvCountry.text = getString(R.string.country, info.country)
+            tvState.text = getString(R.string.state, info.state)
+            tvName.text = getString(R.string.city_name, info.name)
+        }
     }
 
     override fun onClick(dailyWeather: DailyWeather, position: Int, itemView: View) {
@@ -292,14 +211,12 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
     override fun onClick(view: View?) {
         when(view?.id) {
             binding.recipientCardScrim.id -> {
-                if (binding.chipCity.visibility == View.INVISIBLE) {
+                if (!binding.chipCity.isVisible)
                     collapseLocationChip()
-                }
             }
             binding.chipCity.id -> {
-                if(binding.chipCity.visibility == View.VISIBLE) {
+                if(binding.chipCity.isVisible)
                     expandLocationChip()
-                }
             }
             else -> Unit
         }

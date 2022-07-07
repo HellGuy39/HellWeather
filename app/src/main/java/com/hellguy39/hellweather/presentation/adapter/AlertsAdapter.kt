@@ -10,6 +10,7 @@ import com.hellguy39.hellweather.databinding.AlertItemBinding
 import com.hellguy39.hellweather.domain.model.Alert
 import com.hellguy39.hellweather.utils.addTagChips
 import com.hellguy39.hellweather.utils.formatAsDayWithTime
+import com.hellguy39.hellweather.utils.formatAsTitleDate
 
 class AlertsAdapter(
     private val dataSet: List<Alert>,
@@ -36,8 +37,8 @@ class AlertsAdapter(
         fun bind(alert: Alert) {
             binding.run {
                 tvEvent.text = alert.event
-                tvDateEnd.text = resources.getString(R.string.date_end, alert.end?.formatAsDayWithTime())
-                tvDateStart.text = resources.getString(R.string.date_start, alert.start?.formatAsDayWithTime())
+                tvDateEnd.text = resources.getString(R.string.date_end, alert.end?.formatAsTitleDate())
+                tvDateStart.text = resources.getString(R.string.date_start, alert.start?.formatAsTitleDate())
                 tvSender.text = resources.getString(R.string.sender, alert.senderName)
                 tvDescription.text = alert.description
                 tagGroup.addTagChips(alert.tags)

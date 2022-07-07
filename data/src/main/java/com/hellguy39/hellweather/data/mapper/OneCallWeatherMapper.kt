@@ -118,3 +118,119 @@ fun AlertDto.toAlert() : Alert {
         tags = tags,
     )
 }
+
+fun OneCallWeather.toOneCallWeatherDto(): OneCallWeatherDto {
+    return OneCallWeatherDto(
+        lat = lat,
+        lon = lon,
+        timezone = timezone,
+        timezoneOffset = timezoneOffset,
+        currentWeather = currentWeather?.toCurrentWeatherDto(),
+        dailyWeather = dailyWeather?.map { it.toDailyWeatherDto() },
+        hourlyWeather = hourlyWeather?.map { it.toHourlyWeatherDto() },
+        alerts = alerts?.map { it.toAlertDto() }
+    )
+}
+
+fun CurrentWeather.toCurrentWeatherDto(): CurrentWeatherDto {
+    return CurrentWeatherDto(
+        date = date,
+        sunrise = sunrise,
+        sunset = sunset,
+        temp = temp,
+        feelsLike = feelsLike,
+        pressure = pressure,
+        humidity = humidity,
+        dewPoint = dewPoint,
+        uvi = uvi,
+        clouds = clouds,
+        visibility = visibility,
+        windSpeed = windSpeed,
+        windDeg = windDeg,
+        windGust = windGust,
+        weather = weather?.map { it.toWeatherDto() }
+    )
+}
+
+fun DailyWeather.toDailyWeatherDto(): DailyWeatherDto {
+    return DailyWeatherDto(
+        date = date,
+        sunrise = sunrise,
+        sunset = sunset,
+        moonrise = moonrise,
+        moonSet = moonSet,
+        moonPhase = moonPhase,
+        pressure = pressure,
+        humidity = humidity,
+        dewPoint = dewPoint,
+        windSpeed = windSpeed,
+        windDeg = windDeg,
+        windGust = windGust,
+        uvi = uvi,
+        rain = rain,
+        pop = pop,
+        clouds = clouds,
+        temp = temp?.toTempDto(),
+        feelsLike = feelsLike?.toFeelsLikeDto(),
+        weather = weather?.map { it.toWeatherDto() }
+    )
+}
+
+fun Temp.toTempDto(): TempDto {
+    return TempDto(
+        day = day,
+        min = min,
+        max = max,
+        night = night,
+        eve = eve,
+        morn = morn
+    )
+}
+
+fun FeelsLike.toFeelsLikeDto(): FeelsLikeDto {
+    return FeelsLikeDto(
+        day = day,
+        night = night,
+        eve = eve,
+        morn = morn,
+    )
+}
+
+fun HourlyWeather.toHourlyWeatherDto(): HourlyWeatherDto {
+    return HourlyWeatherDto(
+        date = date,
+        temp = temp,
+        feelsLike = feelsLike,
+        pressure = pressure,
+        humidity = humidity,
+        dewPoint = dewPoint,
+        uvi = uvi,
+        clouds = clouds,
+        visibility = visibility,
+        windSpeed = windSpeed,
+        windDeg = windDeg,
+        windGust = windGust,
+        weather = weather?.map { it.toWeatherDto() },
+        pop = pop
+    )
+}
+
+fun Weather.toWeatherDto(): WeatherDto {
+    return WeatherDto(
+        id = id,
+        main = main,
+        description = description,
+        icon = icon,
+    )
+}
+
+fun Alert.toAlertDto() : AlertDto {
+    return AlertDto(
+        senderName = senderName,
+        event = event,
+        description = description,
+        start = start,
+        end = end,
+        tags = tags,
+    )
+}
