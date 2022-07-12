@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.HourlyWeatherItemBinding
 import com.hellguy39.hellweather.domain.model.HourlyWeather
 import com.hellguy39.hellweather.helpers.IconHelper
 import com.hellguy39.hellweather.utils.formatAsHour
+import com.hellguy39.hellweather.utils.setImageAsync
 import kotlin.math.roundToInt
 
 class HourlyForecastAdapter(
@@ -41,17 +41,19 @@ class HourlyForecastAdapter(
             position: Int,
             callback: HourlyWeatherItemCallback
         ) {
-            binding.tvDate.text = if (position == 0) " Now " else hourlyWeather.date?.formatAsHour()
+            binding.run {
+                ivIcon.setImageAsync(IconHelper.getByIconId(hourlyWeather.weather?.get(0)))
+                tvDate.text =
+                    if (position == 0)
+                        resources.getString(R.string.text_now)
+                    else
+                        hourlyWeather.date?.formatAsHour()
 
-            binding.tvTemp.text = resources.getString(R.string.value_as_temp, hourlyWeather.temp?.roundToInt())
-
-            Glide.with(itemView)
-                .load(IconHelper.getByIconId(hourlyWeather.weather?.get(0)))
-                .into(binding.ivIcon)
-
-            binding.rootCard.transitionName = R.string.hourly_details_transition.toString() + position.toString()
-            binding.rootCard.setOnClickListener {
-                callback.onClick(hourlyWeather, position, binding.rootCard)
+                tvTemp.text = resources.getString(R.string.text_value_temp, hourlyWeather.temp?.roundToInt())
+                rootCard.transitionName = R.string.hourly_details_transition.toString() + position.toString()
+                rootCard.setOnClickListener {
+                    callback.onClick(hourlyWeather, position, binding.rootCard)
+                }
             }
         }
     }

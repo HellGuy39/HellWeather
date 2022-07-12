@@ -2,11 +2,13 @@ package com.hellguy39.hellweather.presentation.fragments.weather
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hellguy39.hellweather.domain.usecase.GetCachedForecastUseCase
 import com.hellguy39.hellweather.domain.usecase.GetWeatherForecastUseCase
 import com.hellguy39.hellweather.domain.util.Resource
-import com.hellguy39.hellweather.helpers.LocationHelper
+import com.hellguy39.hellweather.helpers.LocationManager
 import com.hellguy39.hellweather.utils.update
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,17 +16,41 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherFragmentViewModel @Inject constructor(
-    private val getWeatherForecastUseCase: GetWeatherForecastUseCase
+    private val getWeatherForecastUseCase: GetWeatherForecastUseCase,
+    private val getCachedForecastUseCase: GetCachedForecastUseCase,
+    private val locationManager: LocationManager
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(WeatherFragmentState())
     val uiState: StateFlow<WeatherFragmentState> = _uiState
 
-    fun fetchWeather(locationHelper: LocationHelper) = viewModelScope.launch {
+    init {
+        fetchWeatherFromLocal()
+        fetchWeatherFromRemote()
+    }
+
+    private fun fetchWeatherFromLocal() = viewModelScope.launch {
+        getCachedForecastUseCase.invoke().collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            data = resource.data
+                        )
+                    }
+                }
+                else -> Unit
+            }
+        }
+    }
+
+    fun fetchWeatherFromRemote() = viewModelScope.launch {
+
         _uiState.value = WeatherFragmentState(
             isLoading = true
         )
-        val location = locationHelper.getLocation()
+
+        val location = locationManager.getLocation()
 
         if (location == null) {
             _uiState.value = WeatherFragmentState(
@@ -33,7 +59,6 @@ class WeatherFragmentViewModel @Inject constructor(
             )
         } else {
             getWeatherForecastUseCase.invoke(
-                fetchFromRemote = true,
                 lat = location.latitude,
                 lon = location.longitude
             ).collect { resource ->

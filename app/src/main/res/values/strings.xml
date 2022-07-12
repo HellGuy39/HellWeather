@@ -9,20 +9,30 @@
 
     <!-- Data display -->
     <string name="chip_min_max_temp" translatable="false">%1$d / %2$d C°</string>
-    <string name="value_in_percents" translatable="false">%1$d %%</string>
-    <string name="value_as_temp" translatable="false">%1$d °C</string>
-    <string name="value_as_pressure" translatable="false">%1$d hPa</string>
-    <string name="value_meters_per_sec" translatable="false">%1$d m/s</string>
-    <string name="feels_like" translatable="false">Feels like %1$d °C</string>
-    <string name="date_start" translatable="false">Start at %1$s</string>
-    <string name="date_end" translatable="false">End at %1$s</string>
-    <string name="sender" translatable="false">Sender: %1$s</string>
-    <string name="country_and_city_name" translatable="false">%1$s, %2$s</string>
-    <string name="lat" translatable="false">Lat: %1$.2f</string>
-    <string name="lon" translatable="false">Lon: %1$.2f</string>
-    <string name="country" translatable="false">Country: %1$s</string>
-    <string name="state" translatable="false">State: %1$s</string>
-    <string name="city_name" translatable="false">Name: %1$s</string>
+    <string name="text_value_percents" translatable="false">%1$d %%</string>
+    <string name="text_value_temp" translatable="false">%1$d °C</string>
+    <string name="text_value_pressure" translatable="false">%1$d hPa</string>
+    <string name="text_value_meters_per_sec" translatable="false">%1$d m/s</string>
+    <string name="text_temp_feels_like" translatable="false">Feels like %1$d °C</string>
+    <string name="text_date_start" translatable="false">Start at %1$s</string>
+    <string name="text_date_end" translatable="false">End at %1$s</string>
+    <string name="text_sender" translatable="false">Sender: %1$s</string>
+    <string name="text_country_and_city_name" translatable="false">%1$s, %2$s</string>
+    <string name="text_lat" translatable="false">Lat: %1$.2f</string>
+    <string name="text_lon" translatable="false">Lon: %1$.2f</string>
+    <string name="text_country" translatable="false">Country: %1$s</string>
+    <string name="text_state" translatable="false">State: %1$s</string>
+    <string name="text_city_name" translatable="false">Name: %1$s</string>
+    <string name="text_temp_morn">Morning: %1$d C°</string>
+    <string name="text_temp_eve">Evening: %1$d C°</string>
+    <string name="text_temp_min">Min: %1$d C°</string>
+    <string name="text_temp_max">Max: %1$d C°</string>
+    <string name="text_temp_day">Day: %1$d C°</string>
+    <string name="text_temp_night">Night: %1$d C°</string>
+
+    <string name="text_retry">Retry</string>
+    <string name="text_today">Today</string>
+    <string name="text_now"> Now </string>
 
     <string name="text_pop">Probability of precipitation</string>
     <string name="text_clouds">Clouds</string>
@@ -35,5 +45,11 @@
     <string name="text_uv_index">UV index</string>
     <string name="text_visibility">Visibility</string>
     <string name="text_unknown">Unknown</string>
+
+    <string name="title_feels_like">Feels like</string>
+    <string name="title_details">Details</string>
+    <string name="title_hourly_forecast">Hourly forecast</string>
+    <string name="title_daily_forecast">Daily forecast</string>
+    <string name="title_alerts">Alerts</string>
 
 </resources>

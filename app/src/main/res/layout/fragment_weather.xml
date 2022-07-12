@@ -32,14 +32,22 @@
                     android:layout_marginBottom="16dp"
                     android:orientation="vertical">
 
+                    <ImageView
+                        android:id="@+id/ivIcon"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/chipCity"
+                        app:tint="?attr/colorOnSurface"
+                        tools:src="@drawable/ic_cloudy" />
+
                     <TextView
                         android:id="@+id/tvTemp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
-                        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/chipCity"
                         app:layout_constraintVertical_chainStyle="packed"
@@ -55,19 +63,6 @@
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                         app:layout_constraintStart_toEndOf="@+id/tvTemp"
                         app:layout_constraintTop_toTopOf="@+id/tvTemp" />
-
-                    <TextView
-                        android:id="@+id/tvDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:layout_weight="1"
-                        android:gravity="end|center"
-                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"
-                        app:layout_constraintBottom_toBottomOf="@+id/chipCity"
-                        app:layout_constraintEnd_toStartOf="@+id/btnRefresh"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Tue, 9:41" />
 
                     <Button
                         android:id="@+id/btnRefresh"
@@ -94,34 +89,15 @@
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="Russia, Krasnodar" />
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout3"
+                    <TextView
+                        android:id="@+id/tvWeatherDescription"
+                        style="@style/TextAppearance.MdcTypographyStyles.Headline5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toTopOf="@+id/tvTempFeelsLike"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        android:layout_marginStart="16dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvTemp">
-
-                        <ImageView
-                            android:id="@+id/ivIcon"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            app:tint="?attr/colorOnSurface"
-                            tools:src="@drawable/ic_cloudy" />
-
-                        <TextView
-                            android:id="@+id/tvWeatherDescription"
-                            style="@style/TextAppearance.MdcTypographyStyles.Headline5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            tools:text="Scattered clouds" />
-                    </LinearLayout>
+                        app:layout_constraintTop_toBottomOf="@+id/tvTemp"
+                        tools:text="Scattered clouds" />
 
                     <TextView
                         android:id="@+id/tvTempFeelsLike"
@@ -129,10 +105,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintBottom_toTopOf="@+id/tvDate"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+                        app:layout_constraintTop_toBottomOf="@+id/tvWeatherDescription"
                         tools:text="Feels like 6 °C" />
 
                     <com.google.android.material.card.MaterialCardView
@@ -148,7 +124,8 @@
                         app:cardElevation="@dimen/card_default_elevation"
                         app:layout_constraintEnd_toStartOf="@+id/guideline3"
                         app:layout_constraintStart_toStartOf="@+id/chipCity"
-                        app:layout_constraintTop_toBottomOf="@+id/chipCity">
+                        app:layout_constraintTop_toBottomOf="@+id/chipCity"
+                        tools:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -204,6 +181,15 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    android:layout_marginEnd="8dp"
+                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle2"
+                    tools:text="Tue, 9:41" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCurrentWeatherDetails"
                     android:transitionGroup="true"
@@ -216,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="8dp"
                     android:layout_marginHorizontal="8dp"
-                    android:text="Hourly forecast"
+                    android:text="@string/title_hourly_forecast"
                     android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -233,7 +219,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1"
-                    android:text="Daily forecast" />
+                    android:text="@string/title_daily_forecast" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvDailyWeather"
@@ -247,7 +233,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1"
-                    android:text="Alerts" />
+                    android:text="@string/title_alerts" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvAlerts"

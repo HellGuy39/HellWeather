@@ -1,6 +1,5 @@
 package com.hellguy39.hellweather.helpers
 
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -8,20 +7,36 @@ import android.location.LocationManager
 import android.os.Looper
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
+import com.hellguy39.hellweather.utils.PermissionState
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class LocationHelper(private val activity: Activity) {
+@Singleton
+class LocationManager @Inject constructor (
+    @ApplicationContext private val context: Context
+) {
 
     private var fusedLocationProviderClient: FusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(activity)
+        LocationServices.getFusedLocationProviderClient(context)
 
     private val locationRequest = LocationRequest.create().apply {
         interval = TimeUnit.SECONDS.toMillis(15)
         fastestInterval = TimeUnit.SECONDS.toMillis(2)
        // maxWaitTime = TimeUnit.SECONDS.toMillis(2)
         priority = Priority.PRIORITY_HIGH_ACCURACY
+    }
+
+    fun checkPermissions() : Enum<PermissionState> {
+        return when {
+            isPermissionsGranted() -> PermissionState.Denied
+            isGeolocationEnabled() -> PermissionState.GPSDisabled
+            isPermissionsGranted() || isGeolocationEnabled() -> PermissionState.Granted
+            else -> PermissionState.Denied
+        }
     }
 
     suspend fun getLocation(): Location? {
@@ -41,7 +56,7 @@ class LocationHelper(private val activity: Activity) {
     }
 
     fun isPermissionsGranted(): Boolean {
-        return isFineLocationGranted(activity) || isCoarseLocationGranted(activity)
+        return isFineLocationGranted(context) || isCoarseLocationGranted(context)
     }
 
     private fun isFineLocationGranted(context: Context): Boolean =
@@ -54,7 +69,7 @@ class LocationHelper(private val activity: Activity) {
                 == PackageManager.PERMISSION_GRANTED)
 
     fun isGeolocationEnabled(): Boolean {
-        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }

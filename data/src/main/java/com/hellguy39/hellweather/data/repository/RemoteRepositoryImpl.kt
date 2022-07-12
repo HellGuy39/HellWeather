@@ -8,6 +8,7 @@ import com.hellguy39.hellweather.data.remote.OpenWeatherApi
 import com.hellguy39.hellweather.domain.model.LocationInfo
 import com.hellguy39.hellweather.domain.model.OneCallWeather
 import com.hellguy39.hellweather.domain.repository.RemoteRepository
+import com.hellguy39.hellweather.domain.util.Resource
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -20,8 +21,8 @@ class RemoteRepositoryImpl(
     override suspend fun getOneCallWeather(
         lat: Double,
         lon: Double
-    ): OneCallWeather? {
-        return try {
+    ): Resource<OneCallWeather> {
+        try {
             val response = api.getOneCall(
                 lat = lat,
                 lon = lon,
@@ -32,17 +33,17 @@ class RemoteRepositoryImpl(
 
             val data = oneCallWeatherParser.parseFromJson(response)
 
-            if (data != null)
-                return data.toOneCallWeather()
+            return if (data != null)
+                Resource.Success(data.toOneCallWeather())
             else
-                null
+                Resource.Error(message = "Couldn't load data")
 
         } catch (e: IOException) {
             e.printStackTrace()
-            return null
+            return Resource.Error(message = "Couldn't load data")
         } catch (e: HttpException) {
             e.printStackTrace()
-            return null
+            return Resource.Error(message = "Couldn't load data")
         }
     }
 
@@ -50,8 +51,8 @@ class RemoteRepositoryImpl(
         lat: Double,
         lon: Double,
         limit: Int
-    ): List<LocationInfo>? {
-        return try {
+    ): Resource<List<LocationInfo>> {
+        try {
             val response = api.getLocationInfo(
                 lat = lat,
                 lon = lon,
@@ -61,16 +62,16 @@ class RemoteRepositoryImpl(
 
             val data = locationInfoParser.parseFromJson(response)
 
-            if (data != null)
-               return data.map { it.toLocationInfo() }
+            return if (data != null)
+                Resource.Success(data.map { it.toLocationInfo() })
             else
-                null
+                Resource.Error(message = "Couldn't load data")
         } catch (e: IOException) {
             e.printStackTrace()
-            null
+            return Resource.Error(message = "Couldn't load data")
         } catch (e: HttpException) {
             e.printStackTrace()
-            null
+            return Resource.Error(message = "Couldn't load data")
         }
     }
 }

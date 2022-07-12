@@ -13,8 +13,6 @@ import com.hellguy39.hellweather.databinding.FragmentLocationBinding
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.MainActivityViewModel
 import com.hellguy39.hellweather.utils.PermissionState
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.job
 
 class LocationFragment : Fragment(R.layout.fragment_location) {
 
@@ -44,12 +42,6 @@ class LocationFragment : Fragment(R.layout.fragment_location) {
                 }
             }
         }
-
-//        Snackbar.make(binding.root, "Geolocation is disabled", Snackbar.LENGTH_LONG)
-//            .setAction("Open settings") {
-//                openLocationSettings()
-//            }
-//            .show()
     }
 
     private fun onAccessGranted() {

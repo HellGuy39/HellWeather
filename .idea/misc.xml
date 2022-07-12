@@ -101,17 +101,17 @@
         <entry key="app/src/main/res/layout/chip_tag.xml" value="0.29635416666666664" />
         <entry key="app/src/main/res/layout/current_weather_detail_item.xml" value="0.3825944170771757" />
         <entry key="app/src/main/res/layout/daily_weather_item.xml" value="0.36273752848307295" />
-        <entry key="app/src/main/res/layout/fragment_daily_weather_details.xml" value="0.3595580063857042" />
-        <entry key="app/src/main/res/layout/fragment_hourly_weather_details.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/fragment_daily_weather_details.xml" value="0.3386714116251483" />
+        <entry key="app/src/main/res/layout/fragment_hourly_weather_details.xml" value="0.30210418701171876" />
         <entry key="app/src/main/res/layout/fragment_location.xml" value="0.29739583333333336" />
-        <entry key="app/src/main/res/layout/fragment_weather.xml" value="0.44161834716796877" />
+        <entry key="app/src/main/res/layout/fragment_weather.xml" value="0.23501586914062503" />
         <entry key="app/src/main/res/layout/hourly_weather_item.xml" value="0.3244852701822916" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.39114583333333336" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

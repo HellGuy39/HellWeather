@@ -6,9 +6,12 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import okhttp3.ResponseBody
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LocationInfoParser(
-    private val moshi: Moshi
+@Singleton
+class LocationInfoParser @Inject constructor(
+    moshi: Moshi
 ) {
 
     private val jsonAdapter: JsonAdapter<List<LocationInfoDto>> = moshi.adapter(

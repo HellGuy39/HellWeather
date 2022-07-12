@@ -37,9 +37,9 @@ class AlertsAdapter(
         fun bind(alert: Alert) {
             binding.run {
                 tvEvent.text = alert.event
-                tvDateEnd.text = resources.getString(R.string.date_end, alert.end?.formatAsTitleDate())
-                tvDateStart.text = resources.getString(R.string.date_start, alert.start?.formatAsTitleDate())
-                tvSender.text = resources.getString(R.string.sender, alert.senderName)
+                tvDateEnd.text = resources.getString(R.string.text_date_end, alert.end?.formatAsTitleDate())
+                tvDateStart.text = resources.getString(R.string.text_date_start, alert.start?.formatAsTitleDate())
+                tvSender.text = resources.getString(R.string.text_sender, alert.senderName)
                 tvDescription.text = alert.description
                 tagGroup.addTagChips(alert.tags)
             }

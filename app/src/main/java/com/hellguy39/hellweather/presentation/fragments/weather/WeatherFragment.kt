@@ -10,8 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.SnapHelper
 import androidx.transition.TransitionManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialFadeThrough
@@ -19,13 +17,14 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherBinding
 import com.hellguy39.hellweather.domain.model.*
 import com.hellguy39.hellweather.helpers.IconHelper
+import com.hellguy39.hellweather.helpers.LocationManager
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.*
 import com.hellguy39.hellweather.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.roundToInt
-
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment(R.layout.fragment_weather),
@@ -34,6 +33,9 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
     View.OnClickListener
 {
     private lateinit var binding : FragmentWeatherBinding
+
+    @Inject
+    lateinit var locationManager: LocationManager
 
     private lateinit var viewModel: WeatherFragmentViewModel
     private val sharedViewModel by activityViewModels<SharedViewModel>()
@@ -53,12 +55,9 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         binding = FragmentWeatherBinding.bind(view)
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
-        //LinearSnapHelper().attachToRecyclerView()
-        binding.nsvContent
+
         binding.run {
-            btnRefresh.setOnClickListener {
-                checkPermissionAndFetchWeather()
-            }
+            btnRefresh.setOnClickListener(this@WeatherFragment)
             refreshLayout.setOnRefreshListener {
                 checkPermissionAndFetchWeather()
             }
@@ -71,10 +70,6 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     override fun onStart() {
         super.onStart()
-        val state = viewModel.uiState.value
-        if (!state.isLoading && state.data == null)
-            checkPermissionAndFetchWeather()
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect {
                 updateUI(it)
@@ -146,7 +141,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
         if (!state.error.isNullOrEmpty()) {
             Snackbar.make(binding.root, state.error, Snackbar.LENGTH_LONG)
-                .setAction("Retry") {
+                .setAction(R.string.text_retry) {
                     checkPermissionAndFetchWeather()
                 }.show()
         }
@@ -159,10 +154,22 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     private fun checkPermissionAndFetchWeather() {
         if (!viewModel.uiState.value.isLoading) {
-            when((activity as MainActivity).checkPermissions()) {
-                PermissionState.Granted -> { viewModel.fetchWeather((activity as MainActivity).locationHelper) }
-                PermissionState.Denied -> { navigateToLocationFragment() }
-                PermissionState.GPSDisabled -> { navigateToLocationFragment() }
+            when(locationManager.checkPermissions()) {
+                PermissionState.Granted -> {
+                    viewModel.fetchWeatherFromRemote()
+                }
+                PermissionState.Denied -> {
+                    navigateToLocationFragment()
+                }
+                PermissionState.GPSDisabled -> {
+                    Snackbar.make(
+                        binding.root,
+                        "Enable geolocation, please",
+                        Snackbar.LENGTH_SHORT
+                    ).setAction("Settings") {
+                        (activity as MainActivity).openLocationSettings()
+                    }.show()
+                }
             }
         }
     }
@@ -172,9 +179,9 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         TransitionManager.beginDelayedTransition(binding.refreshLayout, MaterialFadeThrough())
 
         binding.run {
-            tvTemp.text = data.currentWeather?.temp?.roundToInt().toString()//resources.getString(R.string.value_as_temp, data.currentWeather?.temp?.roundToInt())
+            tvTemp.text = data.currentWeather?.temp?.roundToInt().toString()
             tvTempFeelsLike.text = resources.getString(
-                R.string.feels_like,
+                R.string.text_temp_feels_like,
                 data.currentWeather?.feelsLike?.roundToInt()
             )
             tvDate.text = data.currentWeather?.date?.formatAsTitleDate()
@@ -189,12 +196,12 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     private fun showLocationInfo(info: LocationInfo) {
         binding.run {
-            chipCity.text = getString(R.string.country_and_city_name, info.country, info.name)
-            tvLat.text = getString(R.string.lat, info.lat?.toFloat())
-            tvLon.text = getString(R.string.lon, info.lon?.toFloat())
-            tvCountry.text = getString(R.string.country, info.country)
-            tvState.text = getString(R.string.state, info.state)
-            tvName.text = getString(R.string.city_name, info.name)
+            chipCity.text = getString(R.string.text_country_and_city_name, info.country, info.name)
+            tvLat.text = getString(R.string.text_lat, info.lat?.toFloat())
+            tvLon.text = getString(R.string.text_lon, info.lon?.toFloat())
+            tvCountry.text = getString(R.string.text_country, info.country)
+            tvState.text = getString(R.string.text_state, info.state)
+            tvName.text = getString(R.string.text_city_name, info.name)
         }
     }
 
@@ -210,6 +217,9 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     override fun onClick(view: View?) {
         when(view?.id) {
+            binding.btnRefresh.id -> {
+                checkPermissionAndFetchWeather()
+            }
             binding.recipientCardScrim.id -> {
                 if (!binding.chipCity.isVisible)
                     collapseLocationChip()

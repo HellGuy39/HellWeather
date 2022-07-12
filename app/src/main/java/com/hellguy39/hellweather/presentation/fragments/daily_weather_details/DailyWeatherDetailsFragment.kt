@@ -20,6 +20,7 @@ import com.hellguy39.hellweather.utils.formatAsTitleDate
 import com.hellguy39.hellweather.utils.getColorFromAttr
 import com.hellguy39.hellweather.utils.setImageAsync
 import com.hellguy39.hellweather.utils.updateAndClearRecycler
+import kotlin.math.roundToInt
 
 class DailyWeatherDetailsFragment : Fragment(R.layout.fragment_daily_weather_details) {
 
@@ -67,6 +68,19 @@ class DailyWeatherDetailsFragment : Fragment(R.layout.fragment_daily_weather_det
             tvDate.text = dailyWeather.date?.formatAsTitleDate()
             ivIcon.setImageAsync(IconHelper.getByIconId(dailyWeather.weather?.get(0)))
             rvDetails.updateAndClearRecycler(detailsList, dailyWeather.toDetailsModelList(resources))
+
+            tvTempEve.text = resources.getString(R.string.text_temp_eve, dailyWeather.temp?.eve?.roundToInt())
+            tvTempMorn.text = resources.getString(R.string.text_temp_morn, dailyWeather.temp?.morn?.roundToInt())
+            tvTempMax.text = resources.getString(R.string.text_temp_max, dailyWeather.temp?.max?.roundToInt())
+            tvTempMin.text = resources.getString(R.string.text_temp_min, dailyWeather.temp?.min?.roundToInt())
+            tvTempDay.text = resources.getString(R.string.text_temp_day, dailyWeather.temp?.day?.roundToInt())
+            tvTempNight.text = resources.getString(R.string.text_temp_night, dailyWeather.temp?.night?.roundToInt())
+            tvTempDay.text = resources.getString(R.string.text_temp_day, dailyWeather.temp?.day?.roundToInt())
+
+            tvTempFeelsDay.text = resources.getString(R.string.text_temp_day, dailyWeather.feelsLike?.day?.roundToInt())
+            tvTempFeelsEve.text = resources.getString(R.string.text_temp_eve, dailyWeather.feelsLike?.eve?.roundToInt())
+            tvTempFeelsMorn.text = resources.getString(R.string.text_temp_morn, dailyWeather.feelsLike?.morn?.roundToInt())
+            tvTempFeelsNight.text = resources.getString(R.string.text_temp_night, dailyWeather.feelsLike?.night?.roundToInt())
         }
     }
 }

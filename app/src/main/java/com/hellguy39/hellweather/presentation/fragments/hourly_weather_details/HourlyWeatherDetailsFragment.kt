@@ -69,7 +69,7 @@ class HourlyWeatherDetailsFragment : Fragment(R.layout.fragment_hourly_weather_d
             tvDate.text = hourlyWeather.date?.formatAsTitleDate()
             tvWeatherDescription.text = hourlyWeather.weather?.get(0)?.description?.replaceFirstChar(Char::titlecase)
             tvTempFeelsLike.text = resources.getString(
-                R.string.feels_like,
+                R.string.text_temp_feels_like,
                 hourlyWeather.feelsLike?.roundToInt()
             )
             ivIcon.setImageAsync(IconHelper.getByIconId(hourlyWeather.weather?.get(0)))
