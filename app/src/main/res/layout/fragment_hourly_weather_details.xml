@@ -66,6 +66,7 @@
                         android:id="@+id/ivIcon"
                         android:layout_width="128dp"
                         android:layout_height="128dp"
+                        style="@style/Theme.HellWeather.Icon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:src="@drawable/ic_day_partly_cloudy" />

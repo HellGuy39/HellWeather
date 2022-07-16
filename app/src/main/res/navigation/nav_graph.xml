@@ -14,20 +14,12 @@
             android:label="fragment_weather"
             tools:layout="@layout/fragment_weather" >
             <action
-                android:id="@+id/action_weatherFragment_to_locationFragment"
-                app:destination="@id/locationFragment" />
-            <action
                 android:id="@+id/action_weatherFragment_to_dailyWeatherDetailsFragment"
                 app:destination="@id/dailyWeatherDetailsFragment" />
             <action
                 android:id="@+id/action_weatherFragment_to_hourlyWeatherDetailsFragment"
                 app:destination="@id/hourlyWeatherDetailsFragment" />
         </fragment>
-        <fragment
-            android:id="@+id/locationFragment"
-            android:name="com.hellguy39.hellweather.presentation.fragments.location.LocationFragment"
-            android:label="fragment_location"
-            tools:layout="@layout/fragment_location" />
         <fragment
             android:id="@+id/dailyWeatherDetailsFragment"
             android:name="com.hellguy39.hellweather.presentation.fragments.daily_weather_details.DailyWeatherDetailsFragment"
@@ -38,6 +30,13 @@
             android:name="com.hellguy39.hellweather.presentation.fragments.hourly_weather_details.HourlyWeatherDetailsFragment"
             android:label="fragment_hourly_weather_details"
             tools:layout="@layout/fragment_hourly_weather_details" />
+    </navigation>
+    <navigation android:id="@+id/navigation_settings"
+        app:startDestination="@id/settingsFragment">
+        <fragment
+            android:id="@+id/settingsFragment"
+            android:name="com.hellguy39.hellweather.presentation.fragments.settings.SettingsFragment"
+            android:label="SettingsFragment" />
     </navigation>
 
 </navigation>

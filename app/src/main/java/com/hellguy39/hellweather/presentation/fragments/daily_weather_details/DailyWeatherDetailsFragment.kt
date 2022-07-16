@@ -11,21 +11,22 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentDailyWeatherDetailsBinding
 import com.hellguy39.hellweather.domain.model.DailyWeather
+import com.hellguy39.hellweather.format.DateFormatter
 import com.hellguy39.hellweather.helpers.IconHelper
 import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.DetailModel
 import com.hellguy39.hellweather.presentation.adapter.DetailsAdapter
 import com.hellguy39.hellweather.presentation.adapter.toDetailsModelList
-import com.hellguy39.hellweather.utils.formatAsTitleDate
 import com.hellguy39.hellweather.utils.getColorFromAttr
 import com.hellguy39.hellweather.utils.setImageAsync
 import com.hellguy39.hellweather.utils.updateAndClearRecycler
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
 
+@AndroidEntryPoint
 class DailyWeatherDetailsFragment : Fragment(R.layout.fragment_daily_weather_details) {
 
     private lateinit var binding: FragmentDailyWeatherDetailsBinding
-
     private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     private val detailsList = mutableListOf<DetailModel>()
@@ -65,7 +66,7 @@ class DailyWeatherDetailsFragment : Fragment(R.layout.fragment_daily_weather_det
 
     private fun updateUI(dailyWeather: DailyWeather) {
         binding.run {
-            tvDate.text = dailyWeather.date?.formatAsTitleDate()
+            tvDate.text = DateFormatter.format(dailyWeather.date, DateFormatter.DATE_OF_THE_MOUTH_AND_HOUR)
             ivIcon.setImageAsync(IconHelper.getByIconId(dailyWeather.weather?.get(0)))
             rvDetails.updateAndClearRecycler(detailsList, dailyWeather.toDetailsModelList(resources))
 

@@ -1,4 +1,4 @@
-package com.hellguy39.hellweather.helpers
+package com.hellguy39.hellweather.location
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -26,14 +26,13 @@ class LocationManager @Inject constructor (
     private val locationRequest = LocationRequest.create().apply {
         interval = TimeUnit.SECONDS.toMillis(15)
         fastestInterval = TimeUnit.SECONDS.toMillis(2)
-       // maxWaitTime = TimeUnit.SECONDS.toMillis(2)
-        priority = Priority.PRIORITY_HIGH_ACCURACY
+        priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY
     }
 
     fun checkPermissions() : Enum<PermissionState> {
         return when {
-            isPermissionsGranted() -> PermissionState.Denied
-            isGeolocationEnabled() -> PermissionState.GPSDisabled
+            !isPermissionsGranted() -> PermissionState.Denied
+            !isGeolocationEnabled() -> PermissionState.GPSDisabled
             isPermissionsGranted() || isGeolocationEnabled() -> PermissionState.Granted
             else -> PermissionState.Denied
         }
@@ -46,7 +45,6 @@ class LocationManager @Inject constructor (
                 object : LocationCallback() {
                     override fun onLocationResult(result: LocationResult) {
                         super.onLocationResult(result)
-                        //Log.d("DEBUG", "onLocRes")
                         fusedLocationProviderClient.removeLocationUpdates(this)
                         continuation.resume(result.locations.last())
                     }
@@ -55,7 +53,7 @@ class LocationManager @Inject constructor (
         }
     }
 
-    fun isPermissionsGranted(): Boolean {
+    private fun isPermissionsGranted(): Boolean {
         return isFineLocationGranted(context) || isCoarseLocationGranted(context)
     }
 
@@ -68,14 +66,16 @@ class LocationManager @Inject constructor (
         (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED)
 
-    fun isGeolocationEnabled(): Boolean {
+    private fun isGeolocationEnabled(): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
     companion object LocationExtension {
-        val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-        const val PERMISSION_REQUEST_CODE = 404
+        val permissions = arrayOf(
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        )
     }
 }

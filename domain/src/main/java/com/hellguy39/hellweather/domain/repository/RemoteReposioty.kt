@@ -11,9 +11,14 @@ interface RemoteRepository {
         lon: Double
     ): Resource<OneCallWeather>
 
-    suspend fun getLocationInfo(
+    suspend fun getLocationsInfoByCoordinates(
         lat: Double,
         lon: Double,
+        limit: Int,
+    ): Resource<List<LocationInfo>>
+
+    suspend fun getLocationsInfoByCityName(
+        cityName: String,
         limit: Int,
     ): Resource<List<LocationInfo>>
 

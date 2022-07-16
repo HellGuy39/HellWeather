@@ -142,7 +142,7 @@
                                 <ImageView
                                     android:layout_width="@dimen/icon_default_size"
                                     android:layout_height="@dimen/icon_default_size"
-                                    app:tint="?attr/colorOnSurface"
+                                    style="@style/Theme.HellWeather.Icon"
                                     android:src="@drawable/ic_thermometer" />
 
                                 <TextView
@@ -214,6 +214,7 @@
                         android:id="@+id/ivIcon"
                         android:layout_width="128dp"
                         android:layout_height="128dp"
+                        style="@style/Theme.HellWeather.Icon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:src="@drawable/ic_day_partly_cloudy" />

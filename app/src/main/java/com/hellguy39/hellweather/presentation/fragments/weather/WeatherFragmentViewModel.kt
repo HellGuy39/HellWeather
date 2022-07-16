@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.hellguy39.hellweather.domain.usecase.GetCachedForecastUseCase
 import com.hellguy39.hellweather.domain.usecase.GetWeatherForecastUseCase
 import com.hellguy39.hellweather.domain.util.Resource
-import com.hellguy39.hellweather.helpers.LocationManager
+import com.hellguy39.hellweather.location.LocationManager
+import com.hellguy39.hellweather.utils.PermissionState
 import com.hellguy39.hellweather.utils.update
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -26,7 +26,9 @@ class WeatherFragmentViewModel @Inject constructor(
 
     init {
         fetchWeatherFromLocal()
-        fetchWeatherFromRemote()
+
+        if (locationManager.checkPermissions() == PermissionState.Granted)
+            fetchWeatherFromRemote()
     }
 
     private fun fetchWeatherFromLocal() = viewModelScope.launch {

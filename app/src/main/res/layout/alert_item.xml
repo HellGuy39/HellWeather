@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootCard"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     app:cardElevation="@dimen/card_default_elevation"
     app:cardCornerRadius="@dimen/card_default_corner_radius"
     android:clickable="true"
@@ -65,23 +65,12 @@
 
         </LinearLayout>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:requiresFadingEdge="horizontal"
-            android:fadingEdgeLength="16dp">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/tagGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true"
-                app:selectionRequired="false">
-
-            </com.google.android.material.chip.ChipGroup>
-
-        </HorizontalScrollView>
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tagGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleLine="true"
+            app:selectionRequired="false"/>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

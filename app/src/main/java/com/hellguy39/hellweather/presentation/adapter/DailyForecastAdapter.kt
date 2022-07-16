@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.DailyWeatherItemBinding
 import com.hellguy39.hellweather.domain.model.DailyWeather
+import com.hellguy39.hellweather.format.DateFormatter
 import com.hellguy39.hellweather.helpers.IconHelper
-import com.hellguy39.hellweather.utils.formatAsDay
 import com.hellguy39.hellweather.utils.setImageAsync
 import com.hellguy39.hellweather.utils.toPercents
 import kotlin.math.roundToInt
@@ -47,7 +47,7 @@ class DailyForecastAdapter(
                     if (position == 0)
                         resources.getString(R.string.text_today)
                     else
-                        dailyWeather.date?.formatAsDay()
+                        DateFormatter.format(dailyWeather.date, DateFormatter.WEEK_DAY)
 
                 ivIcon.setImageAsync(IconHelper.getByIconId(dailyWeather.weather?.get(0)))
                 chipMinMaxTemp.text = resources.getString(

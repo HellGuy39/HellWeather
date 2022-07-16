@@ -11,21 +11,22 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHourlyWeatherDetailsBinding
 import com.hellguy39.hellweather.domain.model.HourlyWeather
+import com.hellguy39.hellweather.format.DateFormatter
 import com.hellguy39.hellweather.helpers.IconHelper
 import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.DetailModel
 import com.hellguy39.hellweather.presentation.adapter.DetailsAdapter
 import com.hellguy39.hellweather.presentation.adapter.toDetailsModelList
-import com.hellguy39.hellweather.utils.formatAsTitleDate
 import com.hellguy39.hellweather.utils.getColorFromAttr
 import com.hellguy39.hellweather.utils.setImageAsync
 import com.hellguy39.hellweather.utils.updateAndClearRecycler
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
 
+@AndroidEntryPoint
 class HourlyWeatherDetailsFragment : Fragment(R.layout.fragment_hourly_weather_details) {
 
     private lateinit var binding: FragmentHourlyWeatherDetailsBinding
-
     private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     private val detailsList = mutableListOf<DetailModel>()
@@ -66,7 +67,7 @@ class HourlyWeatherDetailsFragment : Fragment(R.layout.fragment_hourly_weather_d
     private fun updateUI(hourlyWeather: HourlyWeather) {
         binding.run {
             tvTemp.text = hourlyWeather.temp?.roundToInt().toString()
-            tvDate.text = hourlyWeather.date?.formatAsTitleDate()
+            tvDate.text = DateFormatter.format(hourlyWeather.date, DateFormatter.DATE_OF_THE_MOUTH_AND_HOUR)
             tvWeatherDescription.text = hourlyWeather.weather?.get(0)?.description?.replaceFirstChar(Char::titlecase)
             tvTempFeelsLike.text = resources.getString(
                 R.string.text_temp_feels_like,

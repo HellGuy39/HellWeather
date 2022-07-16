@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionGroup="true"
+    android:id="@+id/refreshLayout"
     tools:context=".presentation.fragments.weather.WeatherFragment">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:transitionGroup="true">
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_menu"
+                app:menu="@menu/content_fragment_toolbar_menu"
+                tools:title="Sat, Jul 16, 21:08"
+                style="@style/Theme.HellWeather.Toolbar"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nsvContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/currentWeatherConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -38,8 +48,8 @@
                         android:layout_height="128dp"
                         android:layout_marginEnd="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/chipCity"
-                        app:tint="?attr/colorOnSurface"
+                        app:layout_constraintTop_toTopOf="parent"
+                        style="@style/Theme.HellWeather.Icon"
                         tools:src="@drawable/ic_cloudy" />
 
                     <TextView
@@ -49,7 +59,7 @@
                         android:layout_marginStart="16dp"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/chipCity"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_chainStyle="packed"
                         tools:text="9" />
 
@@ -64,29 +74,19 @@
                         app:layout_constraintStart_toEndOf="@+id/tvTemp"
                         app:layout_constraintTop_toTopOf="@+id/tvTemp" />
 
-                    <Button
-                        android:id="@+id/btnRefresh"
-                        style="@style/Widget.Material3.Button.IconButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        app:icon="@drawable/ic_refresh"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
-                        app:chipIcon="@drawable/ic_location"
-                        android:clickable="true"
                         android:checked="false"
+                        android:clickable="true"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
                         android:visibility="visible"
+                        app:chipIcon="@drawable/ic_location"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         tools:text="Russia, Krasnodar" />
 
                     <TextView
@@ -95,6 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        app:layout_constraintBottom_toTopOf="@+id/tvTempFeelsLike"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvTemp"
                         tools:text="Scattered clouds" />
@@ -106,9 +107,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="16dp"
-                        app:layout_constraintBottom_toTopOf="@+id/tvDate"
+                        app:layout_constraintBottom_toTopOf="@+id/chipCity"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvWeatherDescription"
                         tools:text="Feels like 6 °C" />
 
                     <com.google.android.material.card.MaterialCardView
@@ -116,15 +116,13 @@
                         style="@style/Widget.Material3.CardView.Elevated"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/card_default_horizontal_margin"
                         android:clickable="true"
                         android:focusable="true"
                         android:visibility="invisible"
                         app:cardCornerRadius="@dimen/card_default_corner_radius"
                         app:cardElevation="@dimen/card_default_elevation"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                        app:layout_constraintBottom_toTopOf="@+id/chipCity"
                         app:layout_constraintStart_toStartOf="@+id/chipCity"
-                        app:layout_constraintTop_toBottomOf="@+id/chipCity"
                         tools:visibility="gone">
 
                         <LinearLayout
@@ -172,23 +170,7 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.63" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center"
-                    android:layout_marginEnd="8dp"
-                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle2"
-                    tools:text="Tue, 9:41" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCurrentWeatherDetails"
@@ -244,8 +226,6 @@
                     android:fadingEdgeLength="16dp"/>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
     <!-- An invisible scrim that captures click events when a chip has been expanded.-->
     <View
         android:id="@+id/recipient_card_scrim"

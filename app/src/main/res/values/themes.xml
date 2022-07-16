@@ -30,19 +30,26 @@
 
         <item name="android:windowActivityTransitions">true</item>
 
-        <item name="android:navigationBarColor">
-            @android:color/transparent
-        </item>
-
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <!-- Optional: set to transparent if your app is drawing behind the status bar. -->
-        <item name="android:statusBarColor">
-            @android:color/transparent
-        </item>
-
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <!-- Optional: set the status bar light and content dark. -->
-        <item name="android:windowLightStatusBar">
-            true
-        </item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MdcTypographyStyles.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MdcTypographyStyles.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MdcTypographyStyles.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MdcTypographyStyles.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MdcTypographyStyles.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MdcTypographyStyles.Headline6</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MdcTypographyStyles.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MdcTypographyStyles.Body2</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.MdcTypographyStyles.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.MdcTypographyStyles.Subtitle2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.MdcTypographyStyles.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.MdcTypographyStyles.Overline</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MdcTypographyStyles.Caption</item>
+
     </style>
 
     <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.Material3.Button.OutlinedButton">

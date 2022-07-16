@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.HourlyWeatherItemBinding
 import com.hellguy39.hellweather.domain.model.HourlyWeather
+import com.hellguy39.hellweather.format.DateFormatter
 import com.hellguy39.hellweather.helpers.IconHelper
-import com.hellguy39.hellweather.utils.formatAsHour
 import com.hellguy39.hellweather.utils.setImageAsync
 import kotlin.math.roundToInt
 
@@ -47,7 +47,7 @@ class HourlyForecastAdapter(
                     if (position == 0)
                         resources.getString(R.string.text_now)
                     else
-                        hourlyWeather.date?.formatAsHour()
+                        DateFormatter.format(hourlyWeather.date, DateFormatter.HOUR)
 
                 tvTemp.text = resources.getString(R.string.text_value_temp, hourlyWeather.temp?.roundToInt())
                 rootCard.transitionName = R.string.hourly_details_transition.toString() + position.toString()

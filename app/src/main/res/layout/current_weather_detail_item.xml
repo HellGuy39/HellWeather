@@ -28,7 +28,7 @@
                 android:id="@+id/ivIcon"
                 android:layout_width="@dimen/icon_default_size"
                 android:layout_height="@dimen/icon_default_size"
-                app:tint="?attr/colorOnSurface"
+                style="@style/Theme.HellWeather.Icon"
                 tools:src="@drawable/ic_visibility" />
 
             <TextView

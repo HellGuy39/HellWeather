@@ -17,9 +17,16 @@ interface OpenWeatherApi {
     ): ResponseBody
 
     @GET("geo/1.0/reverse?")
-    suspend fun getLocationInfo(
+    suspend fun getLocationsInfoByCoordinates(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
+        @Query("limit") limit: Int,
+        @Query("appid") apiKey: String,
+    ): ResponseBody
+
+    @GET("geo/1.0/direct?")
+    suspend fun getLocationsInfoByCityName(
+        @Query("q") cityName: String,
         @Query("limit") limit: Int,
         @Query("appid") apiKey: String,
     ): ResponseBody

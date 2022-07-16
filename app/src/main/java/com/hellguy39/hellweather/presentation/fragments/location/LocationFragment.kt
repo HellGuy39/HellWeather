@@ -29,19 +29,19 @@ class LocationFragment : Fragment(R.layout.fragment_location) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLocationBinding.bind(view)
 
-        binding.fabGrantAccess.setOnClickListener {
-            (activity as MainActivity).requestPermission()
-
-            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                activityViewModel.permissionState.collect {
-                    when(it) {
-                        PermissionState.Granted -> onAccessGranted()
-                        PermissionState.Denied -> onAccessDenied()
-                        else -> Unit
-                    }
-                }
-            }
-        }
+//        binding.fabGrantAccess.setOnClickListener {
+//            (activity as MainActivity).requestPermission()
+//
+//            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+//                activityViewModel.permissionState.collect {
+//                    when(it) {
+//                        PermissionState.Granted -> onAccessGranted()
+//                        PermissionState.Denied -> onAccessDenied()
+//                        else -> Unit
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun onAccessGranted() {

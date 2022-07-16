@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.HellWeather.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/TextAppearance.MdcTypographyStyles.Headline6</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.MdcTypographyStyles.Subtitle1</item>
+    </style>
+
+    <style name="Theme.HellWeather.Icon" parent="">
+        <item name="tint">?attr/colorControlNormal</item>
+    </style>
+</resources>

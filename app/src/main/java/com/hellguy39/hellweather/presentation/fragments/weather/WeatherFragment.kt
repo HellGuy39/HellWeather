@@ -1,5 +1,6 @@
 package com.hellguy39.hellweather.presentation.fragments.weather
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
@@ -16,9 +17,11 @@ import com.google.android.material.transition.MaterialFadeThrough
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherBinding
 import com.hellguy39.hellweather.domain.model.*
+import com.hellguy39.hellweather.format.DateFormatter
 import com.hellguy39.hellweather.helpers.IconHelper
-import com.hellguy39.hellweather.helpers.LocationManager
+import com.hellguy39.hellweather.location.LocationManager
 import com.hellguy39.hellweather.presentation.activities.main.MainActivity
+import com.hellguy39.hellweather.presentation.activities.main.PermissionCallback
 import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.*
 import com.hellguy39.hellweather.utils.*
@@ -30,12 +33,11 @@ import kotlin.math.roundToInt
 class WeatherFragment : Fragment(R.layout.fragment_weather),
     DailyForecastAdapter.DailyWeatherItemCallback,
     HourlyForecastAdapter.HourlyWeatherItemCallback,
-    View.OnClickListener
+    View.OnClickListener, PermissionCallback
 {
     private lateinit var binding : FragmentWeatherBinding
 
-    @Inject
-    lateinit var locationManager: LocationManager
+    @Inject lateinit var locationManager: LocationManager
 
     private lateinit var viewModel: WeatherFragmentViewModel
     private val sharedViewModel by activityViewModels<SharedViewModel>()
@@ -57,10 +59,26 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         view.doOnPreDraw { startPostponedEnterTransition() }
 
         binding.run {
-            btnRefresh.setOnClickListener(this@WeatherFragment)
-            refreshLayout.setOnRefreshListener {
-                checkPermissionAndFetchWeather()
+            //btnRefresh.setOnClickListener(this@WeatherFragment)
+            toolbar.setOnMenuItemClickListener {  item ->
+                when (item.itemId) {
+                    R.id.share -> {
+                        viewModel.uiState.value.data?.let { shareWeather(it) }
+                        true
+                    }
+                    R.id.refresh -> {
+                        checkPermissionAndFetchWeather()
+                        true
+                    }
+                    else -> false
+                }
             }
+            toolbar.setNavigationOnClickListener {
+                (activity as MainActivity).openDrawer()
+            }
+//            refreshLayout.setOnRefreshListener {
+//                checkPermissionAndFetchWeather()
+//            }
             recipientCardScrim.setOnClickListener(this@WeatherFragment)
             chipCity.setOnClickListener(this@WeatherFragment)
         }
@@ -137,7 +155,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
     }
 
     private fun updateUI(state: WeatherFragmentState) {
-        binding.refreshLayout.isRefreshing = state.isLoading
+        //binding.refreshLayout.isRefreshing = state.isLoading
 
         if (!state.error.isNullOrEmpty()) {
             Snackbar.make(binding.root, state.error, Snackbar.LENGTH_LONG)
@@ -159,7 +177,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
                     viewModel.fetchWeatherFromRemote()
                 }
                 PermissionState.Denied -> {
-                    navigateToLocationFragment()
+                    (activity as MainActivity).requestPermission(this)
                 }
                 PermissionState.GPSDisabled -> {
                     Snackbar.make(
@@ -179,12 +197,12 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         TransitionManager.beginDelayedTransition(binding.refreshLayout, MaterialFadeThrough())
 
         binding.run {
+            toolbar.title = DateFormatter.format(data.currentWeather?.date, DateFormatter.DATE_OF_THE_MOUTH_AND_HOUR)
             tvTemp.text = data.currentWeather?.temp?.roundToInt().toString()
             tvTempFeelsLike.text = resources.getString(
                 R.string.text_temp_feels_like,
                 data.currentWeather?.feelsLike?.roundToInt()
             )
-            tvDate.text = data.currentWeather?.date?.formatAsTitleDate()
             tvWeatherDescription.text = data.currentWeather?.weather?.get(0)?.description?.replaceFirstChar(Char::titlecase)
             ivIcon.setImageAsync(IconHelper.getByIconId(data.currentWeather?.weather?.get(0)))
             data.dailyWeather?.let { rvDailyWeather.updateAndClearRecycler(dailyWeatherList, it) }
@@ -205,6 +223,24 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         }
     }
 
+    private fun shareWeather(forecast: WeatherForecast) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "Weather in ${forecast.locationInfo?.get(0)?.country}, ${forecast.locationInfo?.get(0)?.name} " +
+                        "on ${DateFormatter.format(forecast.oneCallWeather?.currentWeather?.date, DateFormatter.DATE_OF_THE_MOUTH_AND_HOUR)}." +
+                        "Temp: ${resources.getString(R.string.text_value_temp, forecast.oneCallWeather?.currentWeather?.temp?.roundToInt())}, " +
+                        "feels like: ${resources.getString(R.string.text_value_temp, forecast.oneCallWeather?.currentWeather?.feelsLike?.roundToInt())}, " +
+                        "description: ${forecast.oneCallWeather?.currentWeather?.weather?.get(0)?.description}, " +
+                        "wind: ${resources.getString(R.string.text_value_meters_per_sec, forecast.oneCallWeather?.currentWeather?.windSpeed?.roundToInt())}, " +
+                        "humidity: ${resources.getString(R.string.text_value_percents, forecast.oneCallWeather?.currentWeather?.humidity)}"
+            )
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(intent,"Share to:"))
+    }
+
     override fun onClick(dailyWeather: DailyWeather, position: Int, itemView: View) {
         sharedViewModel.setDailyWeatherItem(dailyWeather)
         navigateToDailyWeatherDetailsFragment(itemView)
@@ -217,9 +253,9 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     override fun onClick(view: View?) {
         when(view?.id) {
-            binding.btnRefresh.id -> {
-                checkPermissionAndFetchWeather()
-            }
+//            binding.btnRefresh.id -> {
+//                checkPermissionAndFetchWeather()
+//            }
             binding.recipientCardScrim.id -> {
                 if (!binding.chipCity.isVisible)
                     collapseLocationChip()
@@ -230,5 +266,19 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
             }
             else -> Unit
         }
+    }
+
+    override fun onPermissionGranted() {
+        checkPermissionAndFetchWeather()
+    }
+
+    override fun onPermissionDenied() {
+        Snackbar.make(
+            binding.root,
+            "Permission denied",
+            Snackbar.LENGTH_SHORT
+        ).setAction("Retry") {
+            (activity as MainActivity).requestPermission(this)
+        }.show()
     }
 }

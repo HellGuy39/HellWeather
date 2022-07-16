@@ -31,7 +31,7 @@
 
         <ImageView
             android:id="@+id/ivIcon"
-            app:tint="?attr/colorOnSurface"
+            style="@style/Theme.HellWeather.Icon"
             android:layout_margin="@dimen/icon_default_margin"
             android:layout_width="@dimen/icon_large_size"
             android:layout_height="@dimen/icon_large_size"/>

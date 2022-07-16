@@ -10,15 +10,15 @@ import com.hellguy39.hellweather.databinding.CurrentWeatherDetailItemBinding
 import com.hellguy39.hellweather.domain.model.CurrentWeather
 import com.hellguy39.hellweather.domain.model.DailyWeather
 import com.hellguy39.hellweather.domain.model.HourlyWeather
+import com.hellguy39.hellweather.format.DateFormatter
 import com.hellguy39.hellweather.helpers.DetailHelper
-import com.hellguy39.hellweather.utils.formatAsHour
 import com.hellguy39.hellweather.utils.setImageAsync
 import com.hellguy39.hellweather.utils.toKilometers
 import kotlin.math.roundToInt
 
 class DetailsAdapter(
    private val dataSet: List<DetailModel>,
-   private val resources: Resources
+   private val resources: Resources,
 ): RecyclerView.Adapter<DetailsAdapter.DetailsViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -79,10 +79,10 @@ internal fun HourlyWeather.toDetailsModelList(resources: Resources): List<Detail
 
 internal fun DailyWeather.toDetailsModelList(resources: Resources): List<DetailModel> {
     return listOf(
-        DetailModel(DetailType.Sunrise, this.sunrise?.formatAsHour()),
+        DetailModel(DetailType.Sunrise, DateFormatter.format(this.sunrise, DateFormatter.HOUR)),
         DetailModel(DetailType.Humidity, resources.getString(R.string.text_value_percents, this.humidity)),
         DetailModel(DetailType.Pressure, resources.getString(R.string.text_value_pressure, this.pressure)),
-        DetailModel(DetailType.Sunset, this.sunset?.formatAsHour()),
+        DetailModel(DetailType.Sunset, DateFormatter.format(this.sunset, DateFormatter.HOUR)),
         DetailModel(DetailType.UVI, this.uvi?.roundToInt().toString()),
     )
 }

@@ -6,11 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivityViewModel : ViewModel() {
 
-    private val _permissionState = MutableStateFlow(PermissionState.Unknown)
-    val permissionState = _permissionState
 
-    fun updatePermissionState(state: PermissionState) {
-        _permissionState.value = state
-    }
 
 }

@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.AlertItemBinding
 import com.hellguy39.hellweather.domain.model.Alert
+import com.hellguy39.hellweather.format.DateFormatter
 import com.hellguy39.hellweather.utils.addTagChips
-import com.hellguy39.hellweather.utils.formatAsDayWithTime
-import com.hellguy39.hellweather.utils.formatAsTitleDate
 
 class AlertsAdapter(
     private val dataSet: List<Alert>,
@@ -37,11 +36,20 @@ class AlertsAdapter(
         fun bind(alert: Alert) {
             binding.run {
                 tvEvent.text = alert.event
-                tvDateEnd.text = resources.getString(R.string.text_date_end, alert.end?.formatAsTitleDate())
-                tvDateStart.text = resources.getString(R.string.text_date_start, alert.start?.formatAsTitleDate())
+                tvDateEnd.text = resources.getString(
+                    R.string.text_date_end,
+                    DateFormatter.format(alert.end, DateFormatter.DATE_OF_THE_MOUTH_AND_HOUR)
+                )
+                tvDateStart.text = resources.getString(
+                    R.string.text_date_start,
+                    DateFormatter.format(alert.start, DateFormatter.DATE_OF_THE_MOUTH_AND_HOUR)
+                )
                 tvSender.text = resources.getString(R.string.text_sender, alert.senderName)
                 tvDescription.text = alert.description
-                tagGroup.addTagChips(alert.tags)
+                tagGroup.apply {
+                    removeAllViews()
+                    addTagChips(alert.tags)
+                }
             }
         }
     }

@@ -5,7 +5,6 @@ import com.hellguy39.hellweather.domain.repository.LocalRepository
 import com.hellguy39.hellweather.domain.repository.RemoteRepository
 import com.hellguy39.hellweather.domain.util.Resource
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -26,7 +25,7 @@ class GetWeatherForecastUseCase(
                     remoteRepo.getOneCallWeather(lat, lon)
                 }
                 val locationScope = async {
-                    remoteRepo.getLocationInfo(lat, lon, 5)
+                    remoteRepo.getLocationsInfoByCoordinates(lat, lon, 5)
                 }
 
                 val location = locationScope.await()

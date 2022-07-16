@@ -47,15 +47,41 @@ class RemoteRepositoryImpl(
         }
     }
 
-    override suspend fun getLocationInfo(
+    override suspend fun getLocationsInfoByCoordinates(
         lat: Double,
         lon: Double,
         limit: Int
     ): Resource<List<LocationInfo>> {
         try {
-            val response = api.getLocationInfo(
+            val response = api.getLocationsInfoByCoordinates(
                 lat = lat,
                 lon = lon,
+                limit = limit,
+                apiKey = OpenWeatherApi.API_KEY
+            )
+
+            val data = locationInfoParser.parseFromJson(response)
+
+            return if (data != null)
+                Resource.Success(data.map { it.toLocationInfo() })
+            else
+                Resource.Error(message = "Couldn't load data")
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return Resource.Error(message = "Couldn't load data")
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            return Resource.Error(message = "Couldn't load data")
+        }
+    }
+
+    override suspend fun getLocationsInfoByCityName(
+        cityName: String,
+        limit: Int
+    ): Resource<List<LocationInfo>> {
+        try {
+            val response = api.getLocationsInfoByCityName(
+                cityName = cityName,
                 limit = limit,
                 apiKey = OpenWeatherApi.API_KEY
             )
