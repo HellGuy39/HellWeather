@@ -83,6 +83,7 @@
         <entry key="app/src/main/res/drawable/ic_foggy.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_humidity.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_location.xml" value="0.241" />
+        <entry key="app/src/main/res/drawable/ic_mic.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_night_clear.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_night_partly_cloudy.xml" value="0.241" />
         <entry key="app/src/main/res/drawable/ic_outline_wb_cloudy_24.xml" value="0.241" />
@@ -109,6 +110,7 @@
         <entry key="app/src/main/res/layout/fragment_hourly_weather_details.xml" value="0.30210418701171876" />
         <entry key="app/src/main/res/layout/fragment_location.xml" value="0.29739583333333336" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.265093994140625" />
         <entry key="app/src/main/res/layout/fragment_weather.xml" value="0.28971710205078127" />
         <entry key="app/src/main/res/layout/header_navigation_view.xml" value="0.29635416666666664" />
         <entry key="app/src/main/res/layout/hourly_weather_item.xml" value="0.3244852701822916" />

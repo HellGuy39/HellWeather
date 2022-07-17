@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/main_item"
-        android:title="subheader">
-        <menu>
-            <item
-                android:id="@+id/navigation_weather"
-                android:icon="@drawable/ic_cloudy"
-                android:title="Weather"
-                android:checkable="true"/>
-            <item
-                android:id="@+id/search"
-                android:icon="@drawable/ic_search"
-                android:title="Search"
-                android:checkable="true"/>
-            <item
-                android:id="@+id/navigation_settings"
-                android:icon="@drawable/ic_settings"
-                android:title="Settings"
-                android:checkable="true"/>
-        </menu>
-    </item>
+        android:id="@+id/navigation_weather"
+        android:icon="@drawable/ic_cloudy"
+        android:title="Weather"
+        android:checkable="true"/>
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        android:checkable="true"/>
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings"
+        android:checkable="true"/>
 </menu>

@@ -1,11 +1,18 @@
 package com.hellguy39.hellweather.presentation.fragments.settings
 
 import android.os.Bundle
-import androidx.preference.PreferenceFragmentCompat
+import android.view.View
+import androidx.fragment.app.Fragment
 import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.databinding.FragmentSettingsBinding
 
-class SettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+class SettingsFragment : Fragment(R.layout.fragment_settings) {
+
+    private lateinit var binding: FragmentSettingsBinding
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentSettingsBinding.bind(view)
     }
+
 }

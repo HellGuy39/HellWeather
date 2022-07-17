@@ -1,7 +1,5 @@
 package com.hellguy39.hellweather.helpers
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.presentation.adapter.DetailType
 

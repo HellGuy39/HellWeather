@@ -11,9 +11,9 @@ import com.hellguy39.hellweather.domain.model.CurrentWeather
 import com.hellguy39.hellweather.domain.model.DailyWeather
 import com.hellguy39.hellweather.domain.model.HourlyWeather
 import com.hellguy39.hellweather.format.DateFormatter
+import com.hellguy39.hellweather.format.ValueFormatter
 import com.hellguy39.hellweather.helpers.DetailHelper
 import com.hellguy39.hellweather.utils.setImageAsync
-import com.hellguy39.hellweather.utils.toKilometers
 import kotlin.math.roundToInt
 
 class DetailsAdapter(
@@ -54,38 +54,41 @@ class DetailsAdapter(
     }
 }
 
-internal fun CurrentWeather.toDetailsModelList(resources: Resources): List<DetailModel> {
-    return listOf(
+internal fun CurrentWeather.toDetailsModelList(
+    resources: Resources,
+    valueFormatter: ValueFormatter
+): List<DetailModel> = listOf(
         DetailModel(DetailType.Wind, resources.getString(R.string.text_value_meters_per_sec, this.windSpeed?.roundToInt())),
         DetailModel(DetailType.Humidity, resources.getString(R.string.text_value_percents, this.humidity)),
         DetailModel(DetailType.Pressure, resources.getString(R.string.text_value_pressure, this.pressure)),
         DetailModel(DetailType.UVI, this.uvi?.roundToInt().toString()),
-        DetailModel(DetailType.Visibility, this.visibility.toKilometers()),
+        DetailModel(DetailType.Visibility, valueFormatter.toKilometers(this.visibility)),
         DetailModel(DetailType.DewPoint, resources.getString(R.string.text_value_temp, this.dewPoint?.roundToInt())),
 //        DetailModel(DetailType.Sunrise, this.sunrise?.formatAsHour()),
 //        DetailModel(DetailType.Sunset, this.sunset?.formatAsHour()),
 //        DetailModel(DetailType.Clouds, resources.getString(R.string.value_in_percents, this.clouds)),
     )
-}
 
-internal fun HourlyWeather.toDetailsModelList(resources: Resources): List<DetailModel> {
-    return listOf(
+internal fun HourlyWeather.toDetailsModelList(
+    resources: Resources,
+    valueFormatter: ValueFormatter
+): List<DetailModel> = listOf(
         DetailModel(DetailType.Humidity, resources.getString(R.string.text_value_percents, this.humidity)),
         DetailModel(DetailType.Pressure, resources.getString(R.string.text_value_pressure, this.pressure)),
         DetailModel(DetailType.UVI, this.uvi?.roundToInt().toString()),
-        DetailModel(DetailType.Visibility, this.visibility.toKilometers())
+        DetailModel(DetailType.Visibility, valueFormatter.toKilometers(this.visibility))
     )
-}
 
-internal fun DailyWeather.toDetailsModelList(resources: Resources): List<DetailModel> {
-    return listOf(
+internal fun DailyWeather.toDetailsModelList(
+    resources: Resources,
+    //valueFormatter: ValueFormatter
+): List<DetailModel> = listOf(
         DetailModel(DetailType.Sunrise, DateFormatter.format(this.sunrise, DateFormatter.HOUR)),
         DetailModel(DetailType.Humidity, resources.getString(R.string.text_value_percents, this.humidity)),
         DetailModel(DetailType.Pressure, resources.getString(R.string.text_value_pressure, this.pressure)),
         DetailModel(DetailType.Sunset, DateFormatter.format(this.sunset, DateFormatter.HOUR)),
         DetailModel(DetailType.UVI, this.uvi?.roundToInt().toString()),
     )
-}
 
 
 data class DetailModel(

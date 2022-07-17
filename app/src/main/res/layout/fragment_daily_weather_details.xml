@@ -41,9 +41,9 @@
                         android:id="@+id/tvDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="16dp"
                         tools:text="Tue, June 28, 12:00" />
 
                     <Button

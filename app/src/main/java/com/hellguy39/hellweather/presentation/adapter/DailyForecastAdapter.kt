@@ -9,15 +9,16 @@ import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.DailyWeatherItemBinding
 import com.hellguy39.hellweather.domain.model.DailyWeather
 import com.hellguy39.hellweather.format.DateFormatter
+import com.hellguy39.hellweather.format.ValueFormatter
 import com.hellguy39.hellweather.helpers.IconHelper
 import com.hellguy39.hellweather.utils.setImageAsync
-import com.hellguy39.hellweather.utils.toPercents
 import kotlin.math.roundToInt
 
 class DailyForecastAdapter(
     private val dataSet: List<DailyWeather>,
     private val callback: DailyWeatherItemCallback,
-    private val resources: Resources
+    private val resources: Resources,
+    private val valueFormatter: ValueFormatter
 ): RecyclerView.Adapter<DailyForecastAdapter.DailyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyViewHolder {
@@ -55,7 +56,7 @@ class DailyForecastAdapter(
                     dailyWeather.temp?.max?.roundToInt(),
                     dailyWeather.temp?.min?.roundToInt()
                 )
-                chipPop.text = resources.getString(R.string.text_value_percents, dailyWeather.pop.toPercents())
+                chipPop.text = valueFormatter.toPercents(dailyWeather.pop)
 
                 rootCard.transitionName = R.string.daily_details_transition.toString() + position.toString()
                 rootCard.setOnClickListener {

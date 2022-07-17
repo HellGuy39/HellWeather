@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionGroup="true"
-    android:id="@+id/refreshLayout"
+    android:id="@+id/rootLayout"
     tools:context=".presentation.fragments.weather.WeatherFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -22,6 +22,13 @@
                 app:menu="@menu/content_fragment_toolbar_menu"
                 tools:title="Sat, Jul 16, 21:08"
                 style="@style/Theme.HellWeather.Toolbar"/>
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progressIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:indeterminate="true" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

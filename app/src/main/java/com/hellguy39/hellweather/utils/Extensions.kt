@@ -1,42 +1,28 @@
 package com.hellguy39.hellweather.utils
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Resources.Theme
-import android.graphics.drawable.PictureDrawable
 import android.util.TypedValue
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.hellguy39.hellweather.glide.GlideApp
+import com.hellguy39.hellweather.R
+import com.hellguy39.hellweather.domain.model.WeatherForecast
+import com.hellguy39.hellweather.format.DateFormatter
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
-
+import kotlin.math.roundToInt
 
 @ColorInt
-internal fun Fragment.getColorFromAttr(resId: Int): Int {
+internal fun Context.getColorFromAttr(resId: Int): Int {
     val typedValue = TypedValue()
-    val theme: Theme = this.requireContext().theme
+    val theme: Theme = this.theme
     theme.resolveAttribute(resId, typedValue, true)
     return typedValue.data
-}
-
-internal fun Double?.toPercents(): Int {
-    return if (this == null)
-        0
-    else
-        (this * 100).toInt()
-}
-
-internal fun Int?.toKilometers(): String {
-    return (this?.div(1000)).toString() + " km"
 }
 
 inline fun <T> MutableStateFlow<T>.update(function: (T) -> T) {
@@ -54,6 +40,24 @@ internal fun ImageView.setImageAsync(resId: Int) {
         .load(resId)
         .dontTransform()
         .into(this)
+}
+
+internal fun Context.actionSend(forecast: WeatherForecast) {
+    val intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(
+            Intent.EXTRA_TEXT,
+            "Weather in ${forecast.locationInfo?.get(0)?.country}, ${forecast.locationInfo?.get(0)?.name} " +
+                    "on ${DateFormatter.format(forecast.oneCallWeather?.currentWeather?.date, DateFormatter.DATE_OF_THE_MOUTH_AND_HOUR)}. " +
+                    "Temp: ${resources.getString(R.string.text_value_temp, forecast.oneCallWeather?.currentWeather?.temp?.roundToInt())}, " +
+                    "feels like: ${resources.getString(R.string.text_value_temp, forecast.oneCallWeather?.currentWeather?.feelsLike?.roundToInt())}, " +
+                    "description: ${forecast.oneCallWeather?.currentWeather?.weather?.get(0)?.description}, " +
+                    "wind: ${resources.getString(R.string.text_value_meters_per_sec, forecast.oneCallWeather?.currentWeather?.windSpeed?.roundToInt())}, " +
+                    "humidity: ${resources.getString(R.string.text_value_percents, forecast.oneCallWeather?.currentWeather?.humidity)}"
+        )
+        type = "text/plain"
+    }
+    startActivity(Intent.createChooser(intent,"Share to:"))
 }
 
 internal fun <T> RecyclerView.updateAndClearRecycler(adapterDataSet: MutableList<T>, newData: List<T>) {
