@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources.Theme
 import android.util.TypedValue
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
@@ -60,7 +62,7 @@ internal fun Context.actionSend(forecast: WeatherForecast) {
     startActivity(Intent.createChooser(intent,"Share to:"))
 }
 
-internal fun <T> RecyclerView.updateAndClearRecycler(adapterDataSet: MutableList<T>, newData: List<T>) {
+internal fun <T> RecyclerView.clearAndUpdateDataSet(adapterDataSet: MutableList<T>, newData: List<T>) {
     val adapter = this.adapter
     // Clear old data
     val previousSize = adapter?.itemCount ?: 0
@@ -74,5 +76,14 @@ internal fun <T> RecyclerView.updateAndClearRecycler(adapterDataSet: MutableList
 internal fun ChipGroup.addTagChips(dataSet: List<String>?) {
     dataSet?.forEach { tag ->
         this.addView(Chip(this.context).apply { text = tag })
+    }
+}
+
+fun EditText.onSubmit(func: () -> Unit) {
+    setOnEditorActionListener { _, actionId, _ ->
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            func()
+        }
+        true
     }
 }

@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.hellguy39.hellweather.Motion
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentHourlyWeatherDetailsBinding
 import com.hellguy39.hellweather.domain.model.HourlyWeather
@@ -17,8 +16,9 @@ import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.DetailModel
 import com.hellguy39.hellweather.presentation.adapter.DetailsAdapter
 import com.hellguy39.hellweather.presentation.adapter.toDetailsModelList
+import com.hellguy39.hellweather.utils.containerTransform
 import com.hellguy39.hellweather.utils.setImageAsync
-import com.hellguy39.hellweather.utils.updateAndClearRecycler
+import com.hellguy39.hellweather.utils.clearAndUpdateDataSet
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -26,7 +26,6 @@ import kotlin.math.roundToInt
 @AndroidEntryPoint
 class HourlyWeatherDetailsFragment : Fragment(R.layout.fragment_hourly_weather_details) {
 
-    @Inject lateinit var motion: Motion
     @Inject lateinit var valueFormatter: ValueFormatter
 
     private lateinit var binding: FragmentHourlyWeatherDetailsBinding
@@ -36,7 +35,7 @@ class HourlyWeatherDetailsFragment : Fragment(R.layout.fragment_hourly_weather_d
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = motion.containerTransform
+        sharedElementEnterTransition = requireContext().containerTransform()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,7 +70,7 @@ class HourlyWeatherDetailsFragment : Fragment(R.layout.fragment_hourly_weather_d
                 hourlyWeather.feelsLike?.roundToInt()
             )
             ivIcon.setImageAsync(IconHelper.getByIconId(hourlyWeather.weather?.get(0)))
-            rvDetails.updateAndClearRecycler(
+            rvDetails.clearAndUpdateDataSet(
                 detailsList,
                 hourlyWeather.toDetailsModelList(resources, valueFormatter)
             )

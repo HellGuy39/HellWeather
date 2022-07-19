@@ -3,6 +3,7 @@ package com.hellguy39.hellweather.di
 import com.hellguy39.hellweather.domain.repository.LocalRepository
 import com.hellguy39.hellweather.domain.repository.RemoteRepository
 import com.hellguy39.hellweather.domain.usecase.GetCachedForecastUseCase
+import com.hellguy39.hellweather.domain.usecase.GetLocationInfoListUseCase
 import com.hellguy39.hellweather.domain.usecase.GetWeatherForecastUseCase
 import dagger.Module
 import dagger.Provides
@@ -33,6 +34,16 @@ object UseCaseModule {
     ): GetCachedForecastUseCase {
         return GetCachedForecastUseCase(
             localRepo = localRepository
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetLocationInfoListUseCase(
+        remoteRepository: RemoteRepository
+    ): GetLocationInfoListUseCase {
+        return GetLocationInfoListUseCase(
+            remoteRepo = remoteRepository
         )
     }
 }

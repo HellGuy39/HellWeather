@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import com.google.android.material.snackbar.Snackbar
-import com.hellguy39.hellweather.Motion
+import com.google.android.material.transition.MaterialFadeThrough
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentWeatherBinding
 import com.hellguy39.hellweather.domain.model.*
@@ -26,10 +26,10 @@ import com.hellguy39.hellweather.presentation.activities.main.MainActivity
 import com.hellguy39.hellweather.presentation.activities.main.PermissionCallback
 import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.*
-import com.hellguy39.hellweather.utils.PermissionState
+import com.hellguy39.hellweather.utils.*
 import com.hellguy39.hellweather.utils.actionSend
 import com.hellguy39.hellweather.utils.setImageAsync
-import com.hellguy39.hellweather.utils.updateAndClearRecycler
+import com.hellguy39.hellweather.utils.clearAndUpdateDataSet
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -43,7 +43,6 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
     private lateinit var binding : FragmentWeatherBinding
 
     @Inject lateinit var locationManager: LocationManager
-    @Inject lateinit var motion: Motion
     @Inject lateinit var valueFormatter: ValueFormatter
 
     private lateinit var viewModel: WeatherFragmentViewModel
@@ -56,6 +55,8 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        exitTransition = MaterialFadeThrough()
+        enterTransition = MaterialFadeThrough()
         viewModel = ViewModelProvider(this)[WeatherFragmentViewModel::class.java]
     }
 
@@ -77,6 +78,11 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     override fun onStart() {
         super.onStart()
+
+        exitTransition = MaterialFadeThrough()
+        enterTransition = MaterialFadeThrough()
+        reenterTransition = MaterialFadeThrough()
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect {
                 updateUI(it)
@@ -87,7 +93,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
     private fun expandLocationChip() {
         TransitionManager.beginDelayedTransition(
             binding.currentWeatherConstraintLayout,
-            motion.transform(binding.chipCity, binding.cardLocation, 16f)
+            transform(binding.chipCity, binding.cardLocation, 16f)
         )
         binding.run {
             chipCity.visibility = View.INVISIBLE
@@ -99,7 +105,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
     private fun collapseLocationChip() {
         TransitionManager.beginDelayedTransition(
             binding.currentWeatherConstraintLayout,
-            motion.transform(binding.cardLocation, binding.chipCity, 0f)
+            transform(binding.cardLocation, binding.chipCity, 0f)
         )
         binding.run {
             chipCity.visibility = View.VISIBLE
@@ -165,6 +171,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
         state.data?.let { data ->
             data.oneCallWeather?.let { oneCallWeather -> showWeatherData(oneCallWeather) }
             data.locationInfo?.let { list -> if (list.isNotEmpty()) showLocationInfo(list[0]) }
+            (activity as MainActivity).updateDrawerData(data)
         }
     }
 
@@ -192,7 +199,10 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
 
     private fun showWeatherData(data: OneCallWeather) {
 
-        TransitionManager.beginDelayedTransition(binding.rootLayout, motion.fadeThrough)
+        TransitionManager.beginDelayedTransition(
+            binding.rootLayout,
+            MaterialFadeThrough()
+        )
 
         binding.run {
             data.currentWeather?.let { currentWeather ->
@@ -206,15 +216,15 @@ class WeatherFragment : Fragment(R.layout.fragment_weather),
                     .weather?.get(0)?.description?.replaceFirstChar(Char::titlecase)
                 ivIcon.setImageAsync(IconHelper.getByIconId(currentWeather.weather?.get(0)))
             }
-            data.dailyWeather?.let { rvDailyWeather.updateAndClearRecycler(dailyWeatherList, it) }
-            data.hourlyWeather?.let { rvHourlyWeather.updateAndClearRecycler(hourlyWeatherList, it) }
+            data.dailyWeather?.let { rvDailyWeather.clearAndUpdateDataSet(dailyWeatherList, it) }
+            data.hourlyWeather?.let { rvHourlyWeather.clearAndUpdateDataSet(hourlyWeatherList, it) }
             data.currentWeather?.let {
-                rvCurrentWeatherDetails.updateAndClearRecycler(
+                rvCurrentWeatherDetails.clearAndUpdateDataSet(
                     currentWeatherDetailsList,
                     it.toDetailsModelList(resources, valueFormatter)
                 )
             }
-            data.alerts?.let { rvAlerts.updateAndClearRecycler(alertList, it) }
+            data.alerts?.let { rvAlerts.clearAndUpdateDataSet(alertList, it) }
         }
     }
 

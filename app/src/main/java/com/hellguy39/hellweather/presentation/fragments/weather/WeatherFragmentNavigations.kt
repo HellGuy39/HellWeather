@@ -3,16 +3,8 @@ package com.hellguy39.hellweather.presentation.fragments.weather
 import android.view.View
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.transition.MaterialSharedAxis
-import com.google.android.material.transition.platform.MaterialElevationScale
+import com.google.android.material.transition.MaterialElevationScale
 import com.hellguy39.hellweather.R
-
-fun WeatherFragment.navigateToLocationFragment() {
-    //exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
-    //reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-//    val directions = WeatherFragmentDirections.actionWeatherFragmentToLocationFragment()
-//    findNavController().navigate(directions)
-}
 
 fun WeatherFragment.navigateToDailyWeatherDetailsFragment(itemView: View) {
     exitTransition = MaterialElevationScale(false)

@@ -89,6 +89,8 @@
                         android:layout_marginStart="8dp"
                         android:checked="false"
                         android:clickable="true"
+                        android:elevation="4dp"
+                        style="@style/Widget.Material3.Chip.Assist.Elevated"
                         android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
                         android:visibility="visible"
                         app:chipIcon="@drawable/ic_location"

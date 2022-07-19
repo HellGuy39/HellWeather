@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/navigation_weather"
         android:icon="@drawable/ic_cloudy"
@@ -15,4 +16,24 @@
         android:icon="@drawable/ic_settings"
         android:title="Settings"
         android:checkable="true"/>
+
+    <item
+        android:id="@+id/saved"
+        android:title="Saved">
+        <menu>
+            <item
+                android:id="@+id/label_one"
+                android:icon="@drawable/ic_location"
+                android:title="Location 1"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/label_two"
+                android:icon="@drawable/ic_location"
+                android:title="Location 2"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
+        </menu>
+    </item>
+
 </menu>

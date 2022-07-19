@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.hellguy39.hellweather.Motion
 import com.hellguy39.hellweather.R
 import com.hellguy39.hellweather.databinding.FragmentDailyWeatherDetailsBinding
 import com.hellguy39.hellweather.domain.model.DailyWeather
@@ -16,16 +15,14 @@ import com.hellguy39.hellweather.presentation.activities.main.SharedViewModel
 import com.hellguy39.hellweather.presentation.adapter.DetailModel
 import com.hellguy39.hellweather.presentation.adapter.DetailsAdapter
 import com.hellguy39.hellweather.presentation.adapter.toDetailsModelList
+import com.hellguy39.hellweather.utils.containerTransform
 import com.hellguy39.hellweather.utils.setImageAsync
-import com.hellguy39.hellweather.utils.updateAndClearRecycler
+import com.hellguy39.hellweather.utils.clearAndUpdateDataSet
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class DailyWeatherDetailsFragment : Fragment(R.layout.fragment_daily_weather_details) {
-
-    @Inject lateinit var motion: Motion
 
     private lateinit var binding: FragmentDailyWeatherDetailsBinding
     private val sharedViewModel by activityViewModels<SharedViewModel>()
@@ -34,7 +31,7 @@ class DailyWeatherDetailsFragment : Fragment(R.layout.fragment_daily_weather_det
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = motion.containerTransform
+        sharedElementEnterTransition = requireContext().containerTransform()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,7 +60,7 @@ class DailyWeatherDetailsFragment : Fragment(R.layout.fragment_daily_weather_det
         binding.run {
             tvDate.text = DateFormatter.format(dailyWeather.date, DateFormatter.DATE_OF_THE_MOUTH_AND_HOUR)
             ivIcon.setImageAsync(IconHelper.getByIconId(dailyWeather.weather?.get(0)))
-            rvDetails.updateAndClearRecycler(detailsList, dailyWeather.toDetailsModelList(resources))
+            rvDetails.clearAndUpdateDataSet(detailsList, dailyWeather.toDetailsModelList(resources))
 
             tvTempEve.text = resources.getString(R.string.text_temp_eve, dailyWeather.temp?.eve?.roundToInt())
             tvTempMorn.text = resources.getString(R.string.text_temp_morn, dailyWeather.temp?.morn?.roundToInt())
