@@ -7,7 +7,14 @@ dependencyResolutionManagement {
         maven { url "https://jitpack.io" }
     }
 }
+
 rootProject.name = "HellWeather"
+
 include ':app'
-include ':data'
-include ':domain'
+
+include ':core:model'
+include ':core:domain'
+include ':core:data'
+include ':core:common'
+include ':core:network'
+include ':core:ui'
