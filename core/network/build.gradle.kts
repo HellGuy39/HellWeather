@@ -2,6 +2,7 @@ import com.hellguy39.hellweather.buildsrc.*
 import com.hellguy39.hellweather.buildsrc.install.installCoroutines
 import com.hellguy39.hellweather.buildsrc.install.installKoin
 import com.hellguy39.hellweather.buildsrc.install.installKtor
+import com.hellguy39.hellweather.buildsrc.install.installTestingTools
 
 plugins {
     id("com.android.library")
@@ -41,6 +42,7 @@ android {
 installKoin()
 installCoroutines()
 installKtor()
+installTestingTools()
 
 dependencies {
 

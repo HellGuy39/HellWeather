@@ -1,7 +1,6 @@
 package com.hellguy39.hellweather.core.network
 
 import org.junit.Test
-
 import org.junit.Assert.*
 
 /**
