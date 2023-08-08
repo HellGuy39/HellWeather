@@ -1,9 +1,9 @@
+import com.hellguy39.hellweather.buildsrc.*
 import com.hellguy39.hellweather.buildsrc.install.installAndroidCore
 import com.hellguy39.hellweather.buildsrc.install.installCompose
 import com.hellguy39.hellweather.buildsrc.install.installCoroutines
 import com.hellguy39.hellweather.buildsrc.install.installKoin
 import com.hellguy39.hellweather.buildsrc.install.installTestingTools
-import com.hellguy39.hellweather.buildsrc.*
 
 plugins {
     id("com.android.application")

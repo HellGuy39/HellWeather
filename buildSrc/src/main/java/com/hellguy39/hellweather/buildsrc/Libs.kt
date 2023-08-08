@@ -11,7 +11,7 @@ object Libs {
 
     object Testing {
 
-        private const val junitVersion = "1.1.5"
+        private const val junitVersion = "4.13.2"
         private const val espressoVersion = "3.5.1"
         private const val adnroidJunitVersion = "4.13.2"
         private const val composeVersion = "1.4.2"
