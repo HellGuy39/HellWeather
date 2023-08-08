@@ -13,12 +13,12 @@ object Libs {
 
         private const val junitVersion = "4.13.2"
         private const val espressoVersion = "3.5.1"
-        private const val adnroidJunitVersion = "4.13.2"
+        private const val androidJunitVersion = "1.1.5"
         private const val composeVersion = "1.4.2"
         private const val workVersion = "2.8.1"
 
         const val JUnit = "junit:junit:$junitVersion"
-        const val AndroidJUnit = "androidx.test.ext:junit:$junitVersion"
+        const val AndroidJUnit = "androidx.test.ext:junit:$androidJunitVersion"
         const val Espresso = "androidx.test.espresso:espresso-core:$espressoVersion"
 
         const val UiTestJUnit = "androidx.compose.ui:ui-test-junit4:$composeVersion"
